@@ -52,7 +52,7 @@ function run_svc_bin()
 
     local java_home=$(get_java_home)
     local JAVA_CMD="${java_home}/bin/java -Dspring.profiles.active=${NODE_ENV}"
-    local db_name="rongxin_farm"
+    local db_name="rongxin_druid"
 
     if [[ $NODE_ENV == "dev" ]]; then
         NODE_HOST=${ip_address} NODE_PORT=${svc_port} CONSUL_HOST=localhost DATASOURCE_URL="jdbc:mysql://101.201.180.37:3306/${db_name}?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai" DATASOURCE_USER="sample_dbowner" DATASOURCE_PWD="TDkNWKSFatELG5pN" REDIS_HOST=localhost REDIS_PORT=6279 ${JAVA_CMD} -jar ${svc_bin} >> ${svc_log} 2>&1 &
