@@ -10,9 +10,9 @@
 
     <name>rongxin-jl-module-busbasic-rongxin</name>
     <parent>
-        <groupId>rongxin.module.common</groupId>
-        <artifactId>rongxin-jl-module-basic-core</artifactId>
-        <version>3.8.2</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.1</version>
     </parent>
 
 
