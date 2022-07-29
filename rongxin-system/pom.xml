@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>rongxin.module.common</groupId>
+        <artifactId>rongxin-jl-module-busbasic-rongxin</artifactId>
+        <version>3.8.2</version>
+    </parent>
+    <groupId>rongxin.module.common</groupId>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+    <artifactId>rongxin-jl-module-busbasic-system</artifactId>
+
+    <description>
+        system系统模块
+    </description>
+
+    <dependencies>
+        <!-- spring-boot-devtools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional> <!-- 表示依赖不会传递 -->
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+        </dependency>
+
+        <!-- SpringBoot Web容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- SpringBoot 拦截器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.6.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>5.3.22</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+        </dependency>
+        <!-- 核心模块-->
+        <dependency>
+            <groupId>rongxin.module.common</groupId>
+            <artifactId>rongxin-jl-module-basic-common</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+        <!-- 定时任务-->
+        <dependency>
+            <groupId>rongxin.module.common</groupId>
+            <artifactId>rongxin-jl-module-basic-quartz</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+
+        <!-- 代码生成-->
+        <dependency>
+            <groupId>rongxin.module.common</groupId>
+            <artifactId>rongxin-jl-module-basic-generator</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+    </dependencies>
+
+</project>
