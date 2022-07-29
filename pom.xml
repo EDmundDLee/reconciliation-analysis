@@ -8,7 +8,7 @@
     <artifactId>rongxin-jl-module-busbasic-rongxin</artifactId>
     <version>3.8.2</version>
 
-    <name>rongxin</name>
+    <name>rongxin-jl-module-busbasic-rongxin</name>
     <parent>
         <groupId>rongxin.module.common</groupId>
         <artifactId>rongxin-jl-module-basic-core</artifactId>
