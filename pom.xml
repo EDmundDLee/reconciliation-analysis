@@ -9,11 +9,7 @@
     <version>3.8.2</version>
 
     <name>rongxin</name>
-    <parent>
-        <groupId>rongxin.module.common</groupId>
-        <artifactId>rongxin-jl-module-basic-core</artifactId>
-        <version>3.8.2</version>
-    </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
