@@ -19,9 +19,7 @@
 
   <files>
     <!-- 打包时把README.md文件放在根目录 -->
-    <file>
-      <source>README.md</source>
-    </file>
+
     <file>
       <source>target/${project.name}-${project.version}.jar</source>
       <outputDirectory>libs</outputDirectory>
