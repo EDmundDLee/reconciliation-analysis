@@ -9,7 +9,7 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://10.60.0.30:3306/rongxin-druid?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://10.30.94.174:3306/rongxin_druid?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: sample_dbowner
         password: TDkNWKSFatELG5pN
       # 从库数据源
