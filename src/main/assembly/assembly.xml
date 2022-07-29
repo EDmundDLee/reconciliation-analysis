@@ -2,7 +2,7 @@
   <id>distribution</id>
   <formats>
     <!-- 压缩文件类型：zip、tar、tar.gz/tgz、tar.bz2/tbz2、jar、dir、war -->
-    <format>zip</format>
+    <format>jar</format>
   </formats>
 
   <includeBaseDirectory>true</includeBaseDirectory>
