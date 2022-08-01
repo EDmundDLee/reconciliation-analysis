@@ -15,6 +15,8 @@
     </parent>
     <properties>
         <start-class>com.rongxin.RXApplication</start-class>
+        <bitwalker.version>1.21</bitwalker.version>
+
     </properties>
     <dependencies>
 
@@ -25,11 +27,7 @@
             <optional>true</optional> <!-- 表示依赖不会传递 -->
         </dependency>
 
-        <!-- swagger3-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-        </dependency>
+
 
         <!-- SpringBoot Web容器 -->
         <dependency>
@@ -76,6 +74,7 @@
         <dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
+            <version>${bitwalker.version}</version>
         </dependency>
         <!-- 核心模块-->
         <dependency>
