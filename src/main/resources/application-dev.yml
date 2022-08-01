@@ -3,6 +3,9 @@ server:
   address: ${NODE_HOST}
 # 数据源配置
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
