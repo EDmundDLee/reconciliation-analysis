@@ -5,9 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <groupId>rongxin.module.common</groupId>
-    <artifactId>rongxin-jl-module-busbasic-rongxin</artifactId>
-    <version>3.8.2</version>
-    <name>rongxin-jl-module-busbasic-rongxin</name>
+    <artifactId>jlrx-backend-basic-api</artifactId>
+    <name>jlrx-backend-basic-api</name>
+    <version>1.0.0</version>
     <parent>
         <groupId>rongxin.module.common</groupId>
         <artifactId>rongxin-jl-module-basic-core</artifactId>
@@ -29,13 +29,6 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
-        </dependency>
-
-        <!-- 防止进入swagger页面报类型转换错误，排除3.0.0中的引用，手动增加1.6.2版本 -->
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-models</artifactId>
-            <version>1.6.2</version>
         </dependency>
 
         <!-- SpringBoot Web容器 -->

@@ -16,8 +16,8 @@ set -o nounset
 declare -r bin_name=$(dirname $0)
 declare -r bin_dir=$(cd "$bin_name"; pwd)
 declare -r bin_pdir=$(dirname $bin_name)
-declare -r svc_bin="./libs/rongxin-jl-module-busbasic-rongxin-3.8.2.jar"
-declare -r svc_log="./logs/rongxin-jl-module-busbasic-rongxin.log"
+declare -r svc_bin="./libs/jlrx-backend-basic-api-1.0.0.jar"
+declare -r svc_log="./logs/jlrx-backend-basic-api.log"
 declare -r svc_pid_file="./proc.pid"
 
 
