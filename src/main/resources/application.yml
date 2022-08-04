@@ -46,7 +46,7 @@ spring:
     basename: i18n/messages
   profiles:
     active: ${NODE_ENV}
-    # active: druid
+    #active: druid
   # 文件上传
   servlet:
     multipart:
