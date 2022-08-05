@@ -1,16 +1,15 @@
 package com.rongxin.demo.mapper;
 
-import com.rongxin.demo.domain.RxDemo;
-
 import java.util.List;
-
+import com.rongxin.demo.domain.RxDemo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * 示例功能Mapper接口
  * 
  * @author rx
- * @date 2022-07-29
+ * @date 2022-08-05
  */
-public interface RxDemoMapper 
+public interface RxDemoMapper  extends BaseMapper<RxDemo>
 {
     /**
      * 查询示例功能

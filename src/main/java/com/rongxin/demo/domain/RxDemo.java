@@ -1,18 +1,17 @@
 package com.rongxin.demo.domain;
 
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.rongxin.common.annotation.Excel;
 import com.rongxin.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import java.util.Date;
+import com.rongxin.common.annotation.Excel;
 
 /**
  * 示例功能对象 rx_demo
  * 
  * @author rx
- * @date 2022-07-29
+ * @date 2022-08-05
  */
 public class RxDemo extends BaseEntity
 {
@@ -73,7 +72,7 @@ public class RxDemo extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("demoName", getDemoName())
             .append("demoSex", getDemoSex())
