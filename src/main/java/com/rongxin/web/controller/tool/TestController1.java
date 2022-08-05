@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 @Api("用户信息管理")
 @RestController
 @RequestMapping("/test/user")
-public class TestController extends BaseController
+public class TestController1 extends BaseController
 {
     private final static Map<Integer, UserEntity> users = new LinkedHashMap<Integer, UserEntity>();
     {
