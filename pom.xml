@@ -105,6 +105,8 @@
         </dependency>
 
     </dependencies>
+
+
     <build>
         <finalName>${project.name}-${project.version}</finalName>
 
@@ -133,7 +135,6 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
