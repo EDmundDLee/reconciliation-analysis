@@ -135,7 +135,7 @@ public class RxDemoController extends BaseController
     public AjaxResult send(String smsCode, String mobile, String params) throws Exception{
         String randCode = aliYunSmsService.getRandCode(6);
         String parm = "{\"code\":" + randCode + "}";
-        aliYunSmsService.sendSms("13604434551", ConstantsSms.signName, ConstantsSms.templateCodeA, parm,IdUtils.simpleUUID(),true);
+        aliYunSmsService.sendSms("手机号", ConstantsSms.signName, ConstantsSms.templateCodeA, parm,true);
         return AjaxResult.success();
     }
 }
