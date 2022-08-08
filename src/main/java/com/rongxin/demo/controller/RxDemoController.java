@@ -1,6 +1,9 @@
 package com.rongxin.demo.controller;
 
 import java.util.List;
+
+import com.cacfintech.module.sms.aliyun.properties.ConstantsSms;
+import com.cacfintech.module.sms.aliyun.service.AliYunSmsService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -36,7 +39,8 @@ public class RxDemoController extends BaseController
 {
     @Autowired
     private IRxDemoService rxDemoService;
-
+    @Autowired
+    AliYunSmsService aliYunSmsService;
     /**
      * 查询示例功能列表
      */
@@ -117,5 +121,21 @@ public class RxDemoController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(rxDemoService.deleteRxDemoByIds(ids));
+    }
+
+    @PostMapping("send")
+    @ApiOperation("发送短信")
+    @Log(title = "示例功能", businessType = BusinessType.DELETE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "smsCode", value = "短信编码", paramType = "query", required = true, dataType="String"),
+            @ApiImplicitParam(name = "mobile", value = "手机号码", paramType = "query", required = true, dataType="String"),
+            @ApiImplicitParam(name = "params", value = "参数", paramType = "query", required = true, dataType="String")
+    })
+    public AjaxResult send(String smsCode, String mobile, String params) throws Exception{
+
+        String randCode = aliYunSmsService.getRandCode(6);
+        String parm = "{\"code\":" + randCode + "}";
+        aliYunSmsService.sendSms("手机号", ConstantsSms.signName, ConstantsSms.templateCodeA, parm,"1111",true);
+        return AjaxResult.success();
     }
 }
