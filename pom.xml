@@ -67,6 +67,13 @@
             <artifactId>rongxin-jl-module-basic-sms</artifactId>
             <version>3.8.2</version>
         </dependency>
+        <!-- e签宝-->
+
+        <dependency>
+            <groupId>rongxin.module.common</groupId>
+            <artifactId>rongxin-jl-module-basic-eqb</artifactId>
+            <version>3.8.2</version>
+        </dependency>
     </dependencies>
 
 
