@@ -1,21 +1,20 @@
-package com.rongxin.system.service.impl;
-
-import java.io.InputStream;
-import java.util.Date;
-import java.util.List;
+package com.rongxin.demo.service.impl;
 
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.oss.OSSFactory;
+import com.rongxin.common.utils.uuid.IdUtils;
+import com.rongxin.demo.domain.FileUploadShare;
+import com.rongxin.demo.mapper.FileUploadShareMapper;
+import com.rongxin.demo.service.IFileUploadShareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.rongxin.system.mapper.FileUploadShareMapper;
-import com.rongxin.system.domain.FileUploadShare;
-import com.rongxin.system.service.IFileUploadShareService;
 import org.springframework.web.multipart.MultipartFile;
-import com.rongxin.common.utils.uuid.IdUtils;
+
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 
 /**

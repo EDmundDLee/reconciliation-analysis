@@ -1,16 +1,16 @@
 package com.rongxin.demo.service;
 
-import java.util.List;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.rongxin.demo.domain.RxDemo;
+
+import java.util.List;
 
 /**
  * 示例功能Service接口
  * 
  * @author rx
- * @date 2022-08-05
+ * @date 2022-07-29
  */
-public interface IRxDemoService extends IService<RxDemo>
+public interface IRxDemoService 
 {
     /**
      * 查询示例功能

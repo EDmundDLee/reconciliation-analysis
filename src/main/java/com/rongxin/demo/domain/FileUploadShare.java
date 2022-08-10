@@ -1,12 +1,13 @@
-package com.rongxin.system.domain;
+package com.rongxin.demo.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rongxin.common.annotation.Excel;
 import com.rongxin.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
+
 /**
  * 文件上传明细对象 file_upload_share
  * 

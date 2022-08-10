@@ -1,21 +1,21 @@
 package com.rongxin.demo.service.impl;
 
-import java.util.List;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.rongxin.demo.domain.RxDemo;
+import com.rongxin.demo.mapper.RxDemoMapper;
+import com.rongxin.demo.service.IRxDemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.rongxin.demo.mapper.RxDemoMapper;
-import com.rongxin.demo.domain.RxDemo;
-import com.rongxin.demo.service.IRxDemoService;
+
+import java.util.List;
 
 /**
  * 示例功能Service业务层处理
  * 
  * @author rx
- * @date 2022-08-05
+ * @date 2022-07-29
  */
 @Service
-public class RxDemoServiceImpl extends ServiceImpl<RxDemoMapper, RxDemo> implements IRxDemoService
+public class RxDemoServiceImpl implements IRxDemoService
 {
     @Autowired
     private RxDemoMapper rxDemoMapper;
