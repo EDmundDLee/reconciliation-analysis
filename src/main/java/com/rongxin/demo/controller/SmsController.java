@@ -1,7 +1,8 @@
 package com.rongxin.demo.controller;
 
-import com.cacfintech.module.sms.aliyun.properties.ConstantsSms;
-import com.cacfintech.module.sms.aliyun.service.AliYunSmsService;
+
+import com.rongxin.module.sms.aliyun.properties.ConstantsSms;
+import com.rongxin.module.sms.aliyun.service.AliYunSmsService;
 import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.enums.BusinessType;
