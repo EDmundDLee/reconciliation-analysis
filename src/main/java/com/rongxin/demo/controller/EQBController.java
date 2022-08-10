@@ -23,7 +23,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Map;
-
+import org.springframework.beans.factory.annotation.Value;
 /**
  * 测试e签宝
  *
@@ -39,7 +39,15 @@ public class EQBController {
      */
     @Resource
     IEQBService ieQianBaoService;
-
+    //测试环境接入地址
+    @Value("${eqianbao.api.url.prefix}")
+    private String eqianbaoApiUrlPrefix;
+    //应用标识 id
+    @Value("${eqianbao.api.app.id}")
+    private String eqianbaoApiAppId;
+    //秘钥
+    @Value("${eqianbao.api.app.secret}")
+    private String eqianbaoApiAppSecret;
     /**
      * @param path
      * @return
@@ -67,7 +75,9 @@ public class EQBController {
             e.printStackTrace();
         }
         bo.setContentMd5(md5);
-        EQianBaoBaseResForm form = ieQianBaoService.createFileUploadurl(bo);
+//        EQianBaoBaseResForm createFileUploadurl(CreateFileUploadurlReqForm reqform, String eqianbaoApiUrlPrefix, String eqianbaoApiAppId, String eqianbaoApiAppSecret);
+
+        EQianBaoBaseResForm form = ieQianBaoService.createFileUploadurl(bo, eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret);
         Map<String, String> map = (Map<String, String>) form.getData();
 
         // 上传文件
@@ -82,9 +92,9 @@ public class EQBController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ieQianBaoService.uploadFileByFileUrl(resForm, resourceAsStream);
+        ieQianBaoService.uploadFileByFileUrl(resForm, resourceAsStream, eqianbaoApiAppId, eqianbaoApiAppSecret);
         // 创建模板生成模板编号
-        return AjaxResult.success(ieQianBaoService.createContractTemplateByFileKey(map.get("fileKey")));
+        return AjaxResult.success(ieQianBaoService.createContractTemplateByFileKey(map.get("fileKey"),eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret));
     }
 
     public static byte[] getBytesByFile(String pathStr) {
