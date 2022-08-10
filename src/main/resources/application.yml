@@ -91,7 +91,8 @@ pagehelper:
 
 #knife4j配置
 knife4j:
-  enable: true
+  enabled: true
+  #pathMapping: /
   basic:
     enable: false
     username: admin
@@ -99,11 +100,11 @@ knife4j:
   setting:
     enableFooter: false
 # Swagger配置
-swagger:
+  #swagger:
   # 是否开启swagger
-  enabled: true
+  #enabled: true
   # 请求前缀
-  pathMapping: /
+  #pathMapping: /
 # 防止XSS攻击
 xss:
   # 过滤开关
