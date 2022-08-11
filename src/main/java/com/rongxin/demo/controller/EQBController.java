@@ -1,6 +1,8 @@
 package com.rongxin.demo.controller;
 
+import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.domain.AjaxResult;
+import com.rongxin.common.enums.BusinessType;
 import com.rongxin.eqb.req.CreateFileUploadurlReqForm;
 import com.rongxin.eqb.res.EQianBaoBaseResForm;
 import com.rongxin.eqb.res.GetUploadFileUrlResForm;
@@ -9,10 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @Date 2022-06-14
  */
 @RestController
-@RequestMapping(value = "/api/v1.0/wuquan/test")
+@RequestMapping(value = "/eqb/eqbTest")
 @Api(tags = "测试用不参与联调")
 public class EQBController {
 
@@ -117,6 +117,21 @@ public class EQBController {
         return null;
     }
 
+    /**
+     * @param flowId
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('eqb:eqbTest:signContractDownload')")
+    @GetMapping(value = "/signContractDownload")
+    @ApiOperation("测试下载文件接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "鉴权token", name = "authorization", paramType = "header", dataType = "String", required = true),
+            @ApiImplicitParam(value = "文件编码", name = "flowId", paramType = "header", dataType = "String", required = true),
+    })
+    public AjaxResult signContractDownload(String flowId) {
+        System.out.println(flowId);
+        return AjaxResult.success(ieQianBaoService.signContractDownload("1c1009bed17c48ce94421e5112041673", eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret));
+    }
 }
 
 

@@ -45,13 +45,14 @@ public class CaptchaController
     public AjaxResult getCode(HttpServletResponse response) throws IOException
     {
         AjaxResult ajax = AjaxResult.success();
-        boolean captchaOnOff = configService.selectCaptchaOnOff();
+        boolean register = configService.selectCaptchaOnOff("sys.account.registerUser");
+        ajax.put("register", register);
+        boolean captchaOnOff = configService.selectCaptchaOnOff("sys.account.captchaOnOff");
         ajax.put("captchaOnOff", captchaOnOff);
         if (!captchaOnOff)
         {
             return ajax;
         }
-
         // 保存验证码信息
         String uuid = IdUtils.simpleUUID();
         String verifyKey = Constants.CAPTCHA_CODE_KEY + uuid;
