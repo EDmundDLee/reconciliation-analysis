@@ -60,7 +60,7 @@ public class SysLoginService
      */
     public String login(String username, String password, String code, String uuid)
     {
-        boolean captchaOnOff = configService.selectCaptchaOnOff();
+        boolean captchaOnOff = configService.selectCaptchaOnOff("sys.account.captchaOnOff");
         // 验证码开关
         if (captchaOnOff)
         {

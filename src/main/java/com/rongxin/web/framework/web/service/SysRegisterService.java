@@ -41,7 +41,7 @@ public class SysRegisterService
     {
         String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
 
-        boolean captchaOnOff = configService.selectCaptchaOnOff();
+        boolean captchaOnOff = configService.selectCaptchaOnOff("sys.account.captchaOnOff");
         // 验证码开关
         if (captchaOnOff)
         {
