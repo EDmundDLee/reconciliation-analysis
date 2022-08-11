@@ -17,6 +17,7 @@
     <properties>
         <start-class>com.rongxin.RXApplication</start-class>
         <bitwalker.version>1.21</bitwalker.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     </properties>
     <dependencies>
