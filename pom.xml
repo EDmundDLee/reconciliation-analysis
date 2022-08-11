@@ -17,30 +17,11 @@
     <properties>
         <start-class>com.rongxin.RXApplication</start-class>
         <bitwalker.version>1.21</bitwalker.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     </properties>
     <dependencies>
 
-        <!-- spring-boot-devtools -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional> <!-- 表示依赖不会传递 -->
-        </dependency>
-
-
-
-        <!-- SpringBoot Web容器 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- SpringBoot 拦截器 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -62,11 +43,7 @@
             <artifactId>kaptcha</artifactId>
             <version>2.3.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>5.6.5</version>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
@@ -81,12 +58,12 @@
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-common</artifactId>
-            <version>3.8.2</version>
+            <version>3.8.4</version>
         </dependency>
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-framework</artifactId>
-            <version>3.8.2</version>
+            <version>3.8.4</version>
         </dependency>
 
         <!-- 定时任务-->
@@ -94,31 +71,30 @@
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-quartz</artifactId>
-            <version>3.8.2</version>
+            <version>3.8.4</version>
         </dependency>
 
         <!-- 代码生成-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-generator</artifactId>
-            <version>3.8.2</version>
+            <version>3.8.4</version>
         </dependency>
         <!--        短信发送-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-sms</artifactId>
-            <version>3.8.2</version>
+            <version>3.8.4</version>
         </dependency>
         <!--        e 签宝-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-eqb</artifactId>
-            <version>3.8.2</version>
+            <version>3.8.4</version>
         </dependency>
     </dependencies>
     <build>
         <finalName>${project.name}-${project.version}</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
