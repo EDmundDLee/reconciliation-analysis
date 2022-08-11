@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.demo.mapper.FileUploadShareMapper">
+    
+    <resultMap type="FileUploadShare" id="FileUploadShareResult">
+        <result property="id"    column="id"    />
+        <result property="filename"    column="fileName"    />
+        <result property="filesize"    column="fileSize"    />
+        <result property="fileurl"    column="fileUrl"    />
+        <result property="groupid"    column="groupId"    />
+        <result property="createuser"    column="createUser"    />
+        <result property="createdate"    column="createDate"    />
+        <result property="deptcode"    column="deptCode"    />
+        <result property="updatedate"    column="updateDate"    />
+        <result property="updateuser"    column="updateUser"    />
+        <result property="isdel"    column="isdel"    />
+        <result property="standby1"    column="standby1"    />
+        <result property="standby2"    column="standby2"    />
+        <result property="standby3"    column="standby3"    />
+        <result property="standby4"    column="standby4"    />
+        <result property="standby5"    column="standby5"    />
+    </resultMap>
+
+    <sql id="selectFileUploadShareVo">
+        select id, fileName, fileSize, fileUrl, groupId, createUser, createDate, deptCode, updateDate, updateUser, isdel, standby1, standby2, standby3, standby4, standby5 from file_upload_share
+    </sql>
+
+    <select id="selectFileUploadShareList" parameterType="FileUploadShare" resultMap="FileUploadShareResult">
+        <include refid="selectFileUploadShareVo"/>
+        <where>  
+            <if test="filename != null  and filename != ''"> and fileName like concat('%', #{filename}, '%')</if>
+            <if test="filesize != null  and filesize != ''"> and fileSize = #{filesize}</if>
+            <if test="fileurl != null  and fileurl != ''"> and fileUrl = #{fileurl}</if>
+            <if test="groupid != null  and groupid != ''"> and groupId = #{groupid}</if>
+            <if test="createuser != null  and createuser != ''"> and createUser = #{createuser}</if>
+            <if test="createdate != null "> and createDate = #{createdate}</if>
+            <if test="deptcode != null  and deptcode != ''"> and deptCode = #{deptcode}</if>
+            <if test="updatedate != null "> and updateDate = #{updatedate}</if>
+            <if test="updateuser != null  and updateuser != ''"> and updateUser = #{updateuser}</if>
+            <if test="isdel != null  and isdel != ''"> and isdel = #{isdel}</if>
+            <if test="standby1 != null  and standby1 != ''"> and standby1 = #{standby1}</if>
+            <if test="standby2 != null  and standby2 != ''"> and standby2 = #{standby2}</if>
+            <if test="standby3 != null  and standby3 != ''"> and standby3 = #{standby3}</if>
+            <if test="standby4 != null  and standby4 != ''"> and standby4 = #{standby4}</if>
+            <if test="standby5 != null  and standby5 != ''"> and standby5 = #{standby5}</if>
+        </where>
+    </select>
+    
+    <select id="selectFileUploadShareById" parameterType="String" resultMap="FileUploadShareResult">
+        <include refid="selectFileUploadShareVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFileUploadShare" parameterType="FileUploadShare">
+        insert into file_upload_share
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="filename != null">fileName,</if>
+            <if test="filesize != null">fileSize,</if>
+            <if test="fileurl != null">fileUrl,</if>
+            <if test="groupid != null">groupId,</if>
+            <if test="createuser != null">createUser,</if>
+            <if test="createdate != null">createDate,</if>
+            <if test="deptcode != null">deptCode,</if>
+            <if test="updatedate != null">updateDate,</if>
+            <if test="updateuser != null">updateUser,</if>
+            <if test="isdel != null">isdel,</if>
+            <if test="standby1 != null">standby1,</if>
+            <if test="standby2 != null">standby2,</if>
+            <if test="standby3 != null">standby3,</if>
+            <if test="standby4 != null">standby4,</if>
+            <if test="standby5 != null">standby5,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="filename != null">#{filename},</if>
+            <if test="filesize != null">#{filesize},</if>
+            <if test="fileurl != null">#{fileurl},</if>
+            <if test="groupid != null">#{groupid},</if>
+            <if test="createuser != null">#{createuser},</if>
+            <if test="createdate != null">#{createdate},</if>
+            <if test="deptcode != null">#{deptcode},</if>
+            <if test="updatedate != null">#{updatedate},</if>
+            <if test="updateuser != null">#{updateuser},</if>
+            <if test="isdel != null">#{isdel},</if>
+            <if test="standby1 != null">#{standby1},</if>
+            <if test="standby2 != null">#{standby2},</if>
+            <if test="standby3 != null">#{standby3},</if>
+            <if test="standby4 != null">#{standby4},</if>
+            <if test="standby5 != null">#{standby5},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileUploadShare" parameterType="FileUploadShare">
+        update file_upload_share
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="filename != null">fileName = #{filename},</if>
+            <if test="filesize != null">fileSize = #{filesize},</if>
+            <if test="fileurl != null">fileUrl = #{fileurl},</if>
+            <if test="groupid != null">groupId = #{groupid},</if>
+            <if test="createuser != null">createUser = #{createuser},</if>
+            <if test="createdate != null">createDate = #{createdate},</if>
+            <if test="deptcode != null">deptCode = #{deptcode},</if>
+            <if test="updatedate != null">updateDate = #{updatedate},</if>
+            <if test="updateuser != null">updateUser = #{updateuser},</if>
+            <if test="isdel != null">isdel = #{isdel},</if>
+            <if test="standby1 != null">standby1 = #{standby1},</if>
+            <if test="standby2 != null">standby2 = #{standby2},</if>
+            <if test="standby3 != null">standby3 = #{standby3},</if>
+            <if test="standby4 != null">standby4 = #{standby4},</if>
+            <if test="standby5 != null">standby5 = #{standby5},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFileUploadShareById" parameterType="String">
+        delete from file_upload_share where id = #{id}
+    </delete>
+
+    <delete id="deleteFileUploadShareByIds" parameterType="String">
+        delete from file_upload_share where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
