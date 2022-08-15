@@ -105,7 +105,9 @@ knife4j:
   #enabled: true
   # 请求前缀
   #pathMapping: /
+
 # 防止XSS攻击
+
 xss:
   # 过滤开关
   enabled: true
@@ -113,6 +115,7 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
 #阿里云短信配置，无需修改
 ali:
   sms:
