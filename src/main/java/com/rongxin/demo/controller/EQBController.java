@@ -37,8 +37,8 @@ public class EQBController {
     /**
      * e签宝Service
      */
-    @Resource
-    IEQBService ieQianBaoService;
+//    @Resource
+//    IEQBService ieQianBaoService;
     //测试环境接入地址
     @Value("${eqianbao.api.url.prefix}")
     private String eqianbaoApiUrlPrefix;
@@ -48,6 +48,35 @@ public class EQBController {
     //秘钥
     @Value("${eqianbao.api.app.secret}")
     private String eqianbaoApiAppSecret;
+
+    /**
+     * 创建合同模板
+     */
+    @Value("${eqianbao.api.contract.template.create.url.suffix}")
+    private String contractTemplateCreateUrlSuffix;
+    //合同模板创建合同
+    @Value("${eqianbao.api.contract.create.url.suffix}")
+    private String contractCreateUrlSuffix;
+
+    /**
+     * 文件生成路径
+     */
+    @Value("${eqianbao.api.file.upload.url.suffix}")
+    private String fileUploadUrlSuffix;
+    //创建合同签署流程
+    @Value("${eqianbao.api.sign.contract.process.create.url.suffix}")
+    private String signContractProcessCreateUrlSuffix;
+    //发起用户自动签署
+    @Value("${eqianbao.api.user.auto.sign.contract.url.suffix}")
+    private String userAutoSignContractUrlSuffix;
+    //签署文件下载
+    @Value("${eqianbao.api.contract.download.url.suffix}")
+    private String contractDownloadUrlSuffix;
+    //归档流程
+    @Value("${eqianbao.api.contract.contract.url.suffix}")
+    private String contractContractUrlSuffix;
+
+
     /**
      * @param path
      * @return
@@ -76,8 +105,8 @@ public class EQBController {
         }
         bo.setContentMd5(md5);
 //        EQianBaoBaseResForm createFileUploadurl(CreateFileUploadurlReqForm reqform, String eqianbaoApiUrlPrefix, String eqianbaoApiAppId, String eqianbaoApiAppSecret);
-
-        EQianBaoBaseResForm form = ieQianBaoService.createFileUploadurl(bo, eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret);
+        IEQBService ieQianBaoService = new IEQBService();
+        EQianBaoBaseResForm form = ieQianBaoService.createFileUploadurl(bo, eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, fileUploadUrlSuffix);
         Map<String, String> map = (Map<String, String>) form.getData();
 
         // 上传文件
@@ -94,7 +123,7 @@ public class EQBController {
         }
         ieQianBaoService.uploadFileByFileUrl(resForm, resourceAsStream, eqianbaoApiAppId, eqianbaoApiAppSecret);
         // 创建模板生成模板编号
-        return AjaxResult.success(ieQianBaoService.createContractTemplateByFileKey(map.get("fileKey"),eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret));
+        return AjaxResult.success(ieQianBaoService.createContractTemplateByFileKey(map.get("fileKey"),eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, contractTemplateCreateUrlSuffix));
     }
 
     public static byte[] getBytesByFile(String pathStr) {
@@ -130,7 +159,8 @@ public class EQBController {
     })
     public AjaxResult signContractDownload(String flowId) {
         System.out.println(flowId);
-        return AjaxResult.success(ieQianBaoService.signContractDownload("1c1009bed17c48ce94421e5112041673", eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret));
+        IEQBService ieQianBaoService = new IEQBService();
+        return AjaxResult.success(ieQianBaoService.signContractDownload("1c1009bed17c48ce94421e5112041673", eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, contractDownloadUrlSuffix));
     }
 }
 

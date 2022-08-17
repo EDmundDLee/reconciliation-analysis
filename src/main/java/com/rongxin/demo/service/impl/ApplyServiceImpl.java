@@ -49,8 +49,8 @@ public class ApplyServiceImpl implements ApplyService {
     @Value("${vx.pay.call.back.url.suffix}")
     private String callBackUrl;
 
-    @Resource
-    private IPayService payService;
+//    @Resource
+//    private IPayService payService;
 
     @Value("${wechat.public.app.id}")
     private String wechatServiceId;
@@ -91,6 +91,7 @@ public class ApplyServiceImpl implements ApplyService {
         payDTO.setAttach(jsonObject.toJSONString());
         //微信支付类型
         payDTO.setWeChatPayType("");
+        IPayService payService = new IPayService();
         UnifiedOrderDefaultResponse response = payService.unifiedorder(payDTO, wechatAppId, wechatServiceId, wechatMchId, wechatSignKey);
         UnifiedOrderResponse orderResponse = response.getOrderResponse();
         if (StringUtils.equals(orderResponse.getReturnCode(), "FAIL")) {
