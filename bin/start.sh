@@ -67,7 +67,7 @@ function run_svc_bin()
     fi
 
     if [[ $NODE_ENV == "prod" ]]; then
-        NODE_HOST=${ip_address} NODE_PORT=${svc_port} CONSUL_HOST=localhost DATASOURCE_URL="jdbc:mysql://10.25.129.26:3306/${db_name}?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai" DATASOURCE_USER="dbowner" DATASOURCE_PWD="ZygE9iiWUrSN9m67" REDIS_HOST="10.25.129.26" REDIS_PORT=6279 ${JAVA_CMD} -jar ${svc_bin} >> ${svc_log} 2>&1 &
+        NODE_HOST=${ip_address} NODE_PORT=${svc_port} CONSUL_HOST=localhost DATASOURCE_URL="jdbc:mysql://rongxin-mysql-p-svc.prod:3306/${db_name}?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai" DATASOURCE_USER="dbowner" DATASOURCE_PWD="ZygE9iiWUrSN9m67" REDIS_HOST="rongxin-redis-m-svc.prod" REDIS_PORT=6279 ${JAVA_CMD} -jar ${svc_bin} >> ${svc_log} 2>&1 &
     fi
 
     local svc_pid=$(ps -ef | grep -w ${svc_bin} | grep ${svc_bin} | grep -v grep | awk '{print $2}')
