@@ -8,6 +8,7 @@ import com.riversoft.weixin.pay.payment.bean.PaymentNotification;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.riversoft.weixin.pay.util.SignatureUtil;
 import com.rongxin.demo.service.ApplyService;
+import com.rongxin.demo.utils.SpringContextUtil;
 import com.rongxin.wechatPay.bo.PayBo;
 import com.rongxin.wechatPay.errors.BusinessException;
 import com.rongxin.wechatPay.req.PayReqForm;
@@ -66,6 +67,8 @@ public class ApplyServiceImpl implements ApplyService {
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
+    @Resource
+    SpringContextUtil springContextUtil;
 
     @SneakyThrows
     @Override
@@ -92,7 +95,7 @@ public class ApplyServiceImpl implements ApplyService {
         //微信支付类型
         payDTO.setWeChatPayType("");
         IPayService payService = new IPayService();
-        UnifiedOrderDefaultResponse response = payService.unifiedorder(payDTO, wechatAppId, wechatServiceId, wechatMchId, wechatSignKey);
+        UnifiedOrderDefaultResponse response = payService.unifiedorder(payDTO, wechatAppId, wechatServiceId, wechatMchId, wechatSignKey, springContextUtil.getActiveProfile());
         UnifiedOrderResponse orderResponse = response.getOrderResponse();
         if (StringUtils.equals(orderResponse.getReturnCode(), "FAIL")) {
             throw new BusinessException(orderResponse.getReturnMessage());
