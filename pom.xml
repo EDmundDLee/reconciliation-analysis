@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <groupId>rongxin.module.common</groupId>
     <artifactId>jlrx-backend-basic-api</artifactId>
     <name>jlrx-backend-basic-api</name>
@@ -81,11 +81,11 @@
             <version>3.8.7</version>
         </dependency>
         <!--        短信发送-->
-<!--        <dependency>-->
-<!--            <groupId>rongxin.module.common</groupId>-->
-<!--            <artifactId>rongxin-jl-module-basic-sms</artifactId>-->
-<!--            <version>3.8.7</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>rongxin.module.common</groupId>
+            <artifactId>rongxin-jl-module-basic-sms</artifactId>
+            <version>3.8.7</version>
+        </dependency>
         <!--        e 签宝-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
@@ -127,28 +127,6 @@
                 </configuration>
             </plugin>
 
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <!-- 不添加assembly的id到打包后的文件名称中 -->
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptors>
-                        <!-- assembly.xml主要包含内容：打包后的文件格式、都包含哪些文件、不同文件的目录(如bin、lib、conf、README.md)、权限等 -->
-                        <descriptor>src/main/assembly/assembly.xml</descriptor>
-                    </descriptors>
-                    <outputDirectory>target/distributions/</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>

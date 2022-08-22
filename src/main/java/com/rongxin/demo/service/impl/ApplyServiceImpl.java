@@ -81,7 +81,8 @@ public class ApplyServiceImpl implements ApplyService {
         PayReqForm payDTO = new PayReqForm();
         payDTO.setNeedCallBack(true);
         payDTO.setPayMethod(PaymentMethodEnum.WE_CHAT.getTypeCode());
-        payDTO.setCallBackUrl(callBackUrl + "/api/v1.0/jnwq/apply/weChatCallBack");
+        payDTO.setCallBackUrl(callBackUrl);
+//        payDTO.setCallBackUrl(callBackUrl + "/api/v1.0/jnwq/apply/weChatCallBack");
         payDTO.setTradeNo(tradeNo);
         payDTO.setProductDesc("测试1");
         payDTO.setTransactionAmount(vo.getTransactionAmount().multiply(new BigDecimal(100)));
