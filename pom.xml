@@ -127,6 +127,28 @@
                 </configuration>
             </plugin>
 
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <!-- 不添加assembly的id到打包后的文件名称中 -->
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <!-- assembly.xml主要包含内容：打包后的文件格式、都包含哪些文件、不同文件的目录(如bin、lib、conf、README.md)、权限等 -->
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                    <outputDirectory>target/distributions/</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
