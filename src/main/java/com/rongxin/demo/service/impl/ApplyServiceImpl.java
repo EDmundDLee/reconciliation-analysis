@@ -91,7 +91,7 @@ public class ApplyServiceImpl implements ApplyService {
         jsonObject.put("userId", "1234567");
         jsonObject.put("transactionNo", transactionNo);
         jsonObject.put("tType", "评估申请");
-        jsonObject.put("apply_id", "1qaz");
+        jsonObject.put("apply_id", "1111111");
         payDTO.setAttach(jsonObject.toJSONString());
         //微信支付类型
         payDTO.setWeChatPayType("");
