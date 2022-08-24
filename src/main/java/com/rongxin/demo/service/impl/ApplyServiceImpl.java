@@ -81,7 +81,8 @@ public class ApplyServiceImpl implements ApplyService {
         PayReqForm payDTO = new PayReqForm();
         payDTO.setNeedCallBack(true);
         payDTO.setPayMethod(PaymentMethodEnum.WE_CHAT.getTypeCode());
-        payDTO.setCallBackUrl(callBackUrl + "/api/v1.0/jnwq/apply/weChatCallBack");
+        payDTO.setCallBackUrl(callBackUrl);
+//        payDTO.setCallBackUrl(callBackUrl + "/api/v1.0/jnwq/apply/weChatCallBack");
         payDTO.setTradeNo(tradeNo);
         payDTO.setProductDesc("测试1");
         payDTO.setTransactionAmount(vo.getTransactionAmount().multiply(new BigDecimal(100)));
@@ -90,7 +91,7 @@ public class ApplyServiceImpl implements ApplyService {
         jsonObject.put("userId", "1234567");
         jsonObject.put("transactionNo", transactionNo);
         jsonObject.put("tType", "评估申请");
-        jsonObject.put("apply_id", "1qaz");
+        jsonObject.put("apply_id", "1111111");
         payDTO.setAttach(jsonObject.toJSONString());
         //微信支付类型
         payDTO.setWeChatPayType("");
