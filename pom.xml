@@ -81,11 +81,11 @@
             <version>3.8.7</version>
         </dependency>
         <!--        短信发送-->
-<!--        <dependency>-->
-<!--            <groupId>rongxin.module.common</groupId>-->
-<!--            <artifactId>rongxin-jl-module-basic-sms</artifactId>-->
-<!--            <version>3.8.7</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>rongxin.module.common</groupId>
+            <artifactId>rongxin-jl-module-basic-sms</artifactId>
+            <version>3.8.7</version>
+        </dependency>
         <!--        e 签宝-->
         <dependency>
             <groupId>rongxin.module.common</groupId>

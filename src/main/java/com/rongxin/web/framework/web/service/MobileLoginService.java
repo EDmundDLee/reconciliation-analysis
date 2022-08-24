@@ -2,16 +2,21 @@ package com.rongxin.web.framework.web.service;
 
 
 import com.rongxin.common.constant.Constants;
+import com.rongxin.common.constant.UserConstants;
 import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.core.domain.model.LoginUser;
+import com.rongxin.common.core.domain.model.RegisterBody;
 import com.rongxin.common.core.redis.RedisCache;
 import com.rongxin.common.exception.ServiceException;
 import com.rongxin.common.exception.user.UserPasswordNotMatchException;
 import com.rongxin.common.utils.DictUtils;
 import com.rongxin.common.utils.MessageUtils;
+import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.StringUtils;
 import com.rongxin.mobile.rongxinadmin.LoginParams;
+import com.rongxin.module.sms.aliyun.properties.ConstantsSms;
+import com.rongxin.module.sms.aliyun.service.AliYunSmsService;
 import com.rongxin.web.framework.manager.AsyncManager;
 import com.rongxin.web.framework.manager.factory.AsyncFactory;
 import com.rongxin.web.service.ISysRoleService;
@@ -39,6 +44,12 @@ import java.util.Set;
 public class MobileLoginService  {
 
     private static final Logger log = LoggerFactory.getLogger(MobileLoginService.class);
+    @Autowired
+    private ISysUserService userService;
+    @Autowired
+    private SysRegisterService registerService;
+    @Autowired
+    private AliYunSmsService aliYunSmsService;
 
     @Autowired(required = false)
     private TokenService tokenService;
@@ -94,7 +105,7 @@ public class MobileLoginService  {
             }
             String validCode = loginParams.getValidCode();
             //2表示登录验证码，校验验证码合法性
-            //sysSmsSendService.checkValidCode(phoneNo,validCode,"2");
+            //aliYunSmsService.checkVerifyCode(phoneNo,validCode);
             loginParams.setUsername(phoneNo);
             loginParams.setPassword("SSO_LOGIN");
         }else if(loginType.equals("1")){
@@ -150,12 +161,14 @@ public class MobileLoginService  {
         ajax.put("isAgent",String.valueOf(true));
         return ajax;
     }
+
     /**
      * 发送注册验证码
      * @param loginParams
      * @return
      */
     public AjaxResult sendCode(LoginParams loginParams) {
+        boolean returnFlag = true;
         if (Objects.isNull(loginParams)) {
             return AjaxResult.error(-6,"参数为空");
         }
@@ -168,10 +181,10 @@ public class MobileLoginService  {
             validCodeType = loginParams.getValidCodeType();
         }
         try{
-            //SysSmsSend sysSmsSend = sysSmsSendService.sendMessage(loginParams.getPhoneNo(),validCodeType,true);
-            //String resultFlag = sysSmsSend.getResultFlag();
-            String resultFlag = "n";
-            if(resultFlag.equals("f")){
+            String randCode = aliYunSmsService.getRandCode(6);
+            String parm = "{\"code\":" + randCode + "}";
+            returnFlag =aliYunSmsService.sendSms(loginParams.getPhoneNo(), ConstantsSms.signName, ConstantsSms.templateCodeA, parm,true);
+            if(!returnFlag){
                 return AjaxResult.error(-6,"对不起手机号【"+loginParams.getPhoneNo()+"】发送短信失败：失败原因:");
             }
         }catch (Exception e){
@@ -182,31 +195,47 @@ public class MobileLoginService  {
     }
 
     /**
-     * 手机号验证码注册用户
-     * @param loginParams
-     * @return
+     * 注册
      */
-    @Transactional(readOnly = false)
-    public AjaxResult registerUser(LoginParams loginParams) {
-        try{
-            if (Objects.isNull(loginParams)) {
-                return AjaxResult.error(-6,"参数为空");
-            }
-            String phoneNo = loginParams.getPhoneNo();
-            if (StringUtils.isBlank(phoneNo)) {
-                return AjaxResult.error(-6,"发送手机号不能为空");
-            }
-            String validCode = loginParams.getValidCode();
-            if (StringUtils.isBlank(validCode)) {
-                return AjaxResult.error(-6,"验证码不能为空");
-            }
-            loginParams.setUsername(phoneNo);
-            loginParams.setPassword(phoneNo);
-            loginParams.setLoginType("1");
-            return  this.login(loginParams);
-        }catch (Exception e){
-            throw new ServiceException(e.getMessage());
+    public String registerUser(RegisterBody registerBody)
+    {
+        String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
+        if (StringUtils.isEmpty(password))
+        {
+            msg = "用户密码不能为空";
         }
+        else if (username.length() < UserConstants.USERNAME_MIN_LENGTH
+                || username.length() > UserConstants.USERNAME_MAX_LENGTH)
+        {
+            msg = "账户长度必须在2到20个字符之间";
+        }
+        else if (password.length() < UserConstants.PASSWORD_MIN_LENGTH
+                || password.length() > UserConstants.PASSWORD_MAX_LENGTH)
+        {
+            msg = "密码长度必须在5到20个字符之间";
+        }
+        else if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(username)))
+        {
+            msg = "保存用户'" + username + "'失败，注册账号已存在";
+        }
+        else
+        {
+            SysUser sysUser = new SysUser();
+            sysUser.setUserName(username);
+            sysUser.setNickName(username);
+            sysUser.setPassword(SecurityUtils.encryptPassword(registerBody.getPassword()));
+            boolean regFlag = userService.registerUser(sysUser);
+            if (!regFlag)
+            {
+                msg = "注册失败,请联系系统管理人员";
+            }
+            else
+            {
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.REGISTER,
+                        MessageUtils.message("user.register.success")));
+            }
+        }
+        return msg;
     }
 
     /**

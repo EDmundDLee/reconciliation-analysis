@@ -7,14 +7,12 @@ import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.core.domain.model.LoginUser;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.StringUtils;
-import com.rongxin.mobile.rongxinadmin.LoginParams;
-import com.rongxin.web.framework.web.service.MobileLoginService;
 import com.rongxin.web.framework.web.service.TokenService;
 import com.rongxin.web.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * 登录控制器
@@ -33,25 +31,6 @@ public class UserController {
     @Autowired
     private TokenService tokenService;
 
-    @Autowired
-    private MobileLoginService loginService;
-
-    /**
-     * 注册用户
-     *
-     * @return -1 用户名或密码错误  -2 账号冻结  -3 账号锁定 1 成功  -4 验证码错误
-     */
-    @PostMapping("/registerUser")
-    @ResponseBody
-    public AjaxResult registerUser(HttpServletRequest request) {
-        String phoneNo = request.getParameter("phoneNo");
-        String validCode = request.getParameter("validCode");
-        // 登录结果
-        LoginParams loginParams = new LoginParams();
-        loginParams.setPhoneNo(phoneNo);
-        loginParams.setValidCode(validCode);
-        return loginService.registerUser(loginParams);
-    }
 
     /**
      * 获取用户信息
