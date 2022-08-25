@@ -67,7 +67,6 @@
         </dependency>
 
         <!-- 定时任务-->
-
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-quartz</artifactId>
