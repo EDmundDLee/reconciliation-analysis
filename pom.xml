@@ -58,12 +58,12 @@
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-common</artifactId>
-            <version>3.8.7</version>
+            <version>3.8.8</version>
         </dependency>
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-framework</artifactId>
-            <version>3.8.7</version>
+            <version>3.8.8</version>
         </dependency>
 
         <!-- 定时任务-->
@@ -71,32 +71,32 @@
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-quartz</artifactId>
-            <version>3.8.7</version>
+            <version>3.8.8</version>
         </dependency>
 
         <!-- 代码生成-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-generator</artifactId>
-            <version>3.8.7</version>
+            <version>3.8.8</version>
         </dependency>
         <!--        短信发送-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-sms</artifactId>
-            <version>3.8.7</version>
+            <version>3.8.8</version>
         </dependency>
         <!--        e 签宝-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-eqb</artifactId>
-            <version>3.8.7</version>
+            <version>3.8.8</version>
         </dependency>
         <!--         微信支付-->
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-wechatPay</artifactId>
-            <version>3.8.7</version>
+            <version>3.8.8</version>
         </dependency>
     </dependencies>
     <build>
