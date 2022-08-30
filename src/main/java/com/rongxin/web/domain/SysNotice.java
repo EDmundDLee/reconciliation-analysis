@@ -32,6 +32,17 @@ public class SysNotice extends BaseEntity
     /** 公告状态（0正常 1关闭） */
     private String status;
 
+    /** sys_notice_user(关联表id) */
+    private String snuId;
+
+    public String getSnuId() {
+        return snuId;
+    }
+
+    public void setSnuId(String snuId) {
+        this.snuId = snuId;
+    }
+
     public Long getNoticeId()
     {
         return noticeId;
