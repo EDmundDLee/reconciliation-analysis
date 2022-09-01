@@ -104,11 +104,11 @@ public class SysNoticeServiceImpl implements ISysNoticeService
         LoginUser lUser = null;
         String resu ="";
         for (String key : keys) {
-             resu = redisCache.getCacheObject(key);
+             resu = String.valueOf(redisCache.getCacheObject(key));
              lUser = JSON.parseObject(resu, LoginUser.class);
 
             //前端发送消息
-            webSocketServer.sendInfo("有新消息!", lUser.getUsername());
+            //webSocketServer.sendInfo("有新消息!", lUser.getUsername());
         }
         return n;
     }
