@@ -14,7 +14,7 @@ import com.rongxin.common.utils.DictUtils;
 import com.rongxin.common.utils.MessageUtils;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.StringUtils;
-import com.rongxin.mobile.rongxinadmin.LoginParams;
+import com.rongxin.mobile.controller.LoginParams;
 import com.rongxin.module.sms.aliyun.properties.ConstantsSms;
 import com.rongxin.module.sms.aliyun.service.AliYunSmsService;
 import com.rongxin.web.framework.manager.AsyncManager;

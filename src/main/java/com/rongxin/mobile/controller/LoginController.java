@@ -1,4 +1,4 @@
-package com.rongxin.mobile.rongxinadmin;
+package com.rongxin.mobile.controller;
 
 import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.controller.BaseController;
@@ -15,13 +15,14 @@ import com.rongxin.web.framework.web.service.TokenService;
 import com.rongxin.web.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * 登录控制器
  *
- * @author SK
- * @since 2018/6/13
+ * @author rx
+ * @since 2022/8/23
  */
 @RestController
 @RequestMapping("/mobile/login")
