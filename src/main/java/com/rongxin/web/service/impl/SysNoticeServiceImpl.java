@@ -109,6 +109,12 @@ public class SysNoticeServiceImpl implements ISysNoticeService
             redisCache.getCacheObject(key);
 
             lUser= redisCache.getCacheObject(key);
+log.info("--------------------------------------------------------------");
+            log.info("--------------------------------------------------------------");
+            log.info("--------------------------------------------------------------");
+            log.info("--------------------------------------------------------------");
+
+
 
              //lUser = JSON.toJavaObject(JSON, LoginUser.class);
 
