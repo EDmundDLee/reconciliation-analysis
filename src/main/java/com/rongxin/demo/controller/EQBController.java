@@ -160,7 +160,7 @@ public class EQBController {
     public AjaxResult signContractDownload(String flowId) {
         System.out.println(flowId);
         IEQBService ieQianBaoService = new IEQBService();
-        return AjaxResult.success(ieQianBaoService.signContractDownload("1c1009bed17c48ce94421e5112041673", eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, contractDownloadUrlSuffix));
+        return AjaxResult.success(ieQianBaoService.signContractDownload("8ec535e548a445968c7d6a588b02952e", eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, contractDownloadUrlSuffix));
     }
 }
 
