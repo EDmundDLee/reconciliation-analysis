@@ -100,6 +100,13 @@ public class SysNoticeServiceImpl implements ISysNoticeService
         }
         Collection<String> keys = redisCache.keys(Constants.LOGIN_TOKEN_KEY + "*");
         for (String key : keys) {
+            log.info( key);
+            log.info( key);        log.info( key);        log.info( key);        log.info( key);        log.info( key);
+
+
+
+
+
             log.info( redisCache.getCacheObject(key));
             LoginUser lUser = redisCache.getCacheObject(key);
             //前端发送消息
