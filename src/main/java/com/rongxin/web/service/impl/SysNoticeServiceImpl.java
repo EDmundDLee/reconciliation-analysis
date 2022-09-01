@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.rongxin.common.constant.Constants;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.core.domain.model.LoginUser;
@@ -104,8 +105,12 @@ public class SysNoticeServiceImpl implements ISysNoticeService
         LoginUser lUser = null;
         String resu ="";
         for (String key : keys) {
-             resu = String.valueOf(redisCache.getCacheObject(key));
-             lUser = JSON.parseObject(resu, LoginUser.class);
+
+            redisCache.getCacheObject(key);
+
+             JSONObject JSON = redisCache.getCacheObject(key);
+
+             lUser = JSON.toJavaObject(JSON, LoginUser.class);
 
             //前端发送消息
             //webSocketServer.sendInfo("有新消息!", lUser.getUsername());
