@@ -14,10 +14,13 @@ import com.rongxin.common.utils.uuid.IdUtils;
 import com.rongxin.framework.websocket.WebSocketServer;
 import com.rongxin.web.domain.SysNotice;
 import com.rongxin.web.domain.SysNoticeUser;
+import com.rongxin.web.framework.aspectj.LogAspect;
 import com.rongxin.web.mapper.SysNoticeMapper;
 import com.rongxin.web.mapper.SysNoticeUserMapper;
 import com.rongxin.web.mapper.SysUserMapper;
 import com.rongxin.web.service.ISysNoticeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService
 {
+    private static final Logger log = LoggerFactory.getLogger(SysNoticeServiceImpl.class);
     @Autowired
     private SysNoticeMapper noticeMapper;
 
@@ -96,6 +100,7 @@ public class SysNoticeServiceImpl implements ISysNoticeService
         }
         Collection<String> keys = redisCache.keys(Constants.LOGIN_TOKEN_KEY + "*");
         for (String key : keys) {
+            log.info( redisCache.getCacheObject(key));
             LoginUser lUser = redisCache.getCacheObject(key);
             //前端发送消息
             webSocketServer.sendInfo("有新消息!", lUser.getUsername());
