@@ -108,9 +108,9 @@ public class SysNoticeServiceImpl implements ISysNoticeService
 
             redisCache.getCacheObject(key);
 
-             JSONObject JSON = redisCache.getCacheObject(key);
+            lUser= redisCache.getCacheObject(key);
 
-             lUser = JSON.toJavaObject(JSON, LoginUser.class);
+             //lUser = JSON.toJavaObject(JSON, LoginUser.class);
 
             //前端发送消息
             //webSocketServer.sendInfo("有新消息!", lUser.getUsername());
