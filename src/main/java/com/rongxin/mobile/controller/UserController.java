@@ -6,15 +6,11 @@ import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.core.domain.model.LoginUser;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.StringUtils;
-import com.rongxin.mobile.senceverification.httpSenceClientPost;
 import com.rongxin.web.framework.web.service.TokenService;
 import com.rongxin.web.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.security.SignatureException;
 
 
 /**

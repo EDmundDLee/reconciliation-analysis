@@ -8,12 +8,9 @@ import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.enums.BusinessType;
 import com.rongxin.common.utils.file.FileUploadUtils;
 import com.rongxin.mobile.senceverification.httpSenceClientPost;
-import com.rongxin.web.util.ImageBase64ToFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.SignatureException;
