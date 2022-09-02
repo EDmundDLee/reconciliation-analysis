@@ -103,23 +103,10 @@ public class SysNoticeServiceImpl implements ISysNoticeService
         }
         Collection<String> keys = redisCache.keys(Constants.LOGIN_TOKEN_KEY + "*");
         LoginUser lUser = null;
-        String resu ="";
         for (String key : keys) {
-
-            redisCache.getCacheObject(key);
-
             lUser= redisCache.getCacheObject(key);
-log.info("--------------------------------------------------------------");
-            log.info("--------------------------------------------------------------");
-            log.info("--------------------------------------------------------------");
-            log.info("--------------------------------------------------------------");
-
-
-
-             //lUser = JSON.toJavaObject(JSON, LoginUser.class);
-
             //前端发送消息
-            //webSocketServer.sendInfo("有新消息!", lUser.getUsername());
+             webSocketServer.sendInfo("有新消息!", lUser.getUsername());
         }
         return n;
     }
