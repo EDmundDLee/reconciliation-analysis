@@ -65,6 +65,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+
 # token配置
 token:
   # 令牌自定义标识
@@ -126,3 +127,5 @@ ali:
     enable: true   #是否启用短信功能
     time-out: 2   # 默认 2分钟 过期
     open-redis: true  # 开启redis 缓存
+
+

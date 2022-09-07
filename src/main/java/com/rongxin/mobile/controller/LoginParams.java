@@ -1,4 +1,4 @@
-package com.rongxin.mobile.rongxinadmin;
+package com.rongxin.mobile.controller;
 
 
 

@@ -1,10 +1,11 @@
-package com.rongxin.web.framework.web.service;
+package com.rongxin.web.framework.web.service.impl;
 
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.core.domain.model.LoginUser;
 import com.rongxin.common.enums.UserStatus;
 import com.rongxin.common.exception.ServiceException;
 import com.rongxin.common.utils.StringUtils;
+import com.rongxin.web.framework.web.service.SysPermissionService;
 import com.rongxin.web.service.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

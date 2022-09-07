@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rongxin.web.domain.SysNotice;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 通知公告表 数据层
@@ -60,4 +61,12 @@ public interface SysNoticeMapper
      * @return 结果
      */
     public int deleteNoticeByIds(Long[] noticeIds);
+
+    /**
+     * 通过userid查询未读消息列表
+     *
+     * @param userId sys_notice_user(关联表user_id)
+     * @return 公告集合
+     */
+    public List<SysNotice> selectMessageList(@Param("userId") String userId);
 }

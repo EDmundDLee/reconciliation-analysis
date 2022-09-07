@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
     </select>
     
-    <insert id="insertNotice" parameterType="SysNotice">
+    <insert id="insertNotice" useGeneratedKeys="true" keyProperty="noticeId" parameterType="SysNotice" keyColumn="notice_id">
         insert into sys_notice (
 			<if test="noticeTitle != null and noticeTitle != '' ">notice_title, </if>
 			<if test="noticeType != null and noticeType != '' ">notice_type, </if>
@@ -85,5 +85,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{noticeId}
         </foreach>
     </delete>
-    
+
+    <!-- 通过userid查询未读消息列表 -->
+    <select id="selectMessageList" parameterType="string" resultType="com.rongxin.web.domain.SysNotice">
+       SELECT
+            sn.*, snu.id AS "snuId"
+        FROM
+            sys_notice sn,
+            sys_notice_user snu
+        WHERE
+            sn. STATUS = '0'
+        AND sn.notice_id = snu.notice_id
+        AND snu. STATUS = '0'
+        AND snu.user_id = #{userId}
+        ORDER BY
+            sn.create_time DESC
+    </select>
 </mapper>
