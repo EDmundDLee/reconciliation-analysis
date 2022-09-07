@@ -5,9 +5,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.controller.BaseController;
 import com.rongxin.common.core.domain.AjaxResult;
+import com.rongxin.common.core.redis.RedisCache;
 import com.rongxin.common.enums.BusinessType;
 import com.rongxin.common.utils.file.FileUploadUtils;
 import com.rongxin.mobile.senceverification.httpSenceClientPost;
+import com.rongxin.mobile.tencent.TencentUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,9 @@ import java.util.Map;
 @RequestMapping("/sence/util")
 public class SenceUitlController extends BaseController {
 
+
+    @Autowired
+    private RedisCache redisCache;
     /**
      * 上传身份证照片（正面 front  反面 back）
      */
@@ -69,4 +75,26 @@ public class SenceUitlController extends BaseController {
          //根据姓名 、身份证号码以及人脸验证的图片进行确认是否本人
         return  AjaxResult.success( httpSenceClientPost.nameAndIdNoPhotoCheckByImage(name,idNumber, ImageBase64));
     }
+
+   //   接下来这段是腾讯云普通版 H5    -------------------------------------开始
+    @Log(title = "人脸识别跳转至第三方服务接口H5界面", businessType = BusinessType.UPDATE)
+    @PostMapping({"getFaceResultTen"})
+    @ResponseBody
+    public AjaxResult getFaceResultTen() throws IOException, SignatureException {
+        String result =  TencentUtil.DetectAuth();
+        JSONObject jsonObject = JSONObject.parseObject(result);
+
+        redisCache.setCacheObject("tencentBizToken", jsonObject.get("BizToken"));
+        return  AjaxResult.success(result);
+    }
+    @Log(title = "获取人脸验证结果信息", businessType = BusinessType.UPDATE)
+    @PostMapping({"checkNameIdNoAndFaceTen"})
+    @ResponseBody
+    public AjaxResult checkNameIdNoAndFaceTen() throws IOException, SignatureException, URISyntaxException {
+
+       String tencentBizToken = redisCache.getCacheObject("tencentBizToken");
+        //根据姓名 、身份证号码以及人脸验证的图片进行确认是否本人
+        return  AjaxResult.success( TencentUtil.GetDetectInfo(tencentBizToken) );
+    }
+    //   接下来这段是腾讯云普通版 H5    -------------------------------------结束
 }

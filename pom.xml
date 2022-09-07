@@ -32,7 +32,11 @@
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <version>3.0.3</version>
         </dependency>
-
+        <!-- elasticsearch -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
         <!-- Mysql驱动包 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -54,6 +58,13 @@
             <artifactId>UserAgentUtils</artifactId>
             <version>${bitwalker.version}</version>
         </dependency>
+        <!-- 腾讯-->
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java-faceid</artifactId>
+            <version>3.1.587</version>
+        </dependency>
+
         <!-- 核心模块-->
         <dependency>
             <groupId>rongxin.module.common</groupId>

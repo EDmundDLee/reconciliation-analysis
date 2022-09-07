@@ -86,3 +86,91 @@ spring:
         max-active: 8
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1ms
+
+
+# 访问身份验证中用到用户标识
+oss:
+  accessKeyId: UjyKDL1Jo24Z6TCm
+  # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+  accessKeySecret: wfVuLx7LsqIEwMqZ4WGd6ZPjUCyEEF
+  # oss的存储空间
+  bucketName: jnwq-land-pub-test
+  # 上传文件夹路径前缀
+  FOLDER: jlncwqw/pkgs/dev/
+  # oss对外服务的访问域名
+  endpoint: https://oss-cn-beijing.aliyuncs.com
+
+#上传到e签宝文件的模板编号
+eqianbao:
+  templateId: 1c1009bed17c48ce94421e5112041673
+  #回调地址
+  sign:
+    call:
+      back:
+        url:
+          suffix: https://dev-dashboard-api-credit.cacfintech.com/api/v1.0/credit/contract/callBackSignContract
+  #测试环境接入地址：
+  api:
+    url:
+      prefix: https://smlo.tsign.cn/opentreaty-service
+    app:
+      #应用标识
+      id: 7438921315
+      #秘钥
+      secret: 0265e6667d3c810454da29a062c8bbe7
+    contract:
+      create:
+        url:
+          #合同模板创建合同
+          suffix: /doc/createbytemplate
+      template:
+        create:
+          url:
+            #创建模板
+            suffix: /template/createbyfilekey
+      download:
+        url:
+          #签署文件下载
+          suffix: /sign/download
+      contract:
+        url:
+          #归档流程
+          suffix: /sign/contract/archiveProcess
+    file:
+      upload:
+        url:
+          #文件上传路径 获取文件直传地址
+          suffix: /file/uploadurl
+    sign:
+      contract:
+        process:
+          create:
+            url:
+              #创建合同签署流程
+              suffix: /sign/contract/addProcess
+    user:
+      auto:
+        sign:
+          contract:
+            url:
+              #发起用户自动签署
+              suffix: /sign/contract/userSignTask
+
+#微信支付
+vx:
+  pay:
+    app:
+      id: wx76e682e76daa70d5
+    mch:
+      id: 1526904001
+    sign:
+      key: ZNRX82f10f51d5481c67b57aN83Hh9ke
+    call:
+      back:
+        url:
+          suffix: https://dev-jlrx-backend-basic-api.cacfintech.com/api/v1.0/admin/apply/test/weChatCallBack
+wechat:
+  public:
+    app:
+      id: wx47bd0da118464bb7
+
