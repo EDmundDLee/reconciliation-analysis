@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.rongxin.web.framework.web.service.ISysOssService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,10 @@ public class CommonController
     private ServerConfig serverConfig;
 
     private static final String FILE_DELIMETER = ",";
-
+    @Autowired
+    private ISysOssService sysOssService;
     /**
-     * 通用下载请求
+     * 通用本地下载请求
      * 
      * @param fileName 文件名称
      * @param delete 是否删除
@@ -53,8 +56,8 @@ public class CommonController
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
             String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
-            String filePath = RXPROConfig.getDownloadPath() + fileName;
-
+            //String filePath = RXPROConfig.getDownloadPath() + fileName;
+            String filePath = sysOssService.getDownloadPath() + fileName;
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             FileUtils.setAttachmentResponseHeader(response, realFileName);
             FileUtils.writeBytes(filePath, response.getOutputStream());
@@ -77,15 +80,16 @@ public class CommonController
     {
         try
         {
+            String fName = file.getOriginalFilename();
             // 上传文件路径
-            String filePath = RXPROConfig.getUploadPath();
+            String filePath = sysOssService.getUploadPath();
             // 上传并返回新文件名称
-            String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
+            String url = sysOssService.upload(file, fName,filePath);
+           // String url = serverConfig.getUrl() + fileName;
             AjaxResult ajax = AjaxResult.success();
             ajax.put("url", url);
-            ajax.put("fileName", fileName);
-            ajax.put("newFileName", FileUtils.getName(fileName));
+            ajax.put("fileName", fName);
+            ajax.put("newFileName", FileUtils.getName(fName));
             ajax.put("originalFilename", file.getOriginalFilename());
             return ajax;
         }
@@ -131,7 +135,44 @@ public class CommonController
             return AjaxResult.error(e.getMessage());
         }
     }
-
+    /**
+     * 通用上传请求（多个）
+     */
+    @PostMapping("/ossUploads")
+    public AjaxResult ossUploads(List<MultipartFile> files) throws Exception
+    {
+        try
+        {
+            // 上传文件路径
+            String filePath = sysOssService.getUploadPath();
+            List<String> urls = new ArrayList<String>();
+            List<String> fileNames = new ArrayList<String>();
+            List<String> newFileNames = new ArrayList<String>();
+            List<String> originalFilenames = new ArrayList<String>();
+            String fileName = "";
+            for (MultipartFile file : files)
+            {
+                fileName =  file.getOriginalFilename();
+                // 上传并返回新文件名称
+                String url = sysOssService.upload(file, file.getOriginalFilename(),filePath);
+                //String fileName = FileUploadUtils.upload(filePath, file);
+                urls.add(url);
+                fileNames.add(fileName);
+                newFileNames.add(FileUtils.getName(fileName));
+                originalFilenames.add(file.getOriginalFilename());
+            }
+            AjaxResult ajax = AjaxResult.success();
+            ajax.put("urls", StringUtils.join(urls, FILE_DELIMETER));
+            ajax.put("fileNames", StringUtils.join(fileNames, FILE_DELIMETER));
+            ajax.put("newFileNames", StringUtils.join(newFileNames, FILE_DELIMETER));
+            ajax.put("originalFilenames", StringUtils.join(originalFilenames, FILE_DELIMETER));
+            return ajax;
+        }
+        catch (Exception e)
+        {
+            return AjaxResult.error(e.getMessage());
+        }
+    }
     /**
      * 本地资源通用下载
      */
