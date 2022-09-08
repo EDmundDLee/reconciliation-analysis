@@ -96,8 +96,9 @@ spring:
         max-wait: -1ms
 
 
-# 访问身份验证中用到用户标识
+
 oss:
+  # 访问身份验证中用到用户标识
   accessKeyId: UjyKDL1Jo24Z6TCm
   # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
   accessKeySecret: wfVuLx7LsqIEwMqZ4WGd6ZPjUCyEEF
