@@ -69,7 +69,7 @@ spring:
             #            password: admin
         elasticsearch:
             rest:
-                uris: 127.0.0.1:9200
+                uris: 10.60.0.30:9200
                 username:
                 password:
 

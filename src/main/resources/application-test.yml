@@ -173,7 +173,7 @@ vx:
     call:
       back:
         url:
-          suffix: https://dev-jlrx-backend-basic-api.cacfintech.com/api/v1.0/admin/apply/test/weChatCallBack
+          suffix: https://test-jlrx-backend-basic-api.cacfintech.com/api/v1.0/admin/apply/test/weChatCallBack
 wechat:
   public:
     app:
