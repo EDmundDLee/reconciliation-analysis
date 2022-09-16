@@ -112,8 +112,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/login", "/register", "/captchaImage","/wsserver/**").anonymous()
                 // 手机登录界面也可以访问
                 .antMatchers("/mobile/login/**").permitAll()
-                // 工作流创建
-                .antMatchers("/models/create/**").permitAll()
                 //微信回调
                 .antMatchers("/apply/test/weChatCallBack").permitAll()
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
