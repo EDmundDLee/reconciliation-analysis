@@ -7,6 +7,7 @@ import com.riversoft.weixin.common.util.XmlObjectMapper;
 import com.riversoft.weixin.pay.payment.bean.PaymentNotification;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.riversoft.weixin.pay.util.SignatureUtil;
+import com.rongxin.demo.controller.ApplyController;
 import com.rongxin.demo.service.ApplyService;
 import com.rongxin.demo.utils.SpringContextUtil;
 import com.rongxin.wechatPay.bo.PayBo;
@@ -20,6 +21,8 @@ import com.rongxin.wechatPay.vo.VXPayCallBackResVo;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +49,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Transactional(rollbackFor = Exception.class)
 public class ApplyServiceImpl implements ApplyService {
 
+    private static final Logger log = LoggerFactory.getLogger(ApplyController.class);
 
     @Value("${vx.pay.call.back.url.suffix}")
     private String callBackUrl;
@@ -72,7 +76,7 @@ public class ApplyServiceImpl implements ApplyService {
 
     @SneakyThrows
     @Override
-    public PayVo pay(PayBo bo1) {
+    public PayVo pay(PayBo bo1) throws BusinessException {
         PayVo vo = new PayVo();
         String transactionNo ="1wertygfdsa1";
         vo.setTransactionNo(transactionNo);

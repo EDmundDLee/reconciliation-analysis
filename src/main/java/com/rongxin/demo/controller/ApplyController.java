@@ -4,6 +4,7 @@ import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.demo.service.ApplyService;
 import com.rongxin.framework.websocket.WebSocketServer;
+import com.rongxin.web.framework.web.service.impl.UserDetailsServiceImpl;
 import com.rongxin.wechatPay.bo.PayBo;
 import com.rongxin.wechatPay.errors.BusinessException;
 import com.rongxin.wechatPay.vo.PayVo;
@@ -55,7 +56,7 @@ public class ApplyController {
         log.info("微信付款回调开始---------------------------------");
         String result = applyService.weChatPayCallBack(request);
         log.info("微信付款回调结束---------------------------------=｛｝", result);
-        //前端发送消息
+        //前端发送消息   此处要根据实际业务进行   transactionNo   对申请前和返回后的业务编号进行对比是否是一个订单，从而判断返回前端 （支付业务表 多个业务创建 多支付场景  支付明细表 ）
         String userName = SecurityUtils.getUsername();
         webSocketServer.sendInfo("有新消息!", userName);
         return AjaxResult.success(result);

@@ -1,5 +1,7 @@
 package com.rongxin.web.controller.system;
 
+import com.rongxin.common.utils.uuid.IdUtils;
+import com.rongxin.web.framework.web.service.ISysOssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +40,8 @@ public class SysProfileController extends BaseController
 
     @Autowired
     private TokenService tokenService;
-
+    @Autowired
+    private ISysOssService sysOssService;
     /**
      * 个人信息
      */
@@ -126,7 +129,11 @@ public class SysProfileController extends BaseController
         if (!file.isEmpty())
         {
             LoginUser loginUser = getLoginUser();
-            String avatar = FileUploadUtils.upload(RXPROConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+
+            // String avatar = FileUploadUtils.upload(RXPROConfig.getAvatarPath(), file, MimeTypeUtils.IMAGE_EXTENSION);
+
+            // 上传并返回新文件路径
+            String avatar = sysOssService.upload(file,   FileUploadUtils.extractFilename(file),sysOssService.getAvatarPath());
             if (userService.updateUserAvatar(loginUser.getUsername(), avatar))
             {
                 AjaxResult ajax = AjaxResult.success();

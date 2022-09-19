@@ -110,7 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
                 .antMatchers("/login", "/register", "/captchaImage","/wsserver/**").anonymous()
-                // 静态资源，可匿名访问  ("/websocket/**") 如果需要不登录也可以访问
+                // 手机登录界面也可以访问
                 .antMatchers("/mobile/login/**").permitAll()
                 //微信回调
                 .antMatchers("/apply/test/weChatCallBack").permitAll()

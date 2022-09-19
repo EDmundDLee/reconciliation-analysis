@@ -10,9 +10,9 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.cj.jdbc.Driver
         druid:
-            # 主库数据源
+            # 主库数据源 activiti  如果没有表则 数据库url追加这段话  &nullCatalogMeansCurrent=true
             master:
-                url: jdbc:mysql://10.60.0.30:3306/rongxin_druid?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+                url: jdbc:mysql://10.60.0.30:3306/rongxin_druid?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
                 username: sample_dbowner
                 password: TDkNWKSFatELG5pN
             # 从库数据源
@@ -72,7 +72,14 @@ spring:
                 uris: 10.60.0.30:9200
                 username:
                 password:
-
+    activiti:
+        # 项目启动时不用检查流程文件
+        check-process-definitions: false
+        #启用作业执行器
+        async-executor-activate: false
+        db-history-used: true
+        database-schema-update: true  # 自动更新数据库结构
+        process-definition-location-prefix: classpath:/processes  # 流程定义文件存储目录
     # redis 配置
     redis:
         # 地址
@@ -181,4 +188,9 @@ wechat:
     public:
         app:
             id: wx47bd0da118464bb7
+
+activiti:
+    database-schema-update: true
+    # 自动部署验证设置:true-开启（默认）、false-关闭
+    check-process-definitions: false
 
