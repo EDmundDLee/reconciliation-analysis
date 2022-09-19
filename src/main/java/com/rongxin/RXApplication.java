@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * 
  * @author rx
  */
-//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})  无工作流版本 下面是有工作流版本
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class,
         DataSourceAutoConfiguration.class})
 public class RXApplication
