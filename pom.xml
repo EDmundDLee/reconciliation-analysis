@@ -54,7 +54,14 @@
             <artifactId>UserAgentUtils</artifactId>
             <version>${bitwalker.version}</version>
         </dependency>
-        <!-- 腾讯-->
+        <!--rabbitmq-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>2.2.5.RELEASE</version>
+        </dependency>
+
+        <!-- 腾讯云  人脸核身-->
         <dependency>
             <groupId>com.tencentcloudapi</groupId>
             <artifactId>tencentcloud-sdk-java-faceid</artifactId>
@@ -74,13 +81,11 @@
         </dependency>
 
         <!-- 定时任务-->
-
         <dependency>
             <groupId>rongxin.module.common</groupId>
             <artifactId>rongxin-jl-module-basic-quartz</artifactId>
             <version>3.8.8</version>
         </dependency>
-
         <!-- 代码生成-->
         <dependency>
             <groupId>rongxin.module.common</groupId>

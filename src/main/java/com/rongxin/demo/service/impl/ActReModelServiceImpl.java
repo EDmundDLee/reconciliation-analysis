@@ -13,6 +13,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rongxin.common.utils.DateUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rongxin.common.utils.SecurityUtils;
+import com.rongxin.common.utils.uuid.IdUtils;
+import com.rongxin.web.framework.config.DirectRabbitConfig;
+import com.rongxin.web.framework.config.mq.MqMessage;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
@@ -27,6 +30,8 @@ import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.rongxin.demo.mapper.ActReModelMapper;
@@ -56,6 +61,7 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
     ProcessEngine processEngine;
     @Autowired
     ObjectMapper objectMapper;
+
 
     /**
      * 部署流程（将resource下的bpmn和png文件部署到数据库中，

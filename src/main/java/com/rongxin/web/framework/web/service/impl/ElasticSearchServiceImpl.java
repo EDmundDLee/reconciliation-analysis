@@ -117,7 +117,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService
         indexRequest.id(id).source(source, XContentType.JSON);
         // 操作ES
         IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-        System.out.println(indexResponse.toString());
         return indexResponse.getId();
     }
     /**
@@ -140,7 +139,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService
         requests.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);//等待分片与备份刷新完成后再返回。
         // 操作ES
         response  = client.bulk(requests, RequestOptions.DEFAULT);
-        System.out.println(response.toString());
         return response.getItems().length;
     }
     /**
@@ -180,7 +178,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService
         requests.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);//等待分片与备份刷新完成后再返回。
         // 操作ES
         response  = client.bulk(requests, RequestOptions.DEFAULT);
-        System.out.println(response.toString());
         return response.getItems().length;
     }
 
