@@ -57,6 +57,7 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
     @Autowired
     ObjectMapper objectMapper;
 
+
     /**
      * 部署流程（将resource下的bpmn和png文件部署到数据库中，
      * 本项目中由于采用的事原生设计器可不考虑，如果没有通过设计器而是文件这采用此手段）
