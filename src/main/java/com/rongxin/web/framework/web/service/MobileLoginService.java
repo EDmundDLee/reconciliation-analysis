@@ -47,8 +47,6 @@ public class MobileLoginService  {
     @Autowired
     private ISysUserService userService;
     @Autowired
-    private SysRegisterService registerService;
-    @Autowired
     private AliYunSmsService aliYunSmsService;
 
     @Autowired(required = false)
@@ -63,11 +61,7 @@ public class MobileLoginService  {
     @Autowired(required = false)
     private AuthenticationManager authenticationManager;
 
-    @Autowired(required = false)
-    private ISysUserService sysUserService;
 
-    @Autowired(required = false)
-    private PermissionService permissionService;
 
     /**
      * 注入redis服务
@@ -140,6 +134,7 @@ public class MobileLoginService  {
         // 生成token
         String token = tokenService.createToken(loginUser);
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginParams.getUsername(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+
         sysLoginService.recordLoginInfo(user.getUserId());
         //判断用户是否存在管理员角色
         // 角色集合

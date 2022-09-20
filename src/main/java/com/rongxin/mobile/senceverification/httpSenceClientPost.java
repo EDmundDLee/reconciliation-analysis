@@ -112,12 +112,13 @@ public class httpSenceClientPost {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    public static String getInfoFromOcrIdCard(String outsString,String imagePath) throws ClientProtocolException, IOException, SignatureException {
+    public static String getInfoFromOcrIdCard(String outsString,String imageBase64) throws ClientProtocolException, IOException, SignatureException {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost post = new HttpPost(ConstantsSence.POST_URLD);
-        FileBody fileBody = new FileBody(new File(imagePath));
+       // FileBody fileBody = new FileBody(new File(imagePath));
         MultipartEntity entity = new MultipartEntity();
-        entity.addPart("image_file", fileBody);
+        StringBody imageBase64Body = new StringBody(imageBase64);
+        entity.addPart("image_base64", imageBase64Body);
         //用于说明idcard正反面，默认值为auto表示自动，值为front表示正面（人像面），值为back表示背面（即为国徽面），
         StringBody outsideResrult = new StringBody(outsString,Charset.forName("UTF-8"));
         entity.addPart("side",outsideResrult);
