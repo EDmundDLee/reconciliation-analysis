@@ -25,7 +25,7 @@ public class TencentUtilController {
     @PostMapping({"getFaceResultTen"})
     @ResponseBody
     public AjaxResult getFaceResultTen(String idCard,String name){
-        String result =  TencentUtil.DetectAuth(idCard,name);
+        String result =  TencentUtil.DetectAuth(name,idCard);
         JSONObject jsonObject = JSONObject.parseObject(result);
         redisCache.setCacheObject("tencentBizToken", jsonObject.get("BizToken"));
         return  AjaxResult.success(result);
