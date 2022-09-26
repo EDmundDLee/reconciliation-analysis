@@ -53,7 +53,7 @@ public class TencentUtil
      * 人脸识别跳转至第三方服务接口H5界面
      * @return
      */
-    public static String DetectAuth() {
+    public static String DetectAuth(String name,String idCard) {
         String resultStr = "";
         try{
             // 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey,此处还需注意密钥对的保密
@@ -69,8 +69,8 @@ public class TencentUtil
             FaceidClient client = new FaceidClient(cred, "", clientProfile);
             // 实例化一个请求对象,每个接口都会对应一个request对象
             DetectAuthRequest req = new DetectAuthRequest();
-            req.setIdCard("230506198802030215");
-            req.setName("高玉坤");
+            req.setIdCard(idCard);
+            req.setName(name);
             req.setRuleId("1");
             req.setRedirectUrl("https://dev-jlrx-backend-basic.cacfintech.com/twxredirect.html");
             // 返回的resp是一个DetectAuthResponse的实例，与请求对象对应

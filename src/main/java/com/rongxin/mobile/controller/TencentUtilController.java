@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.SignatureException;
 import java.util.Map;
 
 @RestController
@@ -26,17 +24,16 @@ public class TencentUtilController {
     @Log(title = "人脸识别跳转至第三方服务接口H5界面", businessType = BusinessType.UPDATE)
     @PostMapping({"getFaceResultTen"})
     @ResponseBody
-    public AjaxResult getFaceResultTen() throws IOException, SignatureException {
-        String result =  TencentUtil.DetectAuth();
+    public AjaxResult getFaceResultTen(String idCard,String name){
+        String result =  TencentUtil.DetectAuth(idCard,name);
         JSONObject jsonObject = JSONObject.parseObject(result);
-
         redisCache.setCacheObject("tencentBizToken", jsonObject.get("BizToken"));
         return  AjaxResult.success(result);
     }
     @Log(title = "获取人脸验证结果信息", businessType = BusinessType.UPDATE)
     @PostMapping({"checkNameIdNoAndFaceTen"})
     @ResponseBody
-    public AjaxResult checkNameIdNoAndFaceTen() throws IOException, SignatureException, URISyntaxException {
+    public AjaxResult checkNameIdNoAndFaceTen()  {
 
         String tencentBizToken = redisCache.getCacheObject("tencentBizToken");
         //根据姓名 、身份证号码以及人脸验证的图片进行确认是否本人
@@ -46,7 +43,6 @@ public class TencentUtilController {
     @PostMapping({"IdCardVerification"})
     @ResponseBody
     public AjaxResult IdCardVerification(String idCard,String name)  {
-
         return  AjaxResult.success( TencentUtil.IdCardVerification(idCard,name) );
     }
 
