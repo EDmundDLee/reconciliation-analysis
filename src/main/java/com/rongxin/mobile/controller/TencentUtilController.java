@@ -27,6 +27,7 @@ public class TencentUtilController {
     public AjaxResult getFaceResultTen(String idCard,String name){
         String result =  TencentUtil.DetectAuth(name,idCard);
         JSONObject jsonObject = JSONObject.parseObject(result);
+        //此处实际应用的时候需要进行业务逻辑表支撑
         redisCache.setCacheObject("tencentBizToken", jsonObject.get("BizToken"));
         return  AjaxResult.success(result);
     }
