@@ -1,5 +1,4 @@
-package com.rongxin.mobile.rongxinadmin;
-
+package com.rongxin.mobile.controller;
 
 
 import com.rongxin.common.core.domain.AjaxResult;
@@ -71,4 +70,5 @@ public class UserController {
         sysUserService.updateUser(currentUser);
         return ajax;
     }
+
 }

@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.rongxin.common.constant.Constants;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.core.domain.model.LoginUser;
@@ -14,10 +16,14 @@ import com.rongxin.common.utils.uuid.IdUtils;
 import com.rongxin.framework.websocket.WebSocketServer;
 import com.rongxin.web.domain.SysNotice;
 import com.rongxin.web.domain.SysNoticeUser;
+import com.rongxin.web.framework.aspectj.LogAspect;
 import com.rongxin.web.mapper.SysNoticeMapper;
 import com.rongxin.web.mapper.SysNoticeUserMapper;
 import com.rongxin.web.mapper.SysUserMapper;
 import com.rongxin.web.service.ISysNoticeService;
+import org.apache.poi.ss.formula.functions.T;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SysNoticeServiceImpl implements ISysNoticeService
 {
+    private static final Logger log = LoggerFactory.getLogger(SysNoticeServiceImpl.class);
     @Autowired
     private SysNoticeMapper noticeMapper;
 
@@ -95,10 +102,11 @@ public class SysNoticeServiceImpl implements ISysNoticeService
             n = sysNoticeUserMapper.insertSysNoticeUser(snu);
         }
         Collection<String> keys = redisCache.keys(Constants.LOGIN_TOKEN_KEY + "*");
+        LoginUser lUser = null;
         for (String key : keys) {
-            LoginUser lUser = redisCache.getCacheObject(key);
+            lUser= redisCache.getCacheObject(key);
             //前端发送消息
-            webSocketServer.sendInfo("有新消息!", lUser.getUsername());
+             webSocketServer.sendInfo("有新消息!", lUser.getUsername());
         }
         return n;
     }
