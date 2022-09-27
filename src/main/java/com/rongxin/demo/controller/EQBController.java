@@ -77,7 +77,7 @@ public class EQBController {
     @Value("${eqianbao.api.contract.contract.url.suffix}")
     private String contractContractUrlSuffix;
     //项目上传文件路径
-    @Value("${reportPath}")
+    @Value("${eqianbao.reportPath}")
     private String reportPath;
 
     @Resource
