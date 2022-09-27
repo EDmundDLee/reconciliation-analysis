@@ -49,7 +49,7 @@ spring:
     basename: i18n/messages
   profiles:
     active: ${NODE_ENV}
-    #active: local
+#    active: local
   # 文件上传
   servlet:
     multipart:

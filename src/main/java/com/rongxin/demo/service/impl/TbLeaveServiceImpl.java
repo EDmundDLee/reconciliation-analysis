@@ -234,4 +234,38 @@ public class TbLeaveServiceImpl extends ServiceImpl<TbLeaveMapper, TbLeave> impl
         updateStatus(Long.valueOf(id),"0");
         return "申请人重新申请";
     }
+//多人会签
+    //在第一个人创建的时候添加list
+//添加会签的人员，这里可以根据自己的业务逻辑去动态获取列表
+    //在监听里添加 或者在上一级节点完成时添加
+//        List<String> assigneeList = new ArrayList<String>();
+//        arg0.setVariable("assigneeList",assigneeList);
+//
+//    public void completeTask(String taskId,String instanceId,String passflag){
+//        ProcessEngine processEngine =ProcessEngines.getDefaultProcessEngine();
+//        List<Task> tasks = processEngine.getTaskService().createTaskQuery().taskName("t2").processInstanceId("instanceId").list();
+//        int count = 0;
+//        int totalCount = 0;
+//        for(Task tmp:tasks){
+//
+//            String tmpCount = processEngine.getTaskService().getVariable(tmp.getId(), "passCount")+"";//获取通过记录数，这里不能使用nrOfCompletedInstances，因为与我们业务无关
+//            String tmpTotal = processEngine.getTaskService().getVariable(tmp.getId(), "totalCount")+"";//获取记录总数
+//            if(!tmpCount.equals("null") && !tmpCount.trim().equals("")){
+//                count = Integer.parseInt(tmpCount);
+//            }
+//            if(!tmpTotal.equals("null") && !tmpTotal.trim().equals("")){
+//                totalCount = Integer.parseInt(tmpTotal);
+//            }
+//            System.out.println(tmp.getId()+"var = "+passflag);
+//            if(passflag.equals("yes")){//选择通过则+1
+//                count++;
+//            }
+//            totalCount++;
+//        }
+//        Map<String, Object> vars = new HashMap<String,Object>();
+//        //变量回写记录
+//        vars.put("passCount", count);
+//        vars.put("totalCount", totalCount);
+//        processEngine.getTaskService().complete(taskId,vars);
+//    }
 }

@@ -3,27 +3,28 @@ package com.rongxin.demo.controller;
 import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.enums.BusinessType;
+import com.rongxin.demo.service.ILandsService;
 import com.rongxin.eqb.req.CreateFileUploadurlReqForm;
 import com.rongxin.eqb.res.EQianBaoBaseResForm;
 import com.rongxin.eqb.res.GetUploadFileUrlResForm;
 import com.rongxin.eqb.service.IEQBService;
+import com.rongxin.wechatPay.errors.BusinessException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import org.springframework.util.StreamUtils;
+import java.io.*;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+
 /**
  * 测试e签宝
  *
@@ -75,24 +76,49 @@ public class EQBController {
     //归档流程
     @Value("${eqianbao.api.contract.contract.url.suffix}")
     private String contractContractUrlSuffix;
+    //项目上传文件路径
+    @Value("${eqianbao.reportPath}")
+    private String reportPath;
 
-
+    @Resource
+    ILandsService iLandsService;
     /**
-     * @param path
+     * @param files
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('eqb:eqbTest:generateTemplateNo')")
+    @Log(title = "后台人员手动上传文件绝对路径生成模板编号", businessType = BusinessType.INSERT)
     @PostMapping(value = "/generateTemplateNo")
-    @ApiOperation("后台人员手动上传文件绝对路径生成模板编号")
     @ApiImplicitParams({
             @ApiImplicitParam(value = "鉴权token", name = "authorization", paramType = "header", dataType = "String", required = true),
             @ApiImplicitParam(value = "文件路径", name = "path", paramType = "header", dataType = "String", required = true),
     })
-    public AjaxResult generateTemplateNo(@RequestHeader("path") String path) {
+    public AjaxResult generateTemplateNo(MultipartFile[] files) {
+        String path = "";
+        for(int i = 0;i < files.length; i++) {
+            MultipartFile file = files[i];
+            String fileName = file.getOriginalFilename();
+            long fileSize = file.getSize();
+            int begin = fileName.indexOf(".");
+            String fileType = fileName.substring(begin);
 
+            try{
+                File outFile = new File(reportPath);
+                if (!outFile.exists()) {
+                    outFile.mkdirs();
+                }
+                path = reportPath+"/"+files[i].getOriginalFilename();
+                InputStream in = file.getInputStream();
+                OutputStream out = new FileOutputStream(path);
+                StreamUtils.copy(in, out);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         // 获取文件直传地址
         File file = new File(path);
         CreateFileUploadurlReqForm bo = new CreateFileUploadurlReqForm();
-        bo.setFileName("咨询报告单.pdf");
+        bo.setFileName("测试咨询报告单.pdf");
         bo.setFileSize(file.length());
         bo.setContentType("application/pdf");
         // 计算文件MD5
@@ -100,15 +126,13 @@ public class EQBController {
         try {
             md5 = Base64.getEncoder().encodeToString(MessageDigest.getInstance("md5").digest(getBytesByFile(path)));
             System.out.println(md5);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         bo.setContentMd5(md5);
-//        EQianBaoBaseResForm createFileUploadurl(CreateFileUploadurlReqForm reqform, String eqianbaoApiUrlPrefix, String eqianbaoApiAppId, String eqianbaoApiAppSecret);
         IEQBService ieQianBaoService = new IEQBService();
         EQianBaoBaseResForm form = ieQianBaoService.createFileUploadurl(bo, eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, fileUploadUrlSuffix);
         Map<String, String> map = (Map<String, String>) form.getData();
-
         // 上传文件
         GetUploadFileUrlResForm resForm = new GetUploadFileUrlResForm();
         resForm.setFileKey(map.get("fileKey"));
@@ -158,9 +182,23 @@ public class EQBController {
             @ApiImplicitParam(value = "文件编码", name = "flowId", paramType = "header", dataType = "String", required = true),
     })
     public AjaxResult signContractDownload(String flowId) {
-        System.out.println(flowId);
         IEQBService ieQianBaoService = new IEQBService();
-        return AjaxResult.success(ieQianBaoService.signContractDownload("8ec535e548a445968c7d6a588b02952e", eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, contractDownloadUrlSuffix));
+        return AjaxResult.success(ieQianBaoService.signContractDownload(flowId, eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, contractDownloadUrlSuffix));
+    }
+
+
+    /**
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('eqb:eqbTest:test')")
+    @GetMapping(value = "/test")
+    @ApiOperation("测试下载文件接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "鉴权token", name = "authorization", paramType = "header", dataType = "String", required = true),
+            @ApiImplicitParam(value = "文件编码", name = "flowId", paramType = "header", dataType = "String", required = true),
+    })
+    public AjaxResult test() throws BusinessException {
+        return AjaxResult.success(iLandsService.generateTemplate());
     }
 }
 
