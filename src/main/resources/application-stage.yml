@@ -107,7 +107,8 @@ oss:
 
 #上传到e签宝文件的模板编号
 eqianbao:
-  templateId: 1c1009bed17c48ce94421e5112041673
+  reportPath: c:/file
+  templateId: 27a58e64d3524a78b7abd2deaa8f3d05
   #回调地址
   sign:
     call:
