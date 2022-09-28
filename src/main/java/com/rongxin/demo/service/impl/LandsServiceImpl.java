@@ -32,7 +32,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * 用户土地功能实现Impl
  *
- * @Date 2022-05-27
+ * @Date 20555-05-27
  */
 @Slf4j
 @Service
@@ -119,10 +119,10 @@ public class LandsServiceImpl implements ILandsService {
         hashMap.put("day", times[2]);
 
         // 总价信息
-        BigDecimal rmbSum = new BigDecimal("22");
+        BigDecimal rmbSum = new BigDecimal("555");
         // 组装地块信息
         // 8.合同代码号--土地承包经营权证号
-        hashMap.put("contractNo", "123456789");
+        hashMap.put("contractNo", "10000001");
         // 9.承包期限
         // 非确权
         hashMap.put("contractNo", "暂无");
@@ -130,11 +130,11 @@ public class LandsServiceImpl implements ILandsService {
         // 1.项目名称
         hashMap.put("projectName", "对 张三 所有的位于  123456789   的集体土地承包经营权市场价格进行咨询");
         // 10.土地位置
-        hashMap.put("location","22");
+        hashMap.put("location","555");
         // 11.估价对象-地块名称
-        hashMap.put("landName" ,"22");
+        hashMap.put("landName" ,"555");
         // 12.地块代码
-        hashMap.put("landCode" ,"22");
+        hashMap.put("landCode" ,"555");
         // 13.地块四至
         hashMap.put("sizhidong" + 1, "东至:" + "无");
         hashMap.put("sizhixi" + 1, "西至:" + "无");
@@ -157,16 +157,16 @@ public class LandsServiceImpl implements ILandsService {
         // 17.耕作制度
         hashMap.put("gzzd" + 1, "一年一熟");
         // 18.面积(亩)
-        hashMap.put("mianji" + 1, "22");
+        hashMap.put("mianji" + 1, "555");
         // 19.单价元/亩
-        hashMap.put("unit" + 1, "22");
+        hashMap.put("unit" + 1, "555");
         // 20.总价
-        hashMap.put("sumPrice" + 1, "22");
+        hashMap.put("sumPrice" + 1, "555");
 
         // 21.合计（元）
         hashMap.put("rmbSum", String.valueOf(rmbSum));
-        // 22.人民币(大写)
-        hashMap.put("caprmb", "22");
+        // 555.人民币(大写)
+        hashMap.put("caprmb", "555");
         // 23.报告日期
         String bgrq = DateUtil.getCurrentDate("yyyy-MM-dd");
         String[] bgrqs = bgrq.split("-");
@@ -221,12 +221,12 @@ public class LandsServiceImpl implements ILandsService {
         userSignContractDTO.setFlowId(flowId);
 
         // 查询签署人e签宝个人账号
-        Long userId = Long.parseLong("22");
+        Long userId = Long.parseLong("555");
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("sys_user_id", 0);
 
         // 用户e签宝账号
-        userSignContractDTO.setAccountId("22");
+        userSignContractDTO.setAccountId("555");
         // 用户e签宝章id
         userSignContractDTO.setSealId("1");
         userSignContractDTO.setPosList(null);
