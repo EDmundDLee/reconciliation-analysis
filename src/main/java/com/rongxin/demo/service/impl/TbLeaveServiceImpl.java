@@ -258,8 +258,8 @@ public class TbLeaveServiceImpl extends ServiceImpl<TbLeaveMapper, TbLeave> impl
         if(null == list){
             return "当前人是否有审批任务或者是否已经审批完成";
         }else{
-            int spCount = list.get(0);
-            int count = list.get(1);
+            int count = list.get(0);
+            int spCount = list.get(1);
             int totalCount = list.get(2);
             if(spCount == totalCount){
                 if(count/totalCount<1 ){
