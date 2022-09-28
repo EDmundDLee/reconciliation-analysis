@@ -2,10 +2,7 @@ package com.rongxin.demo.service.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,19 +10,24 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rongxin.common.utils.DateUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rongxin.common.utils.SecurityUtils;
+import com.rongxin.demo.domain.ActivitiHis;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.editor.constants.ModelDataJsonConstants;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
+import org.activiti.engine.history.*;
 import org.activiti.engine.impl.identity.Authentication;
+import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +58,8 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
     ProcessEngine processEngine;
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    private HistoryService historyService;
 
 
     /**
@@ -100,6 +104,7 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
         }
         return returnList;
     }
+
     @Override
     public String startProcess(String keyName) {
         //获取模型
@@ -121,33 +126,18 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
      * @return
      */
     @Override
-    public String applyProcess(String keyName) {
+    public String applyProcess(String keyName, Map<String, Object> variablesNext) {
         //设置任务委派人
         Map<String, Object> variables = new HashMap<>();
-        variables.put("applicant", SecurityUtils.getUsername());
-        //流程发起人
+         //流程发起人
         Authentication.setAuthenticatedUserId(SecurityUtils.getUsername());
-        //variables.put("applicant", "admin");
+        //获取流程定义key
         String key = actReModelMapper.getKeyForProcess(keyName);
-
         //根据流程定义key来启动流程定义，返回流程实例
-        ProcessInstance pi = runtimeService.startProcessInstanceByKey(key,variables);
-        //业务数据与 实例id存储一下
-
+        ProcessInstance pi = runtimeService.startProcessInstanceByKey(key,variables);//variables 此处根据实际需要后续判断是否需要传递参数
         //申请人无需审批，直接通过，流程流转到下一个人，
-        Map<String, Object> variablesNext = new HashMap<>();
-        //TODO 这里需要获取数据库定义的配置来确定经理是谁
-        variablesNext.put("manager","dept");
         //根据流程id获取任务
         Task task = taskService.createTaskQuery().processInstanceId(pi.getProcessInstanceId()).singleResult();
-
-       //
-        //map.put("流程实例ID:", task.getProcessInstanceId());
-       // map.put("任务ID:", task.getId());
-       // map.put("任务负责人:", task.getAssignee());
-       // map.put("任务名称:", task.getName());
-        //存储数据  并通过流程实例ID 用于后续逻辑审批
-        //自动通过申请人，交给下任处理
         taskService.complete(task.getId(),variablesNext);//处理完成，交给下个人
         return pi.getProcessInstanceId();
     }
@@ -157,7 +147,8 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
      * @param name
      * @return
      */
-     public List<Map<String,Object>> myTask(String name) {
+    @Override
+    public List<Map<String,Object>> myTask(String name) {
         List<Task> list = taskService.createTaskQuery().taskAssignee(name).list();
         //任务列表的展示
         List<Map<String,Object>> returnList = new ArrayList<>();
@@ -178,16 +169,125 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
      * @param processInstanceId  流程实例id
      * @return
      */
-    public String applicant(String processInstanceId){
+    @Override
+    public boolean reApply(String processInstanceId, Map<String, Object> variablesNext){
         //根据流程id获取任务
         Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
         if (task == null) {
-            return "找不到任务";
+            return false;
         }
-        Map<String, Object> variablesNext = new HashMap<>();
-        variablesNext.put("manager","经理");
         taskService.complete(task.getId(),variablesNext);//处理完成，交给下个人
-        return "申请人重新申请";
+        return true;
+    }
+
+    /**
+     * 单流程审批逻辑
+     * @param processInstanceId  流程id
+     * @param variablesNext 流程所需参数
+     * @param comment 审批意见
+     * @return
+     */
+    @Override
+    public boolean singleFlow(String processInstanceId, Map<String, Object> variablesNext,String comment,String userId){
+        //根据流程id获取任务
+        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+        //根据流程代理人（即流程的审批人task.getAssignee()）进行判断是否是所设置的人
+        if (task == null || !userId.equals(task.getAssignee())) {
+            return false;
+        }
+        //需要添加此句否则审批意见表中ACT_HI_COMMENT，审批人的userId是空的
+        Authentication.setAuthenticatedUserId(SecurityUtils.getUsername());
+        taskService.addComment(task.getId(),processInstanceId,comment);//审批意见
+        taskService.complete(task.getId(),variablesNext);//处理完成，交给下个人
+        return true;
+    }
+
+    /**
+     * 会签审批(并行)
+     * @param processInstanceId 流程实例id
+     * @param hqname 会签人
+     * @param comment 会签意见
+     * @param managerOpinion 通过 0 不通过 1 通过
+     * @return
+     */
+    @Override
+    public List<Integer> joinSign(String processInstanceId,String hqname,String comment,int managerOpinion){
+        if(findProcessInstanceByTaskId(processInstanceId) == null){
+            return null;
+        }
+        //可以通过这个查询获取当前会签的一组任务
+        List<Task> tasks= taskService.createTaskQuery().processInstanceId(processInstanceId).list();
+        String taskId = "";
+        int spCount =0;
+        int count = 0;
+        int totalCount = 0;
+        //对一组任务进行循环处理判断一组任务内的通过情况数
+        for(Task tmp:tasks){
+            String tmpTotal = taskService.getVariable(tmp.getId(), "totalCount")+"";//获取记录总数
+            if(!tmpTotal.equals("null") && !tmpTotal.trim().equals("")){
+                totalCount = Integer.parseInt(tmpTotal);
+            }
+            //当前人处理审批
+            if(tmp.getAssignee().equals(hqname)){
+                Authentication.setAuthenticatedUserId(hqname);
+                taskService.addComment( tmp.getId(),processInstanceId,comment);//添加评论内容
+                taskId = tmp.getId();//获取任务id
+                String tmpCount = taskService.getVariable(tmp.getId(), "passCount")+"";//获取通过记录数，这里不能使用nrOfCompletedInstances，因为与我们业务无关
+                if(!tmpCount.equals("null") && !tmpCount.trim().equals("")){
+                    count = Integer.parseInt(tmpCount);
+                }
+                String tmpSp = taskService.getVariable(tmp.getId(), "spCount")+"";//获取审批记录数
+                if(!tmpSp.equals("null") && !tmpSp.trim().equals("")){
+                    spCount = Integer.parseInt(tmpSp);
+                }
+                spCount++;//对已评论数进行累加
+                if(managerOpinion == 1   ){//选择通过则+1
+                    count++;//对已通过数进行累加
+                }
+            }
+            if( totalCount == 0){
+                totalCount++;
+            }
+        }
+        if(!taskId.equals("")){
+            Map<String, Object> vars = new HashMap<String,Object>();
+            //变量回写记录
+            vars.put("passCount", count);
+            vars.put("spCount", spCount);
+            vars.put("totalCount", totalCount);
+            taskService.complete(taskId,vars);
+            List<Integer> list  = new ArrayList<>();
+            list.add(count);
+            list.add(spCount);
+            list.add(totalCount);
+            return list;
+        }else{
+            return null;
+        }
+
+    }
+    /**
+     * 获取当前正在执行的信息
+     * @param processInstanceId 流程ID
+     * @return
+     */
+    @Override
+    public ProcessInstance findNowExcute(String processInstanceId){
+        /**判断流程是否结束，查询正在执行的执行对象表*/
+        ProcessInstance rpi = processEngine.getRuntimeService()//
+                .createProcessInstanceQuery()//创建流程实例查询对象
+                .processInstanceId(processInstanceId)
+                .singleResult();
+        //说明流程实例结束了
+        if(rpi==null){
+            /**查询历史，获取流程的相关信息*/
+            HistoricProcessInstance hpi = processEngine.getHistoryService()//
+                    .createHistoricProcessInstanceQuery()//
+                    .processInstanceId(processInstanceId)//使用流程实例ID查询
+                    .singleResult();
+            System.out.println(hpi.getId()+"    "+hpi.getStartTime()+"   "+hpi.getEndTime()+"   "+hpi.getDurationInMillis());
+        }
+        return rpi;
     }
     /**
      * 查询工作流基础示例
@@ -212,6 +312,7 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
     {
         return actReModelMapper.selectActReModelList(actReModel);
     }
+
 
     /**
      * 新增工作流基础示例
@@ -311,6 +412,105 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
     }
 
     /**
+     * 撤销审批
+     * @param keyName
+     * @param userName
+     * @return
+     */
+    @Override
+    public String rollBackProEx(String keyName,String userName) {
+
+        //instId 为流程表单id  business_key
+        //hisTaskId  已办任务中的任务历史id(该id为最后一个已办节点，也可以通过 instId来获取list遍历)
+        Task task = taskService.createTaskQuery().processInstanceId(keyName).singleResult();
+        if(task==null) {
+           return "流程未启动或已执行完成，无法撤回";
+        }
+        //获取已完成的任务历史记录
+		List<HistoricTaskInstance> htiList = historyService.createHistoricTaskInstanceQuery()
+				.processInstanceId(keyName)
+				.finished()
+				.orderByTaskCreateTime()
+				.desc()
+				.list();
+		//判断上一节点处理人是否为当前用户
+		HistoricTaskInstance hisTask = null;
+		if(htiList != null && htiList.size()>0) {
+			HistoricTaskInstance hisTaskObj = htiList.get(0);
+
+			if(userName.equals(hisTaskObj.getAssignee())) {
+				hisTask = hisTaskObj;
+			}
+		}
+
+        if(null==hisTask || !userName.equals(hisTask.getAssignee())) {
+            return "该任务非当前用户提交，无法撤回";
+        }
+        HistoricTaskInstance hisTaskL = historyService.createHistoricTaskInstanceQuery().taskId(hisTask.getId()).singleResult();
+
+        //获取上一活动的节点id
+        String taskNodeId = hisTaskL.getTaskDefinitionKey();
+
+        ProcessDefinitionImpl processDefinitionImpl = (ProcessDefinitionImpl) repositoryService.getProcessDefinition(hisTaskL.getProcessDefinitionId());
+
+        // 取得上一步活动
+        ActivityImpl currActivity = processDefinitionImpl.findActivity(taskNodeId);
+
+        //获取节点进口
+        List<PvmTransition> nextTransitionList = currActivity.getIncomingTransitions();
+
+        // 取得当前待办活动节点
+        ActivityImpl execActivity = processDefinitionImpl.findActivity(task.getTaskDefinitionKey());
+
+        // 清除当前活动的出口
+        List<PvmTransition> oriPvmTransitionList = new ArrayList<PvmTransition>();
+        List<PvmTransition> pvmTransitionList = execActivity.getOutgoingTransitions();
+        for (PvmTransition pvmTransition : pvmTransitionList) {
+            oriPvmTransitionList.add(pvmTransition);
+        }
+        pvmTransitionList.clear();
+        //把进口当做出口，重新建立通道
+        List<TransitionImpl> newTransitions = new ArrayList<TransitionImpl>();
+        TransitionImpl newTransition = execActivity.createOutgoingTransition();
+        newTransition.setDestination(currActivity);
+        newTransitions.add(newTransition);
+        // 完成任务
+        List<Task> tasks = taskService.createTaskQuery().processInstanceId(keyName).list();
+        for (Task taskObj : tasks) {
+            Map<String,Object> currentVariables = new HashMap<String,Object>();
+            //此处可以根据也许需求获取上一节点处理人，本人使用的是自己自定义的动态表单
+            //List<String> userList = new ArrayList<>();
+            //userList.add("0122");
+            //currentVariables.put("transactorIdList",userList);
+            Authentication.setAuthenticatedUserId(userName);
+            taskService.addComment(taskObj.getId(), taskObj.getProcessInstanceId(), "撤回");
+
+            taskService.complete(taskObj.getId(), currentVariables);
+            //删除历史、此处执行这两行代码在ACT_HI_TASKINST表中是看不到撤回记录的，但是在ACT_HI_ACTINST表中能看到全部记录
+            //historyService.deleteHistoricTaskInstance(taskObj.getId());
+            //historyService.deleteHistoricTaskInstance(hisTask.getId());
+        }
+        // 恢复方向
+        for (TransitionImpl transitionImpl : newTransitions) {
+            execActivity.getOutgoingTransitions().remove(transitionImpl);
+        }
+        for (PvmTransition pvmTransition : oriPvmTransitionList) {
+            pvmTransitionList.add(pvmTransition);
+        }
+        //后面需要处理的就是 已办的流程历史回显 和 已办的流程表单回显，可根据自己业务需求来调整
+        return "撤回成功";
+    }
+    @Override
+    public boolean rollBackData(String keyName) {
+        // 流程实例是否在执行
+        Execution execution = runtimeService.createExecutionQuery().parentId(keyName).singleResult();
+        if(Objects.isNull(execution)){
+            //学生取消，结束流程
+            runtimeService.deleteProcessInstance(keyName, "申请人"+SecurityUtils.getUsername()+"取消申请");
+        }
+        return true;
+    }
+    /**
      * 挂起或者解挂已经部署的工作流
      * @param modelId
      * @return
@@ -349,7 +549,6 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
     @Override
     public String deployActReModel(String modelId) throws IOException {
 
-
         //获取模型
         RepositoryService repositoryService = processEngine.getRepositoryService();
         Model modelData = repositoryService.getModel(modelId);
@@ -357,7 +556,6 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
             return "已经发布，请先删除发布数据在进行发布操作";
         }
          byte[] bytes = repositoryService.getModelEditorSource(modelData.getId());
-
         if (bytes == null) {
             return "模型数据为空，请先设计流程并成功保存，再进行发布。";
         }
@@ -369,8 +567,6 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
         }
         byte[] bpmnBytes = new BpmnXMLConverter().convertToXML(model);
 
-
-
         //发布流程
         String processName = modelData.getName() + ".bpmn20.xml";
         Deployment deployment = repositoryService.createDeployment()
@@ -379,8 +575,71 @@ public class ActReModelServiceImpl extends ServiceImpl<ActReModelMapper, ActReMo
                 .deploy();
         modelData.setDeploymentId(deployment.getId());
         repositoryService.saveModel(modelData);
-
         return "SUCCESS";
     }
-
+    /**
+     * 根据流程实例ID和任务key值查询所有同级任务集合
+     *
+     * @param processInstanceId
+     * @param key
+     * @return
+     */
+    private List<Task> findTaskListByKey(String processInstanceId, String key) {
+        return taskService.createTaskQuery().processInstanceId(
+                processInstanceId).taskDefinitionKey(key).list();
+    }
+    /**
+     * 根据实例ID获取对应的流程实例
+     *
+     * @param keyName
+     * @return
+     * @throws Exception
+     */
+    public ProcessInstance findProcessInstanceByTaskId(String keyName){
+        // 找到流程实例
+        ProcessInstance processInstance = runtimeService
+                .createProcessInstanceQuery().processInstanceId(keyName)
+                .singleResult();
+        return processInstance;
+    }
+    @Override
+    public  List<ActivitiHis> getHistory(String instanceId){
+//        List<HistoricActivityInstance>  list = processEngine.getHistoryService() // 历史相关Service
+//                .createHistoricActivityInstanceQuery() // 创建历史活动实例查询
+//                .processInstanceId(instanceId) // 执行流程实例id
+//                .finished()
+//                .list();
+//        for(HistoricActivityInstance hai:list){
+//            System.out.println("活动ID:"+hai.getId());
+//            System.out.println("流程实例ID:"+hai.getProcessInstanceId());
+//            System.out.println("活动名称："+hai.getActivityName());
+//            System.out.println("办理人："+hai.getAssignee());
+//            System.out.println("开始时间："+hai.getStartTime());
+//            System.out.println("结束时间："+hai.getEndTime());
+//            System.out.println("=================================");
+//        }
+        List<ActivitiHis> listData = new ArrayList<>();
+        ActivitiHis activitiHis = null;
+         List<HistoricTaskInstance> list1 = processEngine.getHistoryService() // 历史相关Service
+                .createHistoricTaskInstanceQuery() // 创建历史任务实例查询
+                .processInstanceId(instanceId) // 用流程实例id查询
+                .finished() // 查询已经完成的任务
+                .list();
+        for(HistoricTaskInstance hti:list1){
+            activitiHis = new ActivitiHis();
+            activitiHis.setTaskId(hti.getId());
+            activitiHis.setInstanceId(hti.getProcessInstanceId());
+            activitiHis.setTaskName(hti.getName());
+            activitiHis.setStartTime(String.valueOf(hti.getStartTime()));
+            activitiHis.setAssignee(hti.getAssignee());
+            activitiHis.setEndTime(String.valueOf(hti.getEndTime()));
+            List<Comment> commonts = taskService.getTaskComments(hti.getId());//这个写法效率低后续考虑正常写sql
+            activitiHis.setCommentList(commonts);
+            listData.add(activitiHis);
+        }
+        // 查询事件与评论
+        //List<Comment> commonts1 = taskService.getProcessInstanceComments(instanceId);
+        // System.out.println("流程评论（事件）数量：" + commonts1.size());
+        return listData;
+    }
 }

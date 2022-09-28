@@ -1,27 +1,19 @@
 package com.rongxin.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.rongxin.common.utils.DateUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rongxin.common.utils.SecurityUtils;
+import com.rongxin.demo.domain.ActivitiHis;
 import com.rongxin.demo.service.IActReModelService;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.impl.identity.Authentication;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.rongxin.demo.mapper.TbLeaveMapper;
 import com.rongxin.demo.domain.TbLeave;
 import com.rongxin.demo.service.ITbLeaveService;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.annotation.Resource;
 
 /**
  * 请假示例Service业务层处理
@@ -32,14 +24,10 @@ import javax.annotation.Resource;
 @Service
 public class TbLeaveServiceImpl extends ServiceImpl<TbLeaveMapper, TbLeave> implements ITbLeaveService
 {
-    @Resource
-    private TaskService taskService;
     @Autowired
     private TbLeaveMapper tbLeaveMapper;
     @Autowired
     private IActReModelService actReModelService;
-    @Autowired
-    private ProcessEngine processEngine;
 
     /**
      * 查询请假示例
@@ -72,10 +60,22 @@ public class TbLeaveServiceImpl extends ServiceImpl<TbLeaveMapper, TbLeave> impl
      * @return 结果
      */
     @Override
-    public int insertTbLeave(TbLeave tbLeave)
-    {
+    public int insertTbLeave(TbLeave tbLeave){
+
+        //TODO 设置下一流程所需要的参数集合
+        //设置下一流程所需要的参数集合
+        Map<String, Object> variablesNext = new HashMap<>();
+        List<String> assigneeList = new ArrayList<String>();
+        assigneeList.add("张三");
+        assigneeList.add("李四");
+        assigneeList.add("王五");
+        variablesNext.put("passCount",0);
+        variablesNext.put("totalCount",3);
+        variablesNext.put("spCount",0);
+        variablesNext.put("assigneeList",assigneeList);
         tbLeave.setCreateTime(DateUtils.getNowDate());
-        tbLeave.setInstId(actReModelService.applyProcess("test"));
+        //创建工作流第一步  根据process标识 获取流程
+        tbLeave.setInstId(actReModelService.applyProcess("test2",variablesNext));
         tbLeave.setStatus("0");
         return tbLeaveMapper.insertTbLeave(tbLeave);
     }
@@ -128,41 +128,26 @@ public class TbLeaveServiceImpl extends ServiceImpl<TbLeaveMapper, TbLeave> impl
      */
     @Override
     public String managerApproval(Map stringToMap ){
-        String processInstanceId = String.valueOf(stringToMap.get("instId"));
-        int managerOpinion = Integer.valueOf(String.valueOf(stringToMap.get("isPass")));
-        String comment = String.valueOf(stringToMap.get("comment"));
-        String id = String.valueOf(stringToMap.get("id"));
-
-        //根据流程id获取任务
-        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-        if (task == null || !"dept".equals(task.getAssignee())) {
+        //获取前台传递参数
+        String processInstanceId = String.valueOf(stringToMap.get("instId"));//实例ID(当前流程id)
+        int managerOpinion = Integer.valueOf(String.valueOf(stringToMap.get("isPass")));//是否通过
+        String comment = String.valueOf(stringToMap.get("comment"));//审批内容
+        String id = String.valueOf(stringToMap.get("id"));//业务数据ID
+        //设置流程所需要的参数
+        Map<String, Object> variablesNext = new HashMap<>();
+        variablesNext.put("isPass", managerOpinion);
+        //单流程审批
+        if(actReModelService.singleFlow(processInstanceId,variablesNext,comment,"dept")){
+            if(managerOpinion == 0){
+                //该状态为驳回
+                updateStatus(Long.valueOf(id),"4");
+            }else{
+                updateStatus(Long.valueOf(id),"2");
+            }
+        }else{
             return "找不到任务";
         }
-        Map<String, Object> variablesNext = new HashMap<>();
-        //通过
-        if(managerOpinion == 1){
-            //TODO 这里需要获取数据库定义的配置来确定人事名字
-            //此处为流程图内设置的 el表达式传参（我的例子没用，代码仅供参考学习）
-            variablesNext.put("personnel","leader");
-        }else{
-            //TODO 这里需要获取数据库定义的配置来确定回退给谁
-            //此处为流程图内设置的 el表达式传参（我的例子没用，代码仅供参考学习）
-            variablesNext.put("applicant","admin");
-
-        }
-        variablesNext.put("isPass", managerOpinion);
-
-        //需要添加此句否则审批意见表中ACT_HI_COMMENT，审批人的userId是空的
-        Authentication.setAuthenticatedUserId(SecurityUtils.getUsername());
-        taskService.addComment(task.getId(),processInstanceId,comment);
-        taskService.complete(task.getId(),variablesNext);//处理完成，交给下个人
-        updateStatus(Long.valueOf(id),"1");
-        if(managerOpinion == 0){
-            //该状态为驳回
-            updateStatus(Long.valueOf(id),"3");
-        }else{
-            updateStatus(Long.valueOf(id),"1");
-        }
+        //处理业务逻辑状态
         return "经理处理操作成功";
     }
     /**
@@ -170,49 +155,27 @@ public class TbLeaveServiceImpl extends ServiceImpl<TbLeaveMapper, TbLeave> impl
      * @param  stringToMap
      * @return
      */
-    @RequestMapping("personnelApproval")
+    @Override
     public String personnelApproval(Map stringToMap){
-        String id = String.valueOf(stringToMap.get("id"));
-        String processInstanceId = String.valueOf(stringToMap.get("instId"));
-        int isPass = Integer.valueOf(String.valueOf(stringToMap.get("isPass")));
-        String comment = String.valueOf(stringToMap.get("comment"));
-        //根据流程id获取任务
-        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-        if (task == null || !"leader".equals(task.getAssignee())) {
+        //获取前台传递参数
+        String processInstanceId = String.valueOf(stringToMap.get("instId"));//实例ID(当前流程id)
+        int isPass = Integer.valueOf(String.valueOf(stringToMap.get("isPass")));//是否通过
+        String comment = String.valueOf(stringToMap.get("comment"));//审批内容
+        String id = String.valueOf(stringToMap.get("id"));//业务数据ID
+        //设置流程所需要的参数
+        Map<String, Object> variablesNext = new HashMap<>();
+        variablesNext.put("isPass", isPass);
+        //单流程审批
+        if(actReModelService.singleFlow(processInstanceId,variablesNext,comment,"leader")){
+            if(isPass == 0){
+                updateStatus(Long.valueOf(id),"4");
+            }else{
+                updateStatus(Long.valueOf(id),"3");
+            }
+        }else{
             return "找不到任务";
         }
-        Map<String, Object> variablesNext = new HashMap<>();
-        //不通过需要转为给经理，通过则不需要指定人
-        if(isPass == 0){
-            //TODO 这里需要获取数据库定义的配置来确定回退给谁，这里的流程定义是退回给经理
-            //此处为流程图内设置的 el表达式传参（我的例子没用，代码仅供参考学习）
-            variablesNext.put("manager","dept");
-        }
-        variablesNext.put("isPass", isPass);
 
-        //需要添加此句否则审批意见表中ACT_HI_COMMENT，审批人的userId是空的
-        Authentication.setAuthenticatedUserId(SecurityUtils.getUsername());
-        taskService.addComment(task.getId(),processInstanceId,comment);
-        taskService.complete(task.getId(),variablesNext);//处理完成，交给下个人（回退给经理或者结束流程）
-        /**判断流程是否结束，查询正在执行的执行对象表*/
-        ProcessInstance rpi = processEngine.getRuntimeService()//
-                .createProcessInstanceQuery()//创建流程实例查询对象
-                .processInstanceId(processInstanceId)
-                .singleResult();
-        //说明流程实例结束了
-        if(rpi==null){
-            /**查询历史，获取流程的相关信息*/
-            HistoricProcessInstance hpi = processEngine.getHistoryService()//
-                    .createHistoricProcessInstanceQuery()//
-                    .processInstanceId(processInstanceId)//使用流程实例ID查询
-                    .singleResult();
-            System.out.println(hpi.getId()+"    "+hpi.getStartTime()+"   "+hpi.getEndTime()+"   "+hpi.getDurationInMillis());
-        }
-        if(isPass == 0){
-            updateStatus(Long.valueOf(id),"3");
-        }else{
-            updateStatus(Long.valueOf(id),"2");
-        }
         return "人事操作成功";
     }
     /**
@@ -220,52 +183,98 @@ public class TbLeaveServiceImpl extends ServiceImpl<TbLeaveMapper, TbLeave> impl
      * @param stringToMap  流程实例id
      * @return
      */
+    @Override
     public String reApply(Map stringToMap){
         String id = String.valueOf(stringToMap.get("id"));
         String processInstanceId = String.valueOf(stringToMap.get("instId"));
-        //根据流程id获取任务
-        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-        if (task == null) {
+        //配置参数
+        Map<String, Object> variablesNext = new HashMap<>();
+        List<String> assigneeList = new ArrayList<String>();
+        assigneeList.add("张三");
+        assigneeList.add("李四");
+        assigneeList.add("王五");
+        variablesNext.put("passCount",0);
+        variablesNext.put("totalCount",3);
+        variablesNext.put("spCount",0);
+        variablesNext.put("assigneeList",assigneeList);
+        //重新提交方法调用
+        if(actReModelService.reApply(processInstanceId, variablesNext)){
+            updateStatus(Long.valueOf(id),"0");
+            return "重新申请成功";
+        }else{
             return "找不到任务";
         }
-        Map<String, Object> variablesNext = new HashMap<>();
-        //variablesNext.put("manager","经理");
-        taskService.complete(task.getId(),variablesNext);//处理完成，交给下个人
-        updateStatus(Long.valueOf(id),"0");
-        return "申请人重新申请";
     }
-//多人会签
-    //在第一个人创建的时候添加list
-//添加会签的人员，这里可以根据自己的业务逻辑去动态获取列表
-    //在监听里添加 或者在上一级节点完成时添加
-//        List<String> assigneeList = new ArrayList<String>();
-//        arg0.setVariable("assigneeList",assigneeList);
-//
-//    public void completeTask(String taskId,String instanceId,String passflag){
-//        ProcessEngine processEngine =ProcessEngines.getDefaultProcessEngine();
-//        List<Task> tasks = processEngine.getTaskService().createTaskQuery().taskName("t2").processInstanceId("instanceId").list();
-//        int count = 0;
-//        int totalCount = 0;
-//        for(Task tmp:tasks){
-//
-//            String tmpCount = processEngine.getTaskService().getVariable(tmp.getId(), "passCount")+"";//获取通过记录数，这里不能使用nrOfCompletedInstances，因为与我们业务无关
-//            String tmpTotal = processEngine.getTaskService().getVariable(tmp.getId(), "totalCount")+"";//获取记录总数
-//            if(!tmpCount.equals("null") && !tmpCount.trim().equals("")){
-//                count = Integer.parseInt(tmpCount);
-//            }
-//            if(!tmpTotal.equals("null") && !tmpTotal.trim().equals("")){
-//                totalCount = Integer.parseInt(tmpTotal);
-//            }
-//            System.out.println(tmp.getId()+"var = "+passflag);
-//            if(passflag.equals("yes")){//选择通过则+1
-//                count++;
-//            }
-//            totalCount++;
-//        }
-//        Map<String, Object> vars = new HashMap<String,Object>();
-//        //变量回写记录
-//        vars.put("passCount", count);
-//        vars.put("totalCount", totalCount);
-//        processEngine.getTaskService().complete(taskId,vars);
-//    }
+
+    /**
+     * 撤回申请
+     * @param stringToMap
+     * @return
+     */
+    @Override
+    public String rollBackData(Map stringToMap) {
+        String id = String.valueOf(stringToMap.get("id"));
+        String processInstanceId = String.valueOf(stringToMap.get("instId"));
+        if(actReModelService.rollBackData(processInstanceId)){
+            deleteTbLeaveById( Long.valueOf(id));
+        }
+        return "取消成功";
+    }
+
+    @Override
+    public String handleHistory(String instanceId) {
+        List<ActivitiHis> list = actReModelService.getHistory(instanceId);
+        return "成功";
+    }
+
+    @Override
+    public String handleReturn(Map stringToMap) {
+        String id = String.valueOf(stringToMap.get("id"));
+        String processInstanceId = String.valueOf(stringToMap.get("instId"));
+        //重新提交方法调用
+        String result = actReModelService.rollBackProEx(processInstanceId,"dept");
+        if("撤回成功".equals(result)){
+            updateStatus(Long.valueOf(id),"1");
+            return result;
+        }else{
+            return result;
+        }
+    }
+
+    /**
+     * 会签审批逻辑示例
+     * @param stringToMap
+     * @return
+     */
+    @Override
+    public String handleMoreP(Map stringToMap){
+        String processInstanceId = String.valueOf(stringToMap.get("instId"));
+        int managerOpinion = Integer.valueOf(String.valueOf(stringToMap.get("isPass")));
+        String comment = String.valueOf(stringToMap.get("comment"));
+        String id = String.valueOf(stringToMap.get("id"));
+        String hqname = String.valueOf(stringToMap.get("huiqian"));
+        String result = "";
+        List<Integer> list = actReModelService.joinSign(processInstanceId,hqname,comment,managerOpinion);
+        if(null == list){
+            return "当前人是否有审批任务或者是否已经审批完成";
+        }else{
+            int spCount = list.get(0);
+            int count = list.get(1);
+            int totalCount = list.get(2);
+            if(spCount == totalCount){
+                if(count/totalCount<1 ){
+                    updateStatus(Long.valueOf(id),"4");
+                }else{
+                    updateStatus(Long.valueOf(id),"1");
+                }
+            }
+            if(count/totalCount >=1){
+                result = hqname + "审批通过，等待后续经理审批" ;
+            }else{
+                result = hqname + "已审批，等待后续会签审批" ;
+            }
+        }
+        return result;
+    }
+
 }
