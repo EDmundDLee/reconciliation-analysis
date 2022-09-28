@@ -66,5 +66,13 @@ public interface ITbLeaveService extends IService<TbLeave>
 
     public String personnelApproval(Map stringToMap);
 
+    public String handleMoreP(Map stringToMap);
+
     String reApply(Map stringToMap);
+
+    String rollBackData(Map stringToMap);
+
+    String handleHistory(String instanceId);
+
+    String handleReturn(Map stringToMap);
 }

@@ -2,7 +2,10 @@ package com.rongxin.demo.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -78,7 +81,8 @@ public class ActReModelController extends BaseController
      */
     @PostMapping("/applyProcess")
     public AjaxResult applyProcess(@RequestBody String keyName) {
-        return AjaxResult.success(actReModelService.applyProcess(keyName));
+        Map<String, Object> variablesNext = new HashMap<>();
+        return AjaxResult.success(actReModelService.applyProcess(keyName,variablesNext));
     }
 
     /**

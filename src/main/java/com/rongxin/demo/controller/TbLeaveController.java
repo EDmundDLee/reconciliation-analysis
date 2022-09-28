@@ -123,6 +123,17 @@ public class TbLeaveController extends BaseController
     }
 
     /**
+     * 会签审批
+     * @param strData
+     * @return
+     */
+    @PostMapping("/handleMoreP")
+    public AjaxResult handleMoreP(@RequestBody String strData)  {
+        Map stringToMap =  JSONObject.parseObject(strData);
+        return AjaxResult.success(tbLeaveService.handleMoreP(stringToMap));
+    }
+
+    /**
      * 经理审批
      * @param strData
      * @return
@@ -132,7 +143,6 @@ public class TbLeaveController extends BaseController
         Map stringToMap =  JSONObject.parseObject(strData);
         return AjaxResult.success(tbLeaveService.managerApproval(stringToMap));
     }
-
     /**
      * 经理审批
      * @param strData
@@ -153,5 +163,34 @@ public class TbLeaveController extends BaseController
     public AjaxResult reApply(@RequestBody String strData)  {
         Map stringToMap =  JSONObject.parseObject(strData);
         return AjaxResult.success(tbLeaveService.reApply(stringToMap));
+    }
+    /**
+     * 撤回申请
+     * @param strData
+     * @return
+     */
+    @PostMapping("/rollBackData")
+    public AjaxResult rollBackData(@RequestBody String strData)  {
+        Map stringToMap =  JSONObject.parseObject(strData);
+        return AjaxResult.success(tbLeaveService.rollBackData(stringToMap));
+    }
+    /**
+     * 获取审批历史
+     * @param instanceId
+     * @return
+     */
+    @PostMapping("/handleHistory")
+    public AjaxResult handleHistory(@RequestBody String instanceId)  {
+        return AjaxResult.success(tbLeaveService.handleHistory(instanceId));
+    }
+    /**
+     * 撤回审批
+     * @param strData
+     * @return
+     */
+    @PostMapping("/handleReturn")
+    public AjaxResult handleReturn(@RequestBody String strData)  {
+        Map stringToMap =  JSONObject.parseObject(strData);
+        return AjaxResult.success(tbLeaveService.handleReturn(stringToMap));
     }
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rongxin.demo.domain.ActReModel;
+import com.rongxin.demo.domain.ActivitiHis;
+import org.activiti.engine.runtime.ProcessInstance;
 
 /**
  * 工作流基础示例Service接口
@@ -16,18 +18,64 @@ import com.rongxin.demo.domain.ActReModel;
  */
 public interface IActReModelService extends IService<ActReModel>
 {
+
+    /**
+     * 重新提交
+     * @return
+     */
+    public boolean reApply(String processInstanceId, Map<String, Object> variablesNext);
+    //部署
     public Map<String, Object> deployment();
+
+    /**
+     * 单流程审批  流程ID  传递参数  审批意见
+     * @param processInstanceId
+     * @param variablesNext
+     * @param comment
+     * @return
+     */
+    public boolean singleFlow(String processInstanceId, Map<String, Object> variablesNext,String comment,String userId);
+    /**
+     * 会签审批(并行)
+     * @param processInstanceId 流程实例id
+     * @param hqname 会签人
+     * @param comment 会签意见
+     * @param managerOpinion 通过 0 不通过 1 通过
+     * @return
+     */
+    public List<Integer> joinSign(String processInstanceId,String hqname,String comment,int managerOpinion);
+    /**
+     * 根据名字来查当前人的代办任务
+     * @param name
+     * @return
+     */
+    public List<Map<String,Object>> myTask(String name);
+    /**
+     * 获取当前正在执行的信息
+     * @param processInstanceId 流程ID
+     * @return
+     */
+    public ProcessInstance findNowExcute(String processInstanceId);
 
     public List<Map<String,Object>> getAllProcessByKeyName(String keyName);
 
     public String startProcess(String keyName);
 
-    public String applyProcess(String keyName);
+    /**
+     * 流程发起
+     * @param keyName 流程key
+     * @param variablesNext 下一流程所需要的参数
+     * @return
+     */
+    public String applyProcess(String keyName, Map<String, Object> variablesNext);
 
     public String handUpOrDownDeployment(String modelId);
 
     public String deleteDeployment(String modelId);
 
+    public boolean rollBackData(String keyName);
+
+    public String rollBackProEx(String keyName,String userName);
 
     /**
      * 查询工作流基础示例
@@ -85,5 +133,5 @@ public interface IActReModelService extends IService<ActReModel>
     public String deployActReModel(String modelId) throws IOException;
 
 
-
+    public List<ActivitiHis> getHistory(String instanceId);
 }
