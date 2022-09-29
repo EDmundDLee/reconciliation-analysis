@@ -2,25 +2,20 @@ package com.rongxin.demo.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.riversoft.weixin.common.util.XmlObjectMapper;
-import com.riversoft.weixin.pay.payment.bean.PaymentNotification;
 import com.rongxin.demo.service.ILandsService;
 import com.rongxin.demo.utils.DateUtil;
 import com.rongxin.demo.utils.UUIDUtils;
 import com.rongxin.eqb.dto.UserSignContractDTO;
+import com.rongxin.eqb.dto.UserSignContractDetailDTO;
 import com.rongxin.eqb.res.CreateContractResForm;
 import com.rongxin.eqb.res.EQianBaoBaseResForm;
 import com.rongxin.eqb.service.IEQBService;
 import com.rongxin.wechatPay.errors.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
@@ -188,7 +183,7 @@ public class LandsServiceImpl implements ILandsService {
 
         // 第4步：签章  生成 accountId和flowId
         JSONObject resultJson = (JSONObject) result.getData();
-        EQianBaoBaseResForm resutSignURL = sign(resultJson.getString("flowId"));
+        EQianBaoBaseResForm resutSignURL = sign("公章", resultJson.getString("flowId"), "1");
 
         // 第5步：签章流程结束//归档
         EQianBaoBaseResForm ht = eqbService.contractContract(resultJson.get("flowId").toString(), eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, contractContractUrlSuffix);
@@ -215,22 +210,30 @@ public class LandsServiceImpl implements ILandsService {
      * @param flowId   流程编号
      * @return accountId和flowId
      */
-    public EQianBaoBaseResForm sign(String flowId) throws BusinessException {
+    public EQianBaoBaseResForm sign(String key, String flowId, String signType) throws BusinessException {
+        IEQBService eqbService = new IEQBService();
         // 发起用户自动签署
         UserSignContractDTO userSignContractDTO = new UserSignContractDTO();
         userSignContractDTO.setFlowId(flowId);
-
-        // 查询签署人e签宝个人账号
-        Long userId = Long.parseLong("555");
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("sys_user_id", 0);
-
         // 用户e签宝账号
-        userSignContractDTO.setAccountId("555");
+        userSignContractDTO.setAccountId("bbba30e259564c668804392f3653e3e5");
         // 用户e签宝章id
-        userSignContractDTO.setSealId("1");
-        userSignContractDTO.setPosList(null);
-        IEQBService eqbService = new IEQBService();
+        userSignContractDTO.setSealId("d5ea4f40-56e0-4ce6-9d78-ea803efcdeb7");
+        List<UserSignContractDetailDTO> list = new ArrayList<>();
+        UserSignContractDetailDTO dto = new UserSignContractDetailDTO();
+        // 签章位置定位方式 1 关键字定位
+        dto.setSignType(1);
+        // 签署位置信息
+        dto.setKey(key);
+        // x轴偏移量110
+        if (signType.equals("0")) {
+            dto.setPosX(new Float(145.00));
+        } else {
+            dto.setPosY(new Float(-25.00));
+        }
+
+        list.add(dto);
+        userSignContractDTO.setPosList(list);
         // 用户自动签章--accountId和flowId
         EQianBaoBaseResForm resForm = eqbService.userAutoSignContract(userSignContractDTO, eqianbaoApiUrlPrefix, eqianbaoApiAppId, eqianbaoApiAppSecret, userAutoSignContractUrlSuffix);
         return resForm;
