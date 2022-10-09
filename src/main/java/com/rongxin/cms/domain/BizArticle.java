@@ -17,7 +17,7 @@ public class BizArticle extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /**  */
+    /** 主键id */
     private Long id;
 
     /** 栏目id */
@@ -34,10 +34,10 @@ public class BizArticle extends BaseEntity
     /** 时间 */
     private Date createDate;
 
-    /**  */
+    /** 创建人 */
     private String createName;
 
-    /**  */
+    /** 创建id */
     private Long createId;
 
     /** 标题图片id */
