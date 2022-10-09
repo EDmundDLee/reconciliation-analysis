@@ -1,6 +1,8 @@
 package com.rongxin.cms.controller;
 
 import java.util.List;
+
+import com.rongxin.common.core.domain.entity.SysDept;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -117,5 +119,17 @@ public class BizArticleController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(bizArticleService.deleteBizArticleByIds(ids));
+    }
+
+
+    /**
+     * 获取栏目类别下拉树列表
+     */
+    @GetMapping("/treeselect")
+    public AjaxResult treeselect(SysDept dept)
+    {
+       // List<SysDept> depts = bizArticleService.selectColList(dept);
+      //  return AjaxResult.success(bizArticleService.buildDeptTreeSelect(depts));
+        return AjaxResult.success();
     }
 }

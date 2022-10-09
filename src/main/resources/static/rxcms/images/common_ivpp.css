@@ -1,0 +1,429 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*base Start
+=================================*/
+body > div{margin-right:auto;margin-left:auto; }
+body,div,ul,ol,ul,li,ol,dl,dd,dt,form,span,p,textarea{margin:0;padding:0;list-style:none;}
+address,caption,cite,code,dfn,th,var{font-style:normal;font-weight:normal;}
+h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
+input{padding-top:0;padding-bottom:0;}
+input::-moz-focus-inner{border:none;padding:0;}
+select,input{vertical-align:middle;}
+select,input,textarea{font-size:12px;margin:0;}
+input[type="text"],input[type="password"],textarea{outline-style:none;-webkit-appearance:none;}
+textarea{resize:none;}
+table{border-collapse:collapse;border-spacing:0;}
+th,td{font-size:12px;padding:0}
+img,a img{border:0;margin:0;padding:0; width: auto; max-width: 100%;}
+a{outline-style:none;color:#000;text-decoration:none}
+a:hover{text-decoration:none;}
+a:focus {outline-style:none; -moz-outline-style: none;}
+.clearfix:after {content:"."; display:block; height:0; visibility:hidden; clear:both; }
+.clearfix{zoom:1;}
+.clear{clear:both; height:0; font-size:0;overflow:hidden;}
+.auto{margin-left:auto;margin-right:auto;}
+.fl{float:left;}
+.fr{float:right;}
+.show{display:block!important;}
+.hide{display:none!important;}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section{display: block;}
+/*base End
+=================================*/
+
+/*Public Start
+=================================*/
+body, html {
+    color: #444;
+    font-family: "\5FAE\8F6F\96C5\9ED1","Microsoft YaHei","微软雅黑",PingHei,STHeiti,"\5B8B\4F53",SimSun,"宋体",sans-serif;
+    font-size: 62.5%;
+}
+body {
+    font-size: 1.4rem;font-size:14px;
+    line-height: 1.4;
+}
+ul,li{
+    list-style:none;
+}
+a {
+    color: #444;
+    text-decoration: none;
+}
+a:hover,a:focus {
+    color: #014099;
+    text-decoration: none;
+}
+.mt5{margin-top: 0.5rem;}
+.mt10{margin-top: 10px;}
+.mt15{margin-top: 15px;}
+.mt20{margin-top: 20px;}
+.mt25{margin-top: 25px;}
+.mt30{margin-top: 30px;}
+.mb5{margin-bottom: 5px;}
+.mb10{margin-bottom: 10px;}
+.mb15{margin-bottom: 15px;}
+.mb20{margin-bottom: 20px;}
+.mb25{margin-bottom: 25px;}
+.pt5{padding-top: 5px;}
+.pt10{padding-top: 10px;}
+.pt15{padding-top: 15px;}
+.pt20{padding-top: 20px;}
+.pt30{padding-top: 30px;}
+.pb5{padding-bottom: 5px;}
+.pb10{padding-bottom: 10px;}
+.pb15{padding-bottom: 15px;}
+.pb20{padding-bottom: 20px;}
+.pl5{padding-left: 5px;}
+.pl10{padding-left: 10px;}
+.pl15{padding-left: 15px;}
+.pl20{padding-left: 20px;}
+.pr5{padding-right: 5px;}
+.pr10{padding-right: 10px;}
+.pr15{padding-right: 15px;}
+.pr20{padding-right: 20px;}
+.pd0{padding: 0;}
+.pl0{padding-left: 0;}
+.pr0{padding-right: 0;}
+.prl15{padding: 0 15px;}
+.bg-fff{background: #fff;}
+.bgnone{background: none;}
+.tl{text-align: left;}
+.tc{text-align: center;}
+.tr{text-align: right;}
+.ellipsis{
+    overflow: hidden; /*自动隐藏文字*/
+    text-overflow: ellipsis;/*文字隐藏后添加省略号*/
+    white-space: nowrap;/*强制不换行*/
+}
+/*Public End
+=================================*/
+
+/*header Start
+=================================*/
+header{
+    color: #666;
+    line-height: 36px;
+}
+header a{
+    color: #666;
+}
+header a:hover,
+header a:focus{
+    color: #014099;
+}
+header .logo{
+    padding: 0;
+}
+.nav-top li{
+    float: right;
+    padding: 0 1.4%;
+    font-size: 1.4rem; font-size: 14px;
+}
+.nav-top>a{
+    padding: 0 2%;
+    line-height: 2.5;
+}
+.search{
+    /*Alpha
+        ================================================*/
+    background-color: rgba(144,181,224,0.7);/* IE9、标准浏览器、IE6和部分IE7内核的浏览器(如QQ浏览器)会读懂 */
+    border-radius: 20px;
+    height: 36px;
+    line-height: 34px;
+    float: right;
+    width: 82%;
+}
+@media \0screen\,screen\9 {/* 只支持IE6、7、8 */
+    .search{
+        background-color:#90b5e0;
+        filter:Alpha(opacity=70);
+        position:static; /* IE6、7、8只能设置position:static(默认属性) ，否则会导致子元素继承Alpha值 */
+        *zoom:1; /* 激活IE6、7的haslayout属性，让它读懂Alpha */
+    }
+}
+.search input{
+    background: transparent;
+    border: 0 none;
+    float: left;
+    color: #fff;
+    padding-left: 5%;
+    width: 86%;
+}
+.search .btn-search{
+    background: url(ico_search_white.png) no-repeat 50% 50%;
+    width: 14%;
+}
+
+
+/*nav Start
+=================================*/
+.navbar{
+    min-height: auto;
+}
+.nav > li > a{
+    padding: 0;
+}
+.nav .open>a,.nav .open>a:focus,
+.nav .open>a:hover{
+    background-color:transparent;
+}
+.dropdown-menu{
+    border: 0 none;
+    border-radius: 0;
+    box-shadow: none;
+}
+.navbar-inverse{
+    background-color: transparent;
+}
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.open>a:focus,
+.navbar-inverse .navbar-nav>.open>a:hover{
+    color: #fff;
+    background-color: #19be1a;
+}
+
+/* Navbar
+=================================*/
+.nav{
+    background: -webkit-linear-gradient(#2d7cf9,#2d8cf0);
+    background: -o-linear-gradient(#2d7cf9,#2d8cf0);
+    background: -moz-linear-gradient(#2d7cf9,#2d8cf0);
+    background: -mos-linear-gradient(#2d7cf9,#2d8cf0);
+    background: linear-gradient(#2d7cf9,#2d8cf0);	filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr='rgba(100,168,213,0)',endColorstr='rgba(94,168,193,0)');
+}
+
+nav.navbar{
+    margin-bottom: 0;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    border: none;
+    z-index: 99;
+}
+.navbar-inverse .navbar-nav>li>a{
+    color: #fff;
+}
+.navbar-inverse .navbar-nav>li>a:focus,
+.navbar-inverse .navbar-nav>li>a:hover{
+    color: #fff;
+    background-color: #19be6b;
+}
+
+
+nav.navbar ul.nav > li > a:hover
+nav.navbar ul.nav > li > a:visited,
+nav.navbar ul.nav > li > a:focus{
+    color: #fff;
+}
+nav.navbar .navbar-toggle{
+    float: right;
+    background-color: #2f92d5;
+    border: none;
+    position: relative;
+    margin: 15px 2px 15px 0;
+}
+nav.navbar .navbar-toggle .icon-bar {
+    background-color: #f3f6f9;
+}
+nav.navbar .navbar-toggle:hover,
+nav.navbar .navbar-toggle:focus{
+    background-color: #C5C5C5;
+    border-color: #ec0515;
+}
+nav.navbar li.dropdown ul.dropdown-menu{
+    background-color: rgba(47,146,213,0.8);/* IE9、标准浏览器、IE6和部分IE7内核的浏览器(如QQ浏览器)会读懂 */
+}
+nav.navbar ul.nav li.dropdown ul.dropdown-menu  > li > a{
+    line-height: 28px;
+    font-size: 1.6rem; font-size: 16px;
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    color: #fff;
+}
+nav.navbar ul.nav li.dropdown ul.dropdown-menu  > li > a:hover{
+    color: #fff;
+    background: #254087;
+    display: block;
+}
+@media only screen and  (min-width: 991px) {
+    nav.navbar-default .navbar-nav>li>a:hover{
+        color:#fff;
+        background-color:transparent
+    }
+    nav.navbar ul.nav > li {
+        line-height: 48px;
+    }
+    nav.navbar ul.nav > li > a{
+        padding: 0 19px;
+        font-size: 1.7rem; font-size: 17px;
+        font-weight: bold;
+        line-height: 48px;
+    }
+    nav.navbar li.dropdown ul.dropdown-menu > li a:hover{
+        background-color: transparent;
+    }
+    nav.navbar li.dropdown ul.dropdown-menu.wrapMenu{
+        padding: 5px 0;
+    }
+    #arrow-top {
+        border-bottom: 6px solid #fff;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        height: 0;
+        left: 66px;
+        line-height: 0;
+        position: absolute;
+        top: -6px;
+        width: 0;
+    }
+}
+
+@media all and (max-width: 1169px) {
+    nav.navbar ul.nav > li > a{
+        padding: 0 16px;
+        font-size: 1.8rem; font-size: 18px;
+        line-height: 48px;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .navbar-brand {
+        padding: 10px 5px;
+    }
+    nav.navbar .navbar-brand {
+        display: inline-block;
+        margin: 0 !important;
+    }
+    nav.navbar .navbar-header {
+        float: none;
+        display: block;
+        text-align: center;
+    }
+    nav.navbar .navbar-collapse {
+        border: none;
+        margin-bottom: 0;
+    }
+    nav.navbar .navbar-collapse.collapse {
+        display: none !important;
+    }
+
+    nav.navbar .navbar-collapse.collapse.in {
+        display: block !important;
+    }
+    nav.navbar .navbar-nav {
+        float: none !important;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin: 0px -15px;
+    }
+    nav.navbar .navbar-nav > li {
+        float: none;
+    }
+    nav.navbar .navbar-toggle {
+        display: inline-block;
+    }
+    nav.navbar ul.nav li.dropdown ul.dropdown-menu  > li > a{
+        line-height: 22px;
+    }
+    nav.navbar .navbar-nav > li > a{
+        display: block;
+        width: 100%;
+        border-bottom: solid 1px #e0e0e0;
+        padding: 10px 0;
+        border-top: solid 1px #e0e0e0;
+        margin-bottom: -1px;
+    }
+    .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:focus, .navbar-inverse .navbar-nav > .open > a:hover{
+        border: transparent;
+    }
+    nav.navbar .navbar-nav > li:first-child > a{
+        border-top: none;
+    }
+}
+/*nav End
+=================================*/
+
+
+/* PC端：通用样式满足分辨率1280(1024) */
+@media all and (max-width: 1169px) {
+    header .logo img{
+        width: auto;
+    }
+    .search .input-search{
+        width: 81%;
+    }
+}
+
+/* 小屏幕，主要是PAD */
+@media all and (min-width:992px) {
+    header{
+        background: url(bg_header_ivpp.jpg) no-repeat center top;
+    }
+    header .logo img{
+        padding: 20px 0 5px 0;
+        width: 738px;
+    }
+}
+@media all and (max-width:991px) {
+    header{
+        background: #fff;
+    }
+    .search .input-search{
+        width: 86%;
+    }
+}
+@media screen and (min-width:480px) and (max-width: 991px) {
+}
+/* 超小屏幕，主要是手机 */
+@media all and (max-width: 767px) {
+    .title_change{
+        margin-left: :15px; margin-right:15px;
+    }
+    .nav-top{
+        line-height: 1.5;
+        font-size: 1.4rem; font-size: 14px;
+    }
+    .search .input-search{
+        width: 80%;
+    }
+    .title_change{margin-right:0px; margin-left:0px;}
+}
+
+/* 微小屏幕，分辨率更低的手机 */
+@media all and (max-width: 479px) {
+}
+
+/*header End
+=================================*/
+
+/*footer Start
+=================================*/
+footer{
+    background: #2d8cf0;
+    color: #fff;
+    line-height: 1.5;
+    padding: 0.5% 0;
+}
+footer img{
+    width: auto;
+}
+/*footer End
+=================================*/
+
+
+/*toolbar Start
+=================================*/
+*html{background-image:url(about:blank);background-attachment:fixed;}/*解决IE6下滚动抖动的问题*/
+/*解决IE6下不兼容 position:fixed 的问题*/
+#code,#code_hover,#gotop{ width:52px; height:52px; background:url(toolbar.png) no-repeat; position:fixed; right:0; cursor:pointer;
+    _position:absolute;_bottom:auto;_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)));
+}
+#code{ background-position:-184px -125px; bottom:120px; _margin-bottom:120px;}
+#code_hover{ background-position:-240px -125px; bottom:120px; _margin-bottom:120px;}
+#gotop{ background-position:-184px -179px; bottom:67px; _margin-bottom:67px;}
+
+#code_img{ width:203px; height:210px; background:url(toolbar.png) 20px 1px no-repeat; position:fixed; right:54px; bottom:77px; cursor:pointer; display:none;
+    _position:absolute;_bottom:auto;_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0))); _margin-bottom:67px;}
+/*toolbar End
+=================================*/
