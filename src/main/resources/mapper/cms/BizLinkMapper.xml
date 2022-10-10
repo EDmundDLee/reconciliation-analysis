@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.cms.mapper.BizLinkMapper">
+    
+    <resultMap type="BizLink" id="BizLinkResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="linkUrl"    column="link_url"    />
+        <result property="createName"    column="create_name"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="isDel"    column="isDel"    />
+    </resultMap>
+
+    <sql id="selectBizLinkVo">
+        select id, title, img_url, link_url, create_name, create_date, isDel from biz_link
+    </sql>
+
+    <select id="selectBizLinkList" parameterType="BizLink" resultMap="BizLinkResult">
+        <include refid="selectBizLinkVo"/>
+        <where>
+            1 = 1
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
+            <if test="linkUrl != null  and linkUrl != ''"> and link_url = #{linkUrl}</if>
+            <if test="createName != null  and createName != ''"> and create_name like concat('%', #{createName}, '%')</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+             and isDel = '0'
+        </where>
+    </select>
+    
+    <select id="selectBizLinkById" parameterType="Long" resultMap="BizLinkResult">
+        <include refid="selectBizLinkVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizLink" parameterType="BizLink" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_link
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="imgUrl != null">img_url,</if>
+            <if test="linkUrl != null">link_url,</if>
+            <if test="createName != null">create_name,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="isDel != null">isDel,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="imgUrl != null">#{imgUrl},</if>
+            <if test="linkUrl != null">#{linkUrl},</if>
+            <if test="createName != null">#{createName},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="isDel != null">#{isDel},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizLink" parameterType="BizLink">
+        update biz_link
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="imgUrl != null">img_url = #{imgUrl},</if>
+            <if test="linkUrl != null">link_url = #{linkUrl},</if>
+            <if test="createName != null">create_name = #{createName},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="isDel != null">isDel = #{isDel},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizLinkById" parameterType="Long">
+        delete from biz_link where id = #{id}
+    </delete>
+
+    <delete id="deleteBizLinkByIds" parameterType="String">
+        delete from biz_link where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <update id="updateIsDel" parameterType="String">
+        update biz_link set
+            isDel = '1'
+        where id = #{id}
+    </update>
+</mapper>
