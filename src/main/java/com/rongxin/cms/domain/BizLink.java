@@ -17,7 +17,7 @@ public class BizLink extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** $column.columnComment */
+    /** 标识id */
     private Long id;
 
     /** 链接标题 */
@@ -32,19 +32,31 @@ public class BizLink extends BaseEntity
     @Excel(name = "导航链接")
     private String linkUrl;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 创建人名称 */
+    @Excel(name = "创建人名称", readConverterExp = "$column.readConverterExp()")
     private String createName;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 创建时间 */
+    @Excel(name = "创建时间", readConverterExp = "$column.readConverterExp()")
     private Date createDate;
 
     /** 逻辑删除:0未删除 1:已删除 */
     @Excel(name = "逻辑删除:0未删除 1:已删除")
     private Long isDel;
 
-    public void setId(Long id) 
+    /** 创建人id */
+    @Excel(name = "创建人id")
+    private Long createId;
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -117,6 +129,7 @@ public class BizLink extends BaseEntity
             .append("createName", getCreateName())
             .append("createDate", getCreateDate())
             .append("isDel", getIsDel())
+            .append("create_id", getCreateId())
             .toString();
     }
 }
