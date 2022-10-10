@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizLinkVo"/>
         <where>
             1 = 1
-            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
             <if test="imgUrl != null  and imgUrl != ''"> and img_url = #{imgUrl}</if>
             <if test="linkUrl != null  and linkUrl != ''"> and link_url = #{linkUrl}</if>
             <if test="createName != null  and createName != ''"> and create_name like concat('%', #{createName}, '%')</if>

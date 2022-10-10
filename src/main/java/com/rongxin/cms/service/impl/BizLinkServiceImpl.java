@@ -89,7 +89,7 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
         bizLink.setIsDel(new Long("0"));
         bizLink.setCreateDate(new Date());
         bizLink.setImgUrl(fileUrl);
-        bizLink.setCreateId(Long.parseLong(user.getCreateBy()));
+        bizLink.setCreateId(user.getUserId());
         bizLink.setCreateName(user.getUserName());
         return bizLinkMapper.insertBizLink(bizLink);
     }
