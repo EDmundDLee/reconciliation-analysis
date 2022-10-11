@@ -93,11 +93,15 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     }
 
     private String uploadPicture(MultipartFile file) throws IOException {
-        String fName = file.getOriginalFilename();
-        // 上传文件路径
-        String filePath = sysOssService.getUploadPath();
-        // 上传并返回新文件名称
-        return sysOssService.upload(file, fName,filePath);
+        if(file != null){
+            String fName = file.getOriginalFilename();
+            // 上传文件路径
+            String filePath = sysOssService.getUploadPath();
+            // 上传并返回新文件名称
+            return sysOssService.upload(file, fName,filePath);
+        }else{
+            return "";
+        }
     }
     /**
      * 获取主信息对象

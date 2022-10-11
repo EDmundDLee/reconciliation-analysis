@@ -7,6 +7,7 @@ import com.rongxin.cms.service.IBizLinkService;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.oss.OSSFactory;
+import com.rongxin.web.framework.web.service.ISysOssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,9 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
 {
     @Autowired
     private BizLinkMapper bizLinkMapper;
+
+    @Autowired
+    private ISysOssService sysOssService;
 
     @Value("${oss.accessKeyId}")
     private String accessKeyId;
@@ -75,16 +79,7 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
     @Override
     public int insertBizLink(MultipartFile file,BizLink bizLink) throws IOException
     {
-        String fileUrl = "";
-        if(file != null){
-            String fileName = file.getOriginalFilename();
-            // oss中的文件夹名
-            OSSFactory ossUtil = new OSSFactory();
-            // 上传oss
-            ossUtil.uploadFile2OSS(file.getInputStream(), endpoint, accessKeyId, accessKeySecret, bucketName, FOLDER, fileName);
-            //获取文件的URl地址
-            fileUrl = ossUtil.getImgUrl(fileName, endpoint, accessKeyId, accessKeySecret, bucketName, FOLDER);
-        }
+        String fileUrl = uploadPicture(file);
         SysUser user = SecurityUtils.getLoginUser().getUser();
         bizLink.setIsDel(new Long("0"));
         bizLink.setCreateDate(new Date());
@@ -103,16 +98,7 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
     @Override
     public int updateBizLink(MultipartFile file, BizLink bizLink) throws IOException
     {
-        String fileUrl = "";
-        if(file != null){
-            String fileName = file.getOriginalFilename();
-            // oss中的文件夹名
-            OSSFactory ossUtil = new OSSFactory();
-            // 上传oss
-            ossUtil.uploadFile2OSS(file.getInputStream(), endpoint, accessKeyId, accessKeySecret, bucketName, FOLDER, fileName);
-            //获取文件的URl地址
-            fileUrl = ossUtil.getImgUrl(fileName, endpoint, accessKeyId, accessKeySecret, bucketName, FOLDER);
-        }
+        String fileUrl = uploadPicture(file);
         bizLink.setImgUrl(fileUrl);
         return bizLinkMapper.updateBizLink(bizLink);
     }
@@ -139,6 +125,16 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
     public int deleteBizLinkById(Long id)
     {
         return bizLinkMapper.updateIsDel(id);
-//        return bizLinkMapper.deleteBizLinkById(id);
+    }
+    private String uploadPicture(MultipartFile file) throws IOException {
+        if(file != null){
+            String fName = file.getOriginalFilename();
+            // 上传文件路径
+            String filePath = sysOssService.getUploadPath();
+            // 上传并返回新文件名称
+            return sysOssService.upload(file, fName,filePath);
+        }else{
+            return "";
+        }
     }
 }
