@@ -58,4 +58,10 @@ public interface BizColumnMapper  extends BaseMapper<BizColumn>
      * @return 结果
      */
     public int deleteBizColumnByIds(Long[] ids);
+
+    /**
+     * 获取发布栏目树
+     * @return
+     */
+    List<BizColumn> selectColList();
 }

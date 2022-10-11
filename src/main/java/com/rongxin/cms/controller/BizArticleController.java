@@ -1,22 +1,21 @@
 package com.rongxin.cms.controller;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
+import com.rongxin.cms.domain.BizColumn;
+import com.rongxin.cms.service.impl.BizColumnServiceImpl;
 import com.rongxin.common.core.domain.entity.SysDept;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.controller.BaseController;
 import com.rongxin.common.core.domain.AjaxResult;
@@ -25,6 +24,7 @@ import com.rongxin.cms.domain.BizArticle;
 import com.rongxin.cms.service.IBizArticleService;
 import com.rongxin.common.utils.poi.ExcelUtil;
 import com.rongxin.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文章内容Controller
@@ -38,6 +38,9 @@ public class BizArticleController extends BaseController
 {
     @Autowired
     private IBizArticleService bizArticleService;
+    @Autowired
+    private BizColumnServiceImpl bizColumnService;
+
 
     /**
      * 查询文章内容列表
@@ -82,30 +85,26 @@ public class BizArticleController extends BaseController
      * 新增文章内容
      */
     @ApiOperation("新增文章内容")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "主键ID", dataType = "Integer", dataTypeClass = Integer.class)
-    })
     @PreAuthorize("@ss.hasPermi('cms:article:add')")
     @Log(title = "文章内容", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody BizArticle bizArticle)
-    {
-        return toAjax(bizArticleService.insertBizArticle(bizArticle));
+    @PostMapping("/add")
+    public AjaxResult add(@RequestParam(value="files" , required = false) MultipartFile[] files,
+                          HttpServletRequest request,
+                          @RequestParam Map<String, Object> map) throws IOException {
+        return toAjax(bizArticleService.insertBizArticle(files,map));
     }
 
     /**
      * 修改文章内容
      */
     @ApiOperation("修改文章内容")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "主键ID", dataType = "Integer", dataTypeClass = Integer.class)
-    })
     @PreAuthorize("@ss.hasPermi('cms:article:edit')")
     @Log(title = "文章内容", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody BizArticle bizArticle)
-    {
-        return toAjax(bizArticleService.updateBizArticle(bizArticle));
+    @PostMapping("/edit")
+    public AjaxResult edit(@RequestParam(value="files" , required = false)MultipartFile[] files,
+                           HttpServletRequest request,
+                           @RequestParam Map<String, Object> map) throws IOException {
+        return toAjax(bizArticleService.updateBizArticle(files,map));
     }
 
     /**
@@ -126,10 +125,9 @@ public class BizArticleController extends BaseController
      * 获取栏目类别下拉树列表
      */
     @GetMapping("/treeselect")
-    public AjaxResult treeselect(SysDept dept)
+    public AjaxResult treeselect()
     {
-       // List<SysDept> depts = bizArticleService.selectColList(dept);
-      //  return AjaxResult.success(bizArticleService.buildDeptTreeSelect(depts));
-        return AjaxResult.success();
+       List<BizColumn> cols = bizColumnService.selectColList();
+       return AjaxResult.success(bizColumnService.buildColTreeSelect(cols));
     }
 }

@@ -3,6 +3,7 @@ package com.rongxin.cms.service;
 import java.util.List;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rongxin.cms.domain.BizColumn;
+import com.rongxin.cms.domain.ColSelect;
 
 /**
  * 栏目类别Service接口
@@ -59,4 +60,12 @@ public interface IBizColumnService extends IService<BizColumn>
      * @return 结果
      */
     public int deleteBizColumnById(Long id);
+
+    /**
+     * 获取树形结构
+     * @return
+     */
+    List<BizColumn> selectColList();
+
+    List<ColSelect>  buildColTreeSelect(List<BizColumn> cols);
 }

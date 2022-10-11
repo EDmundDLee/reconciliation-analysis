@@ -29,7 +29,7 @@ public class BizPicture extends BaseEntity
 
     /** 描述 */
     @Excel(name = "描述")
-    private String describe;
+    private String picDescribe;
 
     public Long getId() {
         return id;
@@ -55,12 +55,12 @@ public class BizPicture extends BaseEntity
         this.url = url;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getPicDescribe() {
+        return picDescribe;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setPicDescribe(String picDescribe) {
+        this.picDescribe = picDescribe;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class BizPicture extends BaseEntity
             .append("id", getId())
             .append("articleId", getArticleId())
             .append("url", getUrl())
-            .append("describe", getDescribe())
+            .append("picDescribe", getPicDescribe())
             .toString();
     }
 }

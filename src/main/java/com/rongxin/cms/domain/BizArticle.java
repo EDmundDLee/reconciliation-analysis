@@ -32,7 +32,8 @@ public class BizArticle extends BaseEntity
 
     /** 时间 */
     private Date createDate;
-
+    /** 时间 */
+    private Date updateDate;
     /** 创建人 */
     private String createName;
 
@@ -97,7 +98,16 @@ public class BizArticle extends BaseEntity
     {
         return createDate;
     }
-    public void setCreateName(String createName) 
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public void setCreateName(String createName)
     {
         this.createName = createName;
     }
@@ -160,7 +170,8 @@ public class BizArticle extends BaseEntity
             .append("title", getTitle())
             .append("content", getContent())
             .append("createDate", getCreateDate())
-            .append("createName", getCreateName())
+                .append("updateDate", getUpdateDate())
+                .append("createName", getCreateName())
             .append("createId", getCreateId())
             .append("titleImgId", getTitleImgId())
             .append("artType", getArtType())
