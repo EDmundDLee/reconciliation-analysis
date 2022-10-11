@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.rongxin.cms.domain.BizColumn;
+import com.rongxin.cms.domain.BizColumnTree;
+import com.rongxin.cms.domain.BizPicture;
 import com.rongxin.cms.service.impl.BizColumnServiceImpl;
 import com.rongxin.common.core.domain.entity.SysDept;
 import io.swagger.annotations.ApiImplicitParam;
@@ -80,18 +82,27 @@ public class BizArticleController extends BaseController
     {
         return AjaxResult.success(bizArticleService.selectBizArticleById(id));
     }
-
+    /**
+     * 获取文章标题图片信息
+     */
+    @ApiOperation("获取文章标题图片信息")
+    @ApiImplicitParam(name = "id", value = "主键ID", required = true, dataType = "int", paramType = "path", dataTypeClass = Integer.class)
+    @PreAuthorize("@ss.hasPermi('cms:article:query')")
+    @GetMapping(value = "/getPictureInfo")
+    public AjaxResult getPictureInfo(Long id)
+    {
+        return AjaxResult.success(bizArticleService.getPictureInfo(id));
+    }
     /**
      * 新增文章内容
      */
     @ApiOperation("新增文章内容")
     @PreAuthorize("@ss.hasPermi('cms:article:add')")
     @Log(title = "文章内容", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    public AjaxResult add(@RequestParam(value="files" , required = false) MultipartFile[] files,
-                          HttpServletRequest request,
-                          @RequestParam Map<String, Object> map) throws IOException {
-        return toAjax(bizArticleService.insertBizArticle(files,map));
+    @PostMapping
+    public AjaxResult add(@RequestBody BizArticle bizArticle)
+    {
+        return toAjax(bizArticleService.insertBizArticle(bizArticle));
     }
 
     /**
@@ -100,11 +111,10 @@ public class BizArticleController extends BaseController
     @ApiOperation("修改文章内容")
     @PreAuthorize("@ss.hasPermi('cms:article:edit')")
     @Log(title = "文章内容", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    public AjaxResult edit(@RequestParam(value="files" , required = false)MultipartFile[] files,
-                           HttpServletRequest request,
-                           @RequestParam Map<String, Object> map) throws IOException {
-        return toAjax(bizArticleService.updateBizArticle(files,map));
+    @PutMapping
+    public AjaxResult edit(@RequestBody BizArticle bizArticle)
+    {
+        return toAjax(bizArticleService.updateBizArticle(bizArticle));
     }
 
     /**
@@ -127,7 +137,24 @@ public class BizArticleController extends BaseController
     @GetMapping("/treeselect")
     public AjaxResult treeselect()
     {
-       List<BizColumn> cols = bizColumnService.selectColList();
+       List<BizColumnTree> cols = bizColumnService.selectColList();
        return AjaxResult.success(bizColumnService.buildColTreeSelect(cols));
     }
+
+    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
+    @Log(title = "上传图片", businessType = BusinessType.UPDATE)
+    @PostMapping("/uploadPic")
+    public AjaxResult uploadPic(MultipartFile file,Long id) throws IOException {
+        return AjaxResult.success(bizArticleService.uploadPic(file,id));
+    }
+
+    @ApiOperation("删除图片信息")
+    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
+    @Log(title = "删除图片信息", businessType = BusinessType.DELETE)
+    @PostMapping("/deletePictureInfo")
+    public AjaxResult deletePictureInfo(@RequestBody BizPicture bizPicture)
+    {
+        return toAjax(bizArticleService.deletePictureInfo(bizPicture));
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.rongxin.cms.service.impl;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rongxin.cms.domain.BizPicture;
 import com.rongxin.cms.mapper.BizPictureMapper;
 import com.rongxin.common.utils.DateUtils;
-import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.web.framework.web.service.ISysOssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,16 +41,22 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
      * @return 文章内容
      */
     @Override
-    public  Map<String,Object>  selectBizArticleById(Long id)
+    public  BizArticle selectBizArticleById(Long id)
     {
-        Map<String,Object> map = new HashMap<>();
-        BizArticle bizArticle = bizArticleMapper.selectBizArticleById(id);
-        map.put("article",bizArticle);
-        map.put("pictures",bizArticleMapper.selectBizArticleById(id));
+        return bizArticleMapper.selectBizArticleById(id);
+    }
+    /**
+     * 查询文章图片信息内容
+     *
+     * @param id 文章内容主键
+     * @return 图片
+     */
+    @Override
+    public  List<BizPicture> getPictureInfo(Long id)
+    {
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("article_id", bizArticle.getId());
-        map.put("pictures", bizPictureMapper.selectList(queryWrapper));
-        return map;
+        queryWrapper.eq("article_id", id);
+        return bizPictureMapper.selectList(queryWrapper);
     }
 
     /**
@@ -69,75 +73,25 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
 
     /**
      * 新增文章内容
-     * @param file 标题图片
-     * @param map 数据集合
+     * @param bizArticle 内容对象
      * @return 结果
      */
     @Override
-    public int insertBizArticle(MultipartFile[] file,Map<String, Object> map) throws IOException {
-        String pathUrl = "";
-
-        if(file != null && file.length>0){
-            pathUrl = uploadPicture(file[0]);//默认第一张为展示图
-        }else{
-            pathUrl = "";
-        }
-        BizArticle bizArticle =  getBizArticle(map,pathUrl);
-        bizArticle.setCreateTime(DateUtils.getNowDate());
-        bizArticle.setCreateName(SecurityUtils.getUsername());
-        int flag = bizArticleMapper.insertBizArticle(bizArticle);
-        if(file != null && file.length>0){
-            //处理子数据
-            BizPicture bizPicture = new BizPicture();
-            bizPicture.setArticleId(bizArticle.getId());
-            bizPicture.setUrl(bizArticle.getTitleImgUrl());
-            bizPictureMapper.insert(bizPicture);
-            for(int i=1;i<file.length;i++){
-                bizPicture = new BizPicture();
-                bizPicture.setArticleId(bizArticle.getId());
-                bizPicture.setUrl(uploadPicture(file[i]));
-                bizPictureMapper.insert(bizPicture);
-            }
-        }
-        return flag;
+    public int insertBizArticle(BizArticle bizArticle)
+    {
+        return bizArticleMapper.insertBizArticle(bizArticle);
     }
-
     /**
      * 修改文章内容
-     * @param file 标题图片
-     * @param map 数据集合
+     * @param bizArticle 内容对象
      * @return 结果
      */
     @Override
-    public int updateBizArticle(MultipartFile[] file, Map<String, Object> map) throws IOException {
-        String pathUrl = "";
-        BizArticle bizArticle = null;
-        if(file == null){
-               bizArticle =  getBizArticle(map,"");
-         }else{
-             if(file.length>0){
-                 pathUrl = uploadPicture(file[0]);
-             }
-               bizArticle =  getBizArticle(map,pathUrl);
-             bizArticle.setCreateName(SecurityUtils.getUsername());
-
-             QueryWrapper queryWrapper = new QueryWrapper();
-             queryWrapper.eq("article_id", bizArticle.getId());
-             //处理子数据
-             bizPictureMapper.delete(queryWrapper);//先删除在新增
-             BizPicture bizPicture = new BizPicture();
-             bizPicture.setArticleId(bizArticle.getId());
-             bizPicture.setUrl(bizArticle.getTitleImgUrl());
-             bizPictureMapper.insert(bizPicture);
-             for(int i=1;i<file.length;i++){
-                 bizPicture = new BizPicture();
-                 bizPicture.setArticleId(bizArticle.getId());
-                 bizPicture.setUrl(uploadPicture(file[i]));
-                 bizPictureMapper.insert(bizPicture);
-             }
-         }
+    public int updateBizArticle(BizArticle bizArticle)
+    {
         return bizArticleMapper.updateBizArticle(bizArticle);
     }
+
     private String uploadPicture(MultipartFile file) throws IOException {
         String fName = file.getOriginalFilename();
         // 上传文件路径
@@ -185,5 +139,46 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     public int deleteBizArticleById(Long id)
     {
         return bizArticleMapper.deleteBizArticleById(id);
+    }
+
+
+    /**
+     * 上传图片
+     * @param file 图片信息
+     * @return
+     * @throws IOException
+     */
+    @Override
+    public BizPicture uploadPic(MultipartFile file,Long id) throws IOException {
+        String url = uploadPicture(file);
+        BizArticle bizArticle =  bizArticleMapper.selectBizArticleById(id);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("article_id", bizArticle.getId());
+        List<BizPicture> list = bizPictureMapper.selectList(queryWrapper);
+        BizPicture bizPicture =  new BizPicture();
+        bizPicture.setUrl(url);
+        bizPicture.setArticleId(id);
+        bizPictureMapper.insert(bizPicture);
+        if(list==null || list.size()==0 ){
+            bizArticle.setTitleImgUrl(url);
+            bizArticle.setTitleImgId(bizPicture.getId());
+            bizArticleMapper.updateBizArticle(bizArticle);
+        }
+        return bizPicture;
+    }
+
+    @Override
+    public int deletePictureInfo(BizPicture bizPicture) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("article_id", bizPicture.getArticleId());
+        List<BizPicture> list = bizPictureMapper.selectList(queryWrapper);
+        int flag = bizPictureMapper.deleteById(bizPicture.getId());
+        if(list != null && list.size() == 1){
+            BizArticle bizArticle = bizArticleMapper.selectBizArticleById(bizPicture.getArticleId());
+            bizArticle.setTitleImgUrl("");
+            bizArticle.setTitleImgId(null);
+            bizArticleMapper.updateBizArticle(bizArticle);
+        }
+        return flag;
     }
 }

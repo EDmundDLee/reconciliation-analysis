@@ -3,6 +3,8 @@ package com.rongxin.cms.mapper;
 import java.util.List;
 import com.rongxin.cms.domain.BizColumn;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.rongxin.cms.domain.BizColumnTree;
+
 /**
  * 栏目类别Mapper接口
  * 
@@ -63,5 +65,5 @@ public interface BizColumnMapper  extends BaseMapper<BizColumn>
      * 获取发布栏目树
      * @return
      */
-    List<BizColumn> selectColList();
+    List<BizColumnTree> selectColList();
 }

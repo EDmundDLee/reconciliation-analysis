@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rongxin.cms.domain.ColSelect;
-import com.rongxin.common.core.domain.TreeSelect;
+import com.rongxin.cms.domain.BizColumnTree;
+import com.rongxin.cms.mapper.BizColumnTreeMapper;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.StringUtils;
+import com.rongxin.web.domain.CommonTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.rongxin.cms.mapper.BizColumnMapper;
@@ -29,7 +30,8 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
 {
     @Autowired
     private BizColumnMapper bizColumnMapper;
-
+    @Autowired
+    private BizColumnTreeMapper bizColumnTreeMapper;
     /**
      * 查询栏目类别
      * 
@@ -112,8 +114,8 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
      * @return
      */
     @Override
-    public List<BizColumn> selectColList() {
-        return bizColumnMapper.selectColList();
+    public List<BizColumnTree> selectColList() {
+        return bizColumnTreeMapper.selectColList();
     }
 
 
@@ -124,10 +126,10 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
      * @return 下拉树结构列表
      */
     @Override
-    public List<ColSelect> buildColTreeSelect(List<BizColumn> cols)
+    public List<CommonTree> buildColTreeSelect(List<BizColumnTree> cols)
     {
-        List<BizColumn> colsTrees = buildDeptTree(cols);
-        return colsTrees.stream().map(ColSelect::new).collect(Collectors.toList());
+        List<BizColumnTree> colsTrees = buildDeptTree(cols);
+        return colsTrees.stream().map(CommonTree::new).collect(Collectors.toList());
     }
     /**
      * 构建前端所需要树结构
@@ -135,15 +137,15 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
      * @param cols 栏目列表
      * @return 树结构列表
      */
-    public List<BizColumn> buildDeptTree(List<BizColumn> cols)
+    public List<BizColumnTree> buildDeptTree(List<BizColumnTree> cols)
     {
-        List<BizColumn> returnList = new ArrayList<BizColumn>();
+        List<BizColumnTree> returnList = new ArrayList<BizColumnTree>();
         List<Long> tempList = new ArrayList<Long>();
-        for (BizColumn col : cols)
+        for (BizColumnTree col : cols)
         {
             tempList.add(col.getId());
         }
-        for (BizColumn col : cols)
+        for (BizColumnTree col : cols)
         {
             // 如果是顶级节点, 遍历该父节点的所有子节点
             if (!tempList.contains(col.getParentId()))
@@ -162,12 +164,12 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
     /**
      * 递归列表
      */
-    private void recursionFn(List<BizColumn> list, BizColumn t)
+    private void recursionFn(List<BizColumnTree> list, BizColumnTree t)
     {
         // 得到子节点列表
-        List<BizColumn> childList = getChildList(list, t);
+        List<BizColumnTree> childList = getChildList(list, t);
         t.setChildren(childList);
-        for (BizColumn tChild : childList)
+        for (BizColumnTree tChild : childList)
         {
             if (hasChild(list, tChild))
             {
@@ -179,13 +181,13 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
     /**
      * 得到子节点列表
      */
-    private List<BizColumn> getChildList(List<BizColumn> list, BizColumn t)
+    private List<BizColumnTree> getChildList(List<BizColumnTree> list, BizColumnTree t)
     {
-        List<BizColumn> tlist = new ArrayList<BizColumn>();
-        Iterator<BizColumn> it = list.iterator();
+        List<BizColumnTree> tlist = new ArrayList<BizColumnTree>();
+        Iterator<BizColumnTree> it = list.iterator();
         while (it.hasNext())
         {
-            BizColumn n = (BizColumn) it.next();
+            BizColumnTree n = (BizColumnTree) it.next();
             if (StringUtils.isNotNull(n.getParentId()) && n.getParentId().longValue() == t.getId().longValue())
             {
                 tlist.add(n);
@@ -197,7 +199,7 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
     /**
      * 判断是否有子节点
      */
-    private boolean hasChild(List<BizColumn> list, BizColumn t)
+    private boolean hasChild(List<BizColumnTree> list, BizColumnTree t)
     {
         return getChildList(list, t).size() > 0;
     }

@@ -1,5 +1,7 @@
 package com.rongxin.cms.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.rongxin.common.annotation.Excel;
 import com.rongxin.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,6 +20,7 @@ public class BizPicture extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 主键id */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /** 内容 */

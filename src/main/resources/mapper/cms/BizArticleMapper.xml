@@ -24,9 +24,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizArticleList" parameterType="BizArticle" resultMap="BizArticleResult">
         <include refid="selectBizArticleVo"/>
-        <where>  
-            <if test="title != null  and title != ''"> and title = #{title}</if>
+        <where>
+            1 = 1
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="title != null  and title != ''"> and title  like concat('%', #{title}, '%')</if>
         </where>
+
     </select>
     
     <select id="selectBizArticleById" parameterType="Long" resultMap="BizArticleResult">
