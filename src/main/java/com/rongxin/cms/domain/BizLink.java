@@ -48,6 +48,18 @@ public class BizLink extends BaseEntity
     @Excel(name = "创建人id")
     private Long createId;
 
+    /** 图片名称 */
+    @Excel(name = "图片名称")
+    private String imgName;
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
+    }
+
     public Long getCreateId() {
         return createId;
     }
@@ -130,6 +142,7 @@ public class BizLink extends BaseEntity
             .append("createDate", getCreateDate())
             .append("isDel", getIsDel())
             .append("create_id", getCreateId())
+            .append("img_name", getImgName())
             .toString();
     }
 }

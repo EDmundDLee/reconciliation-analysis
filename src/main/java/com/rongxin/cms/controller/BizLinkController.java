@@ -83,7 +83,7 @@ public class BizLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('cms:link:add')")
     @Log(title = "", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestParam("file") MultipartFile file, BizLink bizLink) throws IOException
+    public AjaxResult add(MultipartFile file, BizLink bizLink) throws IOException
     {
         return toAjax(bizLinkService.insertBizLink(file, bizLink));
     }
@@ -98,7 +98,7 @@ public class BizLinkController extends BaseController
     @PreAuthorize("@ss.hasPermi('cms:link:edit')")
     @Log(title = "", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestParam("file") MultipartFile file, BizLink bizLink) throws IOException
+    public AjaxResult edit(MultipartFile file, BizLink bizLink) throws IOException
     {
         return toAjax(bizLinkService.updateBizLink(file, bizLink));
     }

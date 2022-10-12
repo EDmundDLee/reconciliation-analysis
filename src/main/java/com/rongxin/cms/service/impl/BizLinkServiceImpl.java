@@ -1,12 +1,12 @@
 package com.rongxin.cms.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.util.StringUtil;
 import com.rongxin.cms.domain.BizLink;
 import com.rongxin.cms.mapper.BizLinkMapper;
 import com.rongxin.cms.service.IBizLinkService;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.utils.SecurityUtils;
-import com.rongxin.common.utils.oss.OSSFactory;
 import com.rongxin.web.framework.web.service.ISysOssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,20 +32,6 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
     @Autowired
     private ISysOssService sysOssService;
 
-    @Value("${oss.accessKeyId}")
-    private String accessKeyId;
-
-    @Value("${oss.accessKeySecret}")
-    private String accessKeySecret;
-
-    @Value("${oss.bucketName}")
-    private String bucketName;
-
-    @Value("${oss.FOLDER}")
-    private String FOLDER;
-
-    @Value("${oss.endpoint}")
-    private String endpoint;
     /**
      * 查询
      * 
@@ -79,11 +65,13 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
     @Override
     public int insertBizLink(MultipartFile file,BizLink bizLink) throws IOException
     {
-        String fileUrl = uploadPicture(file);
         SysUser user = SecurityUtils.getLoginUser().getUser();
         bizLink.setIsDel(new Long("0"));
         bizLink.setCreateDate(new Date());
-        bizLink.setImgUrl(fileUrl);
+        if(file != null){
+            bizLink.setImgUrl(uploadPicture(file));
+            bizLink.setImgName(file.getOriginalFilename());
+        }
         bizLink.setCreateId(user.getUserId());
         bizLink.setCreateName(user.getUserName());
         return bizLinkMapper.insertBizLink(bizLink);
@@ -93,13 +81,18 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
      * 修改
      * 
      * @param bizLink 
-     * @return 结果
+     * @return 结果-
      */
     @Override
     public int updateBizLink(MultipartFile file, BizLink bizLink) throws IOException
     {
-        String fileUrl = uploadPicture(file);
-        bizLink.setImgUrl(fileUrl);
+         if(file == null && StringUtil.isEmpty(bizLink.getImgUrl())){
+            bizLink.setImgUrl("");
+            bizLink.setImgName("");
+        }else if(file != null && StringUtil.isEmpty(bizLink.getImgUrl())){
+            bizLink.setImgUrl(uploadPicture(file));
+            bizLink.setImgName(file.getOriginalFilename());
+        }
         return bizLinkMapper.updateBizLink(bizLink);
     }
 
@@ -127,14 +120,10 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
         return bizLinkMapper.updateIsDel(id);
     }
     private String uploadPicture(MultipartFile file) throws IOException {
-        if(file != null){
-            String fName = file.getOriginalFilename();
-            // 上传文件路径
-            String filePath = sysOssService.getUploadPath();
-            // 上传并返回新文件名称
-            return sysOssService.upload(file, fName,filePath);
-        }else{
-            return "";
-        }
+        String fName = file.getOriginalFilename();
+        // 上传文件路径
+        String filePath = sysOssService.getUploadPath();
+        // 上传并返回新文件名称
+        return sysOssService.upload(file, fName,filePath);
     }
 }

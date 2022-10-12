@@ -13,10 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createDate"    column="create_date"    />
         <result property="isDel"    column="isDel"    />
         <result property="createId"    column="create_Id"    />
+        <result property="imgName"    column="img_Name"    />
     </resultMap>
 
     <sql id="selectBizLinkVo">
-        select id, title, img_url, link_url, create_name, create_date, isDel, create_Id from biz_link
+        select id, title, img_url, link_url, create_name, create_date, isDel, create_Id, img_Name from biz_link
     </sql>
 
     <select id="selectBizLinkList" parameterType="BizLink" resultMap="BizLinkResult">
@@ -29,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createName != null  and createName != ''"> and create_name like concat('%', #{createName}, '%')</if>
             <if test="createDate != null "> and create_date = #{createDate}</if>
             <if test="createId != null "> and create_id = #{createId}</if>
+            <if test="imgName != null "> and img_Name = #{imgName}</if>
              and isDel = '0'
         </where>
     </select>
@@ -48,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createDate != null">create_date,</if>
             <if test="isDel != null">isDel,</if>
             <if test="createId != null">create_Id,</if>
+            <if test="imgName != null">img_Name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">#{title},</if>
@@ -57,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createDate != null">#{createDate},</if>
             <if test="isDel != null">#{isDel},</if>
             <if test="createId != null">#{createId},</if>
+            <if test="imgName != null">#{imgName},</if>
          </trim>
     </insert>
 
@@ -70,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createDate != null">create_date = #{createDate},</if>
             <if test="isDel != null">isDel = #{isDel},</if>
             <if test="createId != null">create_Id = #{createId},</if>
+            <if test="imgName != null">img_Name = #{imgName},</if>
         </trim>
         where id = #{id}
     </update>
