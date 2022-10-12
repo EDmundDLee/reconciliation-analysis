@@ -23,4 +23,8 @@ public interface ISysOssService
     String getUploadPath();
 
     String upload(MultipartFile file, String fileName, String opath) throws IOException;
+
+    boolean deleteFile(String fileName, String endpoint, String accessKeyId, String accessKeySecret, String bucketName);
+
+    List<String> deleteFileAll(List<String> keys, String endpoint, String accessKeyId, String accessKeySecret, String bucketName);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -61,4 +62,17 @@ public class SysOssServiceImpl implements ISysOssService
         return fileUrl;
     }
 
+    @Override
+    public boolean deleteFile(String fileName, String endpoint, String accessKeyId, String accessKeySecret, String bucketName) {
+        OSSFactory ossUtil = new OSSFactory();
+        boolean flag = ossUtil.deleteFile(fileName, endpoint, accessKeyId, accessKeySecret, bucketName);
+        return flag;
+    }
+
+    @Override
+    public List<String> deleteFileAll(List<String> keys, String endpoint, String accessKeyId, String accessKeySecret, String bucketName) {
+        OSSFactory ossUtil = new OSSFactory();
+        List<String> deletedObjects = ossUtil.deleteFileAll(keys, endpoint, accessKeyId, accessKeySecret, bucketName);
+        return deletedObjects;
+    }
 }
