@@ -1,6 +1,8 @@
 package com.rongxin.cms.domain;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rongxin.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -31,8 +33,10 @@ public class BizArticle extends BaseEntity
     private String content;
 
     /** 时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
     /** 时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
     /** 创建人 */
     private String createName;

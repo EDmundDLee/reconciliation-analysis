@@ -17,6 +17,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBizPictureList" parameterType="BizPicture" resultMap="BizPictureResult">
         <include refid="selectBizPictureVo"/>
+        <where>
+        1 = 1
+         <if test="articleId != null "> and article_id = #{articleId}</if>
+        </where>
     </select>
 
 </mapper>

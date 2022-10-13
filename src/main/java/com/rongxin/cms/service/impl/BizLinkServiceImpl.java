@@ -86,7 +86,7 @@ public class BizLinkServiceImpl extends ServiceImpl<BizLinkMapper, BizLink> impl
     @Override
     public int updateBizLink(MultipartFile file, BizLink bizLink) throws IOException
     {
-         if(file == null && StringUtil.isEmpty(bizLink.getImgUrl())){
+         if(file == null && (StringUtil.isEmpty(bizLink.getImgUrl()) || "null".equals(bizLink.getImgUrl()))){
             bizLink.setImgUrl("");
             bizLink.setImgName("");
         }else if(file != null && StringUtil.isEmpty(bizLink.getImgUrl())){
