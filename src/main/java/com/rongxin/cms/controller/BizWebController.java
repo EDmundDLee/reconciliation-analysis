@@ -4,10 +4,7 @@ import com.rongxin.cms.domain.BizArticle;
 import com.rongxin.cms.domain.BizColumn;
 import com.rongxin.cms.domain.BizLink;
 import com.rongxin.cms.domain.BizPicture;
-import com.rongxin.cms.service.IBizArticleService;
-import com.rongxin.cms.service.IBizColumnService;
-import com.rongxin.cms.service.IBizLinkService;
-import com.rongxin.cms.service.IBizPictureService;
+import com.rongxin.cms.service.*;
 import com.rongxin.common.core.controller.BaseController;
 import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.core.page.TableDataInfo;
@@ -16,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 网站接口集合
@@ -36,7 +34,8 @@ public class BizWebController extends BaseController
     private IBizLinkService bizLinkService;
     @Autowired
     private IBizPictureService bizPictureService;
-
+    @Autowired
+    private IBizWebService bizWebService;
     /**
      * 查询文章内容列表
      */
@@ -98,5 +97,13 @@ public class BizWebController extends BaseController
     public AjaxResult columnGetInfo(@PathVariable("id") Long id)
     {
         return AjaxResult.success(bizColumnService.selectBizColumnById(id));
+    }
+    /**
+     * 全文检索
+     */
+    @ApiOperation("全文检索")
+    @GetMapping("/search")
+    public AjaxResult search(@RequestParam Map<String, Object> params) throws Exception {
+         return AjaxResult.success(bizWebService.search(params));
     }
 }
