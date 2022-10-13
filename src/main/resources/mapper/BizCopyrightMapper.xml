@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.cms.mapper.BizCopyrightMapper">
+    
+    <resultMap type="BizCopyright" id="BizCopyrightResult">
+        <result property="id"    column="id"    />
+        <result property="copyright"    column="copyright"    />
+        <result property="wx"    column="wx"    />
+        <result property="address"    column="address"    />
+        <result property="createName"    column="create_name"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="isdel"    column="isDel"    />
+        <result property="createId"    column="create_id"    />
+        <result property="zipCode"    column="zip_code"    />
+        <result property="copyrightName"    column="copyright_name"    />
+    </resultMap>
+
+    <sql id="selectBizCopyrightVo">
+        select id, copyright, wx, address, create_name, create_date, isDel, create_id, zip_code, copyright_name from biz_copyright
+    </sql>
+
+    <select id="selectBizCopyrightList" parameterType="BizCopyright" resultMap="BizCopyrightResult">
+        <include refid="selectBizCopyrightVo"/>
+        <where>
+            1 = 1
+            and isdel='0'
+            <if test="copyright != null  and copyright != ''"> and copyright = #{copyright}</if>
+            <if test="wx != null  and wx != ''"> and wx = #{wx}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="createName != null  and createName != ''"> and create_name like concat('%', #{createName}, '%')</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="createId != null "> and create_id = #{createId}</if>
+            <if test="zipCode != null  and zipCode != ''"> and zip_code = #{zipCode}</if>
+            <if test="copyrightName != null  and copyrightName != ''"> and copyright_name like concat('%', #{copyrightName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBizCopyrightById" parameterType="Long" resultMap="BizCopyrightResult">
+        <include refid="selectBizCopyrightVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizCopyright" parameterType="BizCopyright" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_copyright
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="copyright != null">copyright,</if>
+            <if test="wx != null">wx,</if>
+            <if test="address != null">address,</if>
+            <if test="createName != null">create_name,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="isdel != null">isDel,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="zipCode != null">zip_code,</if>
+            <if test="copyrightName != null">copyright_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="copyright != null">#{copyright},</if>
+            <if test="wx != null">#{wx},</if>
+            <if test="address != null">#{address},</if>
+            <if test="createName != null">#{createName},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="isdel != null">#{isdel},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="zipCode != null">#{zipCode},</if>
+            <if test="copyrightName != null">#{copyrightName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizCopyright" parameterType="BizCopyright">
+        update biz_copyright
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="copyright != null">copyright = #{copyright},</if>
+            <if test="wx != null">wx = #{wx},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="createName != null">create_name = #{createName},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="isdel != null">isDel = #{isdel},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="zipCode != null">zip_code = #{zipCode},</if>
+            <if test="copyrightName != null">copyright_name = #{copyrightName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizCopyrightById" parameterType="Long">
+        delete from biz_copyright where id = #{id}
+    </delete>
+
+    <delete id="deleteBizCopyrightByIds" parameterType="String">
+        update biz_copyright set isdel='1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
