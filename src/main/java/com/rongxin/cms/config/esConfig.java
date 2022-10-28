@@ -1,18 +1,13 @@
 package com.rongxin.cms.config;
 
-import com.rongxin.cms.domain.BizArticle;
+
 import com.rongxin.cms.service.impl.BizWebServiceImpl;
-import com.rongxin.demo.domain.RxStudent;
-import com.rongxin.web.framework.web.service.ElasticSearchService;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 
 /* 用于服务器启动同步到es的文章数据 */

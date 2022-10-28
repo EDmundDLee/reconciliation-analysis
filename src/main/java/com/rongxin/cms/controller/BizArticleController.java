@@ -2,18 +2,13 @@ package com.rongxin.cms.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-import com.rongxin.cms.domain.BizColumn;
 import com.rongxin.cms.domain.BizColumnTree;
 import com.rongxin.cms.domain.BizPicture;
 import com.rongxin.cms.service.impl.BizColumnServiceImpl;
-import com.rongxin.common.core.domain.entity.SysDept;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;

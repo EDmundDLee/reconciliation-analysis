@@ -7,11 +7,13 @@ import com.rongxin.common.utils.uuid.IdUtils;
 import com.rongxin.demo.domain.FileUploadShare;
 import com.rongxin.demo.mapper.FileUploadShareMapper;
 import com.rongxin.demo.service.IFileUploadShareService;
+import com.rongxin.web.framework.web.service.ISysOssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +45,8 @@ public class FileUploadShareServiceImpl implements IFileUploadShareService
 
     @Value("${oss.endpoint}")
     private String endpoint;
+    @Autowired
+    private ISysOssService sysOssService;
 
     /**
      * 查询文件上传明细
@@ -117,7 +121,18 @@ public class FileUploadShareServiceImpl implements IFileUploadShareService
     {
         return fileUploadShareMapper.updateFileUploadShare(fileUploadShare);
     }
-
+    /**
+     * 文件转换
+     *
+     * @param id 文件转换
+     * @return 结果
+     */
+    @Override
+    public int handleTurn(String id) throws FileNotFoundException {
+        FileUploadShare fileUploadShare =  fileUploadShareMapper.selectFileUploadShareById(id);
+        sysOssService.convertWordtoPdf(fileUploadShare.getFilename());
+        return 0;
+    }
     /**
      * 批量删除文件上传明细
      *
