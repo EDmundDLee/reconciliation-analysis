@@ -38,7 +38,7 @@ public class WordToPDFHelper {
     public  void wordOfDocToPdf(InputStream in,String outPutPath) {
         Document document = new Document();
         try {
-
+//doc 转换pdf 需要表格图片等进行二次处理并且doc 转换pdf 包冲突 暂时注释该段代码
 //            HWPFDocument doc = new HWPFDocument(in);
 //            WordExtractor we = new WordExtractor(doc);
 //            OutputStream file = new FileOutputStream(new File(outPutPath));
