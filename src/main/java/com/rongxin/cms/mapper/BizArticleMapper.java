@@ -1,6 +1,8 @@
 package com.rongxin.cms.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.rongxin.cms.domain.BizArticle;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
@@ -19,7 +21,7 @@ public interface BizArticleMapper  extends BaseMapper<BizArticle>
      */
     public BizArticle selectBizArticleById(Long id);
 
-    public List<String> selectBizArticleAttr(Long id);
+    public List<Map<String,Object>> selectBizArticleAttr(Long id);
 
     /**
      * 查询文章内容列表
