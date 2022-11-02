@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.cms.mapper.BizAttributeValueMapper">
+    
+    <resultMap type="BizAttributeValue" id="BizAttributeValueResult">
+        <result property="id"    column="id"    />
+        <result property="ruleId"    column="rule_id"    />
+        <result property="articleId"    column="article_id"    />
+        <result property="attrValue"    column="attr_value"    />
+        <result property="attrStatus"    column="attr_status"    />
+        <result property="attrOrder"    column="attr_order"    />
+        <result property="attrId"    column="attr_id"    />
+    </resultMap>
+
+    <sql id="selectBizAttributeValueVo">
+        select id, rule_id, article_id, attr_value, attr_status, attr_order, attr_id from biz_attribute_value
+    </sql>
+
+    <select id="selectBizAttributeValueList" parameterType="BizAttributeValue" resultMap="BizAttributeValueResult">
+        <include refid="selectBizAttributeValueVo"/>
+        <where>  
+            <if test="ruleId != null "> and rule_id = #{ruleId}</if>
+            <if test="articleId != null "> and article_id = #{articleId}</if>
+            <if test="attrValue != null  and attrValue != ''"> and attr_value = #{attrValue}</if>
+            <if test="attrStatus != null  and attrStatus != ''"> and attr_status = #{attrStatus}</if>
+            <if test="attrOrder != null  and attrOrder != ''"> and attr_order = #{attrOrder}</if>
+            <if test="attrId != null "> and attr_id = #{attrId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizAttributeValueById" parameterType="Long" resultMap="BizAttributeValueResult">
+        <include refid="selectBizAttributeValueVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizAttributeValue" parameterType="BizAttributeValue" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_attribute_value
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">rule_id,</if>
+            <if test="articleId != null">article_id,</if>
+            <if test="attrValue != null">attr_value,</if>
+            <if test="attrStatus != null">attr_status,</if>
+            <if test="attrOrder != null">attr_order,</if>
+            <if test="attrId != null">attr_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleId != null">#{ruleId},</if>
+            <if test="articleId != null">#{articleId},</if>
+            <if test="attrValue != null">#{attrValue},</if>
+            <if test="attrStatus != null">#{attrStatus},</if>
+            <if test="attrOrder != null">#{attrOrder},</if>
+            <if test="attrId != null">#{attrId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizAttributeValue" parameterType="BizAttributeValue">
+        update biz_attribute_value
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleId != null">rule_id = #{ruleId},</if>
+            <if test="articleId != null">article_id = #{articleId},</if>
+            <if test="attrValue != null">attr_value = #{attrValue},</if>
+            <if test="attrStatus != null">attr_status = #{attrStatus},</if>
+            <if test="attrOrder != null">attr_order = #{attrOrder},</if>
+            <if test="attrId != null">attr_id = #{attrId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizAttributeValueById" parameterType="Long">
+        delete from biz_attribute_value where id = #{id}
+    </delete>
+
+    <delete id="deleteBizAttributeValueByIds" parameterType="String">
+        delete from biz_attribute_value where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

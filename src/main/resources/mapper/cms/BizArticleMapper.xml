@@ -81,7 +81,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where id = #{id}
     </update>
-
+    <select id="selectBizArticleAttr" parameterType="Long" resultType="String">
+         select attribute_name  from biz_article_rule a left join biz_attribute b on a.rule_id =  b.rule_id
+         where attribute_status=0 and article_id = #{createId}
+    </select>
     <delete id="deleteBizArticleById" parameterType="Long">
         delete from biz_article where id = #{id}
     </delete>

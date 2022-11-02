@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.cms.mapper.BizArticleRuleMapper">
+    
+    <resultMap type="BizArticleRule" id="BizArticleRuleResult">
+        <result property="id"    column="id"    />
+        <result property="articleId"    column="article_id"    />
+        <result property="ruleId"    column="rule_id"    />
+    </resultMap>
+
+    <sql id="selectBizArticleRuleVo">
+        select id, article_id, rule_id from biz_article_rule
+    </sql>
+
+    <select id="selectBizArticleRuleList" parameterType="BizArticleRule" resultMap="BizArticleRuleResult">
+        <include refid="selectBizArticleRuleVo"/>
+        <where>  
+            <if test="articleId != null "> and article_id = #{articleId}</if>
+            <if test="ruleId != null "> and rule_id = #{ruleId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizArticleRuleById" parameterType="Long" resultMap="BizArticleRuleResult">
+        <include refid="selectBizArticleRuleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizArticleRule" parameterType="BizArticleRule" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_article_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">article_id,</if>
+            <if test="ruleId != null">rule_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="articleId != null">#{articleId},</if>
+            <if test="ruleId != null">#{ruleId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizArticleRule" parameterType="BizArticleRule">
+        update biz_article_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="articleId != null">article_id = #{articleId},</if>
+            <if test="ruleId != null">rule_id = #{ruleId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizArticleRuleById" parameterType="Long">
+        delete from biz_article_rule where id = #{id}
+    </delete>
+
+    <delete id="deleteBizArticleRuleByIds" parameterType="String">
+        delete from biz_article_rule where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBizArticleRuleByRuleId" parameterType="String">
+        delete from biz_article_rule where rule_id =  #{ruleId}
+    </delete>
+
+</mapper>

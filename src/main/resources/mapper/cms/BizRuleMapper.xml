@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.cms.mapper.BizRuleMapper">
+    
+    <resultMap type="BizRule" id="BizRuleResult">
+        <result property="id"    column="id"    />
+        <result property="ruleName"    column="rule_name"    />
+        <result property="ruleStatus"    column="rule_status"    />
+    </resultMap>
+
+    <sql id="selectBizRuleVo">
+        select id, rule_name, rule_status from biz_rule
+    </sql>
+
+    <select id="selectBizRuleList" parameterType="BizRule" resultMap="BizRuleResult">
+        <include refid="selectBizRuleVo"/>
+        <where>  
+            <if test="ruleName != null  and ruleName != ''"> and rule_name like concat('%', #{ruleName}, '%')</if>
+            <if test="ruleStatus != null  and ruleStatus != ''"> and rule_status = #{ruleStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizRuleById" parameterType="Long" resultMap="BizRuleResult">
+        <include refid="selectBizRuleVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectBizRuleForSelect"   resultType="Map">>
+ select * from biz_rule
+    </select>
+
+    <insert id="insertBizRule" parameterType="BizRule" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleName != null">rule_name,</if>
+            <if test="ruleStatus != null">rule_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleName != null">#{ruleName},</if>
+            <if test="ruleStatus != null">#{ruleStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizRule" parameterType="BizRule">
+        update biz_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleName != null">rule_name = #{ruleName},</if>
+            <if test="ruleStatus != null">rule_status = #{ruleStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizRuleById" parameterType="Long">
+        delete from biz_rule where id = #{id}
+    </delete>
+
+    <delete id="deleteBizRuleByIds" parameterType="String">
+        delete from biz_rule where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

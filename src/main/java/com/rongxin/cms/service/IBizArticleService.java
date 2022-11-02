@@ -2,6 +2,8 @@ package com.rongxin.cms.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rongxin.cms.domain.BizArticle;
 import com.rongxin.cms.domain.BizPicture;
@@ -22,6 +24,14 @@ public interface IBizArticleService extends IService<BizArticle>
      * @return 文章内容
      */
     public BizArticle  selectBizArticleById(Long id);
+    /**
+     * 查询文章内容及规则属性
+     *
+     * @param id 文章内容主键
+     * @return 文章内容
+     */
+    public Map<String,Object>  selectBizArticleAndAttrById(Long id);
+
 
     /**
      * 查询文章内容
@@ -84,4 +94,11 @@ public interface IBizArticleService extends IService<BizArticle>
      */
     public int deletePictureInfo(BizPicture bizPicture);
 
+    public Map<String,Object> getRuleAttr();
+    /**
+     * 绑定规则
+     *
+     * @return 结果
+     */
+    public int bindRule(Map<String,Object> map);
 }

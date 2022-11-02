@@ -19,6 +19,8 @@ public interface BizArticleMapper  extends BaseMapper<BizArticle>
      */
     public BizArticle selectBizArticleById(Long id);
 
+    public List<String> selectBizArticleAttr(Long id);
+
     /**
      * 查询文章内容列表
      * 

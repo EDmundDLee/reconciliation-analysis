@@ -1,20 +1,21 @@
 package com.rongxin.cms.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rongxin.cms.domain.BizPicture;
-import com.rongxin.cms.mapper.BizPictureMapper;
+import com.rongxin.cms.domain.*;
+import com.rongxin.cms.mapper.*;
+import com.rongxin.cms.service.IBizArticleRuleService;
 import com.rongxin.common.utils.DateUtils;
 import com.rongxin.web.framework.web.service.ISysOssService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.rongxin.cms.mapper.BizArticleMapper;
-import com.rongxin.cms.domain.BizArticle;
 import com.rongxin.cms.service.IBizArticleService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,14 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     private BizArticleMapper bizArticleMapper;
     @Autowired
     private ISysOssService sysOssService;
+    @Autowired
+    private BizRuleMapper bizRuleMapper;
+    @Autowired
+    private BizAttributeMapper bizAttributeMapper;
+    @Autowired
+    private IBizArticleRuleService bizArticleRuleService;
+    @Autowired
+    private BizArticleRuleMapper bizArticleRuleMapper;
 
     @Autowired
     private BizPictureMapper bizPictureMapper;
@@ -43,7 +52,21 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     @Override
     public  BizArticle selectBizArticleById(Long id)
     {
-        return bizArticleMapper.selectBizArticleById(id);
+         return bizArticleMapper.selectBizArticleById(id);
+    }
+    /**
+     * 查询文章内容及规则属性
+     *
+     * @param id 文章内容主键
+     * @return 文章内容
+     */
+    @Override
+    public  Map<String,Object> selectBizArticleAndAttrById(Long id)
+    {
+        Map<String,Object> map = new HashMap<>();
+        map.put("attrList",bizArticleMapper.selectBizArticleAttr(id));
+        map.put("articleList",bizArticleMapper.selectBizArticleById(id));
+        return map;
     }
     /**
      * 查询文章图片信息内容
@@ -184,5 +207,36 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
             bizArticleMapper.updateBizArticle(bizArticle);
         }
         return flag;
+    }
+
+    @Override
+    public Map<String, Object> getRuleAttr() {
+       Map<String, Object> map = new HashMap<>();
+        List<Map<String, Object>> list =  new ArrayList<>();
+       List<BizRule> ruleList = bizRuleMapper.selectBizRuleList(null);
+        if(ruleList!= null && ruleList.size()>0){
+            map.put("ruleList",ruleList);
+            BizAttribute bizAttribute = new BizAttribute();
+            bizAttribute.setRuleId(ruleList.get(0).getId());
+            List<BizAttribute> attrList = bizAttributeMapper.selectBizAttributeList(bizAttribute);
+            map.put("attributeList",attrList);
+        }
+         return map;
+    }
+
+    @Override
+    public int bindRule(Map<String,Object> map) {
+        String ruleId =  String.valueOf(map.get("ruleId"));
+        ArrayList idsStr = (ArrayList) map.get("ids");
+
+        bizArticleRuleMapper.deleteBizArticleRuleByRuleId(ruleId);
+        BizArticleRule bizArticleRule =  new BizArticleRule();
+        for(int i = 0 ;i<idsStr.size();i++){
+            bizArticleRule =  new BizArticleRule();
+            bizArticleRule.setRuleId(Long.valueOf(ruleId));
+            bizArticleRule.setArticleId(Long.valueOf(String.valueOf(idsStr.get(i))));
+            bizArticleRuleService.insertBizArticleRule(bizArticleRule);
+        }
+        return 0;
     }
 }

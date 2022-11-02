@@ -2,6 +2,7 @@ package com.rongxin.cms.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.rongxin.cms.domain.BizColumnTree;
 import com.rongxin.cms.domain.BizPicture;
@@ -75,7 +76,7 @@ public class BizArticleController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(bizArticleService.selectBizArticleById(id));
+        return AjaxResult.success(bizArticleService.selectBizArticleAndAttrById(id));
     }
     /**
      * 获取文章标题图片信息
@@ -150,6 +151,22 @@ public class BizArticleController extends BaseController
     public AjaxResult deletePictureInfo(@RequestBody BizPicture bizPicture)
     {
         return toAjax(bizArticleService.deletePictureInfo(bizPicture));
+    }
+    @ApiOperation("获取规则属性")
+    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
+    @Log(title = "获取规则属性", businessType = BusinessType.DELETE)
+    @PostMapping("/getRuleAttr")
+    public AjaxResult getRuleAttr()
+    {
+        return AjaxResult.success(bizArticleService.getRuleAttr());
+    }
+    @ApiOperation("绑定规则")
+    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
+    @Log(title = "绑定规则", businessType = BusinessType.DELETE)
+    @PostMapping("/bindRule")
+    public AjaxResult bindRule(@RequestBody Map<String,Object> map)
+    {
+        return AjaxResult.success(bizArticleService.bindRule(map));
     }
 
 }
