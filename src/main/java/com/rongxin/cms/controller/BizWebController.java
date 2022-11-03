@@ -86,7 +86,7 @@ public class BizWebController extends BaseController
     @GetMapping(value = "/article/{id}")
     public AjaxResult articleGetInfo(@PathVariable("id") Long id)
     {
-        return AjaxResult.success(bizArticleService.selectBizArticleById(id));
+        return AjaxResult.success(bizArticleService.selectBizArticleAndAttrById(id));
     }
 
     /**

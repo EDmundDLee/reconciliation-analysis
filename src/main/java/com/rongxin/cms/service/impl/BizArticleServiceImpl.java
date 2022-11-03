@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rongxin.cms.domain.*;
 import com.rongxin.cms.mapper.*;
 import com.rongxin.cms.service.IBizArticleRuleService;
+import com.rongxin.cms.service.IBizAttributeValueService;
 import com.rongxin.common.utils.DateUtils;
 import com.rongxin.web.framework.web.service.ISysOssService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     private IBizArticleRuleService bizArticleRuleService;
     @Autowired
     private BizArticleRuleMapper bizArticleRuleMapper;
+    @Autowired
+    private IBizAttributeValueService bizAttributeValueService;
 
     @Autowired
     private BizPictureMapper bizPictureMapper;
@@ -112,7 +115,31 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     @Override
     public int updateBizArticle(BizArticle bizArticle)
     {
-        return bizArticleMapper.updateBizArticle(bizArticle);
+        int flag = 0;
+        if(bizArticleMapper.updateBizArticle(bizArticle)>0){
+            flag = 1;
+            if(bizArticle.getParams()!=null){
+                Map<String,Object> map =  bizArticle.getParams();
+                Map<String,Object> mapValue = new HashMap<>();
+                ArrayList list = (ArrayList) map.get("params");
+                BizAttributeValue bizAttributeValue = null;
+                    for(int i=0;i<list.size();i++){
+                        mapValue =  (Map<String,Object>)list.get(i);
+                        bizAttributeValue = new BizAttributeValue();
+                        bizAttributeValue.setArticleId(Long.valueOf(String.valueOf(mapValue.get("article_id"))));
+                        bizAttributeValue.setRuleId(Long.valueOf(String.valueOf(mapValue.get("rule_id"))));
+                        bizAttributeValue.setAttrId(Long.valueOf(String.valueOf(mapValue.get("attrId"))));
+                        bizAttributeValue.setAttrValue( mapValue.get("attrValue")==null?"":String.valueOf(mapValue.get("attrValue")));
+                        bizAttributeValue.setId(mapValue.get("id")==null?null: Long.valueOf(String.valueOf( mapValue.get("id"))));
+                         if(bizAttributeValue.getId()!=null){
+                            bizAttributeValueService.updateBizAttributeValue(bizAttributeValue);
+                        }else{
+                            bizAttributeValueService.insertBizAttributeValue(bizAttributeValue);
+                        }
+                    }
+                }
+            }
+        return flag;
     }
 
     private String uploadPicture(MultipartFile file) throws IOException {

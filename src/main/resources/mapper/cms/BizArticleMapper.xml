@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
     <select id="selectBizArticleAttr" parameterType="Long" resultType="java.util.Map">
-         select e.id,d.rule_id,d.article_id,d.attribute_name as attrName, IFNULL(e.attr_value,'') as attrValue  from (
+         select e.id,d.rule_id,d.article_id,d.attribute_name as attrName, IFNULL(e.attr_value,'') as attrValue ,d.id as attrId from (
             select b.id,b.attribute_name,a.article_id,a.rule_id  from biz_article_rule a
              left join biz_attribute b on a.rule_id =  b.rule_id where attribute_status=0 and article_id = #{id}
             ) d left join biz_attribute_value e on d.article_id = e.article_id and d.rule_id = e.rule_id and d.id= e.attr_id
