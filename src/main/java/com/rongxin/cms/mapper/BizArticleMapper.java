@@ -1,5 +1,6 @@
 package com.rongxin.cms.mapper;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public interface BizArticleMapper  extends BaseMapper<BizArticle>
      */
     public BizArticle selectBizArticleById(Long id);
 
-    public List<Map<String,Object>> selectBizArticleAttr(Long id);
+    public List<LinkedHashMap<String,Object>> selectBizArticleAttr(Long id);
 
     /**
      * 查询文章内容列表

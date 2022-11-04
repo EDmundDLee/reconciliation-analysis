@@ -43,7 +43,8 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     private BizArticleRuleMapper bizArticleRuleMapper;
     @Autowired
     private IBizAttributeValueService bizAttributeValueService;
-
+    @Autowired
+    private BizAttributeValueMapper bizAttributeValueMapper;
     @Autowired
     private BizPictureMapper bizPictureMapper;
     /**
@@ -128,6 +129,9 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
                         bizAttributeValue = new BizAttributeValue();
                         bizAttributeValue.setArticleId(Long.valueOf(String.valueOf(mapValue.get("article_id"))));
                         bizAttributeValue.setRuleId(Long.valueOf(String.valueOf(mapValue.get("rule_id"))));
+                        bizAttributeValue.setAttrId(Long.valueOf(String.valueOf(mapValue.get("attrId"))));
+                        bizAttributeValue.setAttrIndex( mapValue.get("attr_index")==null?"":String.valueOf(mapValue.get("attr_index")));
+                        bizAttributeValue.setAttrOrder( mapValue.get("attr_order")==null?"":String.valueOf(mapValue.get("attr_order")));
                         bizAttributeValue.setAttrId(Long.valueOf(String.valueOf(mapValue.get("attrId"))));
                         bizAttributeValue.setAttrValue( mapValue.get("attrValue")==null?"":String.valueOf(mapValue.get("attrValue")));
                         bizAttributeValue.setId(mapValue.get("id")==null?null: Long.valueOf(String.valueOf( mapValue.get("id"))));
@@ -254,9 +258,9 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     @Override
     public int bindRule(Map<String,Object> map) {
         String ruleId =  String.valueOf(map.get("ruleId"));
-        ArrayList idsStr = (ArrayList) map.get("ids");
-
-        bizArticleRuleMapper.deleteBizArticleRuleByRuleId(ruleId);
+        List<String> idsStr = (ArrayList) map.get("ids");
+        bizArticleRuleMapper.deleteBizArticleRuleByArticleIds(idsStr);
+        bizAttributeValueMapper.deleteBizArticleRuleValueByArticleIds(idsStr);
         BizArticleRule bizArticleRule =  new BizArticleRule();
         for(int i = 0 ;i<idsStr.size();i++){
             bizArticleRule =  new BizArticleRule();

@@ -46,7 +46,7 @@ public class SysPermissionService
 
     /**
      * 获取菜单数据权限
-     * 
+     *
      * @param user 用户信息
      * @return 菜单权限信息
      */
@@ -62,6 +62,18 @@ public class SysPermissionService
         {
             perms.addAll(menuService.selectMenuPermsByUserId(user.getUserId()));
         }
+        return perms;
+    }
+    /**
+     * 根据用户及角色获取菜单数据权限
+     *
+     * @param roleId 角色ID
+     * @return 菜单权限信息
+     */
+    public Set<String> getMenuPermissionByRoleId(SysUser user,Long roleId)
+    {
+        Set<String> perms = new HashSet<String>();
+        perms.addAll(menuService.selectMenuPermsByUserIdAndRoleId(user.getUserId(),roleId));
         return perms;
     }
 }

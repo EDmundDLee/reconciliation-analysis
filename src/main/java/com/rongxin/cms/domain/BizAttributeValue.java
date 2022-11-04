@@ -35,7 +35,10 @@ public class BizAttributeValue extends BaseEntity
     private String attrStatus;
 
     /** 排序 */
-    @Excel(name = "排序")
+    @Excel(name = "排序序号")
+    private String attrIndex;
+    /** 排序 */
+    @Excel(name = "排序定位")
     private String attrOrder;
 
     /** 所属属性 */
@@ -92,7 +95,15 @@ public class BizAttributeValue extends BaseEntity
         this.attrOrder = attrOrder;
     }
 
-    public String getAttrOrder() 
+    public String getAttrIndex() {
+        return attrIndex;
+    }
+
+    public void setAttrIndex(String attrIndex) {
+        this.attrIndex = attrIndex;
+    }
+
+    public String getAttrOrder()
     {
         return attrOrder;
     }
@@ -114,6 +125,7 @@ public class BizAttributeValue extends BaseEntity
             .append("articleId", getArticleId())
             .append("attrValue", getAttrValue())
             .append("attrStatus", getAttrStatus())
+            .append("attrIndex", getAttrIndex())
             .append("attrOrder", getAttrOrder())
             .append("attrId", getAttrId())
             .toString();

@@ -46,7 +46,7 @@ public interface IBizAttributeValueService extends IService<BizAttributeValue>
 
     /**
      * 批量删除内容拓展属性值
-     * 
+     *
      * @param ids 需要删除的内容拓展属性值主键集合
      * @return 结果
      */
@@ -54,7 +54,7 @@ public interface IBizAttributeValueService extends IService<BizAttributeValue>
 
     /**
      * 删除内容拓展属性值信息
-     * 
+     *
      * @param id 内容拓展属性值主键
      * @return 结果
      */

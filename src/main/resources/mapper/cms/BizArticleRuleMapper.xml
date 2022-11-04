@@ -59,8 +59,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <delete id="deleteBizArticleRuleByRuleId" parameterType="String">
-        delete from biz_article_rule where rule_id =  #{ruleId}
+    <delete id="deleteBizArticleRuleByArticleIds" parameterType="String">
+        delete from biz_article_rule where  article_id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
 
 </mapper>

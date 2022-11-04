@@ -1,5 +1,6 @@
 package com.rongxin.cms.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.rongxin.cms.domain.BizAttributeValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -58,4 +59,8 @@ public interface BizAttributeValueMapper  extends BaseMapper<BizAttributeValue>
      * @return 结果
      */
     public int deleteBizAttributeValueByIds(Long[] ids);
+
+
+
+    public int deleteBizArticleRuleValueByArticleIds(List<String> ids);
 }

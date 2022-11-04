@@ -11,11 +11,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="attrValue"    column="attr_value"    />
         <result property="attrStatus"    column="attr_status"    />
         <result property="attrOrder"    column="attr_order"    />
+        <result property="attrIndex"    column="attr_index"    />
+
         <result property="attrId"    column="attr_id"    />
     </resultMap>
 
     <sql id="selectBizAttributeValueVo">
-        select id, rule_id, article_id, attr_value, attr_status, attr_order, attr_id from biz_attribute_value
+        select id, rule_id, article_id, attr_value, attr_status, attr_order,attr_index, attr_id from biz_attribute_value
     </sql>
 
     <select id="selectBizAttributeValueList" parameterType="BizAttributeValue" resultMap="BizAttributeValueResult">
@@ -26,7 +28,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="attrValue != null  and attrValue != ''"> and attr_value = #{attrValue}</if>
             <if test="attrStatus != null  and attrStatus != ''"> and attr_status = #{attrStatus}</if>
             <if test="attrOrder != null  and attrOrder != ''"> and attr_order = #{attrOrder}</if>
+            <if test="attrIndex != null  and attrOrder != ''"> and attr_index = #{attrIndex}</if>
             <if test="attrId != null "> and attr_id = #{attrId}</if>
+
         </where>
     </select>
     
@@ -43,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="attrValue != null">attr_value,</if>
             <if test="attrStatus != null">attr_status,</if>
             <if test="attrOrder != null">attr_order,</if>
+            <if test="attrIndex != null">attr_index,</if>
             <if test="attrId != null">attr_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -51,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="attrValue != null">#{attrValue},</if>
             <if test="attrStatus != null">#{attrStatus},</if>
             <if test="attrOrder != null">#{attrOrder},</if>
+            <if test="attrIndex != null">#{attrIndex},</if>
             <if test="attrId != null">#{attrId},</if>
          </trim>
     </insert>
@@ -63,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="attrValue != null">attr_value = #{attrValue},</if>
             <if test="attrStatus != null">attr_status = #{attrStatus},</if>
             <if test="attrOrder != null">attr_order = #{attrOrder},</if>
+            <if test="attrIndex != null">attr_index = #{attrIndex},</if>
             <if test="attrId != null">attr_id = #{attrId},</if>
         </trim>
         where id = #{id}
@@ -75,6 +82,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteBizAttributeValueByIds" parameterType="String">
         delete from biz_attribute_value where id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBizArticleRuleValueByArticleIds" parameterType="String">
+        delete from biz_attribute_value where article_id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>

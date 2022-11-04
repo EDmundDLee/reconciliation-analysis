@@ -1,5 +1,6 @@
 package com.rongxin.cms.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.rongxin.cms.domain.BizArticleRule;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -60,5 +61,7 @@ public interface BizArticleRuleMapper  extends BaseMapper<BizArticleRule>
     public int deleteBizArticleRuleByIds(Long[] ids);
 
 
-    public int deleteBizArticleRuleByRuleId(String ruleId);
+    public int deleteBizArticleRuleByArticleIds(List<String> ids);
+
+
 }
