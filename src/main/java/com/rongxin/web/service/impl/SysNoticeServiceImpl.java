@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.rongxin.common.constant.Constants;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.core.domain.model.LoginUser;

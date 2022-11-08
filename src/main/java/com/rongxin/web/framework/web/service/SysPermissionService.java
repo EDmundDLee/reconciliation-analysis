@@ -73,7 +73,14 @@ public class SysPermissionService
     public Set<String> getMenuPermissionByRoleId(SysUser user,Long roleId)
     {
         Set<String> perms = new HashSet<String>();
-        perms.addAll(menuService.selectMenuPermsByUserIdAndRoleId(user.getUserId(),roleId));
+        // 管理员拥有所有权限
+        if (user.isAdmin())
+        {
+            perms.add("*:*:*");
+        }
+        else {
+            perms.addAll(menuService.selectMenuPermsByUserIdAndRoleId(user.getUserId(), roleId));
+        }
         return perms;
     }
 }

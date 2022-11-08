@@ -118,8 +118,6 @@ public class SysNoticeController extends BaseController
     @GetMapping(value = "/queryMessage")
     public AjaxResult getMessageInfo(SysNotice notice)
     {
-        System.out.println(notice.getNoticeId());
-        System.out.println(notice.getSnuId());
         return AjaxResult.success(noticeService.selectMessageById(notice));
     }
     /**
@@ -128,8 +126,6 @@ public class SysNoticeController extends BaseController
     @GetMapping(value = "/queryMessageOfAll")
     public AjaxResult queryMessageOfAll(SysNotice notice)
     {
-        System.out.println(notice.getNoticeId());
-        System.out.println(notice.getSnuId());
         return AjaxResult.success(noticeService.selectMessageById(notice));
     }
 }

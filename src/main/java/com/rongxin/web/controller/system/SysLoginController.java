@@ -78,6 +78,21 @@ public class SysLoginController
      *
      * @return 用户信息
      */
+    @GetMapping("getRoles")
+    public AjaxResult getRoles()
+    {
+        SysUser user = SecurityUtils.getLoginUser().getUser();
+        // 角色集合
+        List<SysRole> roles = sysRoleService.selectRoleListByUserId(user.getUserId());
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("roles", roles);
+        return ajax;
+    }
+    /**
+     * 获取用户信息
+     *
+     * @return 用户信息
+     */
     @GetMapping("GetInfoByRole")
     public AjaxResult GetInfoByRole()
     {
