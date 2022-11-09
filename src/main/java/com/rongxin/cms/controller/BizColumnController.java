@@ -1,6 +1,8 @@
 package com.rongxin.cms.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -115,5 +117,23 @@ public class BizColumnController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(bizColumnService.deleteBizColumnByIds(ids));
+    }
+
+    @ApiOperation("获取规则属性")
+    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
+    @Log(title = "获取规则属性", businessType = BusinessType.DELETE)
+    @PostMapping("/getRuleAttr")
+    public AjaxResult getRuleAttr()
+    {
+        return AjaxResult.success(bizColumnService.getRuleAttr());
+    }
+
+    @ApiOperation("绑定规则")
+    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
+    @Log(title = "绑定规则", businessType = BusinessType.DELETE)
+    @PostMapping("/bindRule")
+    public AjaxResult bindRule(@RequestBody Map<String,Object> map)
+    {
+        return AjaxResult.success(bizColumnService.bindRule(map));
     }
 }

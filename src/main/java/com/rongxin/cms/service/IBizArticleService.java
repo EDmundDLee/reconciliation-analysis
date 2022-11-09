@@ -93,12 +93,11 @@ public interface IBizArticleService extends IService<BizArticle>
      * @return 结果
      */
     public int deletePictureInfo(BizPicture bizPicture);
-
-    public Map<String,Object> getRuleAttr();
     /**
-     * 绑定规则
+     * 根据栏目获取栏目下的规则属性
      *
-     * @return 结果
+     * @param id 栏目主键
+     * @return 文章内容
      */
-    public int bindRule(Map<String,Object> map);
+    public Map<String,Object>  getArticleAttrByColumnId(Long columnId);
 }

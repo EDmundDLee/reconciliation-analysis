@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rongxin.cms.domain.*;
 import com.rongxin.cms.mapper.*;
-import com.rongxin.cms.service.IBizArticleRuleService;
 import com.rongxin.cms.service.IBizAttributeValueService;
 import com.rongxin.common.utils.DateUtils;
 import com.rongxin.web.framework.web.service.ISysOssService;
@@ -34,19 +33,9 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     @Autowired
     private ISysOssService sysOssService;
     @Autowired
-    private BizRuleMapper bizRuleMapper;
-    @Autowired
-    private BizAttributeMapper bizAttributeMapper;
-    @Autowired
-    private IBizArticleRuleService bizArticleRuleService;
-    @Autowired
-    private BizArticleRuleMapper bizArticleRuleMapper;
+    private BizPictureMapper bizPictureMapper;
     @Autowired
     private IBizAttributeValueService bizAttributeValueService;
-    @Autowired
-    private BizAttributeValueMapper bizAttributeValueMapper;
-    @Autowired
-    private BizPictureMapper bizPictureMapper;
     /**
      * 查询文章内容
      * 
@@ -68,8 +57,9 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     public  Map<String,Object> selectBizArticleAndAttrById(Long id)
     {
         Map<String,Object> map = new HashMap<>();
-        map.put("attrList",bizArticleMapper.selectBizArticleAttr(id));
-        map.put("articleList",bizArticleMapper.selectBizArticleById(id));
+        BizArticle bizArticle = bizArticleMapper.selectBizArticleById(id);
+        map.put("attrList",bizArticleMapper.selectBizArticleAttr(id,bizArticle.getColumnId()));
+        map.put("articleList",bizArticle);
         return map;
     }
     /**
@@ -106,7 +96,39 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     @Override
     public int insertBizArticle(BizArticle bizArticle)
     {
-        return bizArticleMapper.insertBizArticle(bizArticle);
+
+        int flag = 0;
+        if(bizArticleMapper.insertBizArticle(bizArticle)>0){
+            flag = 1;
+            if(bizArticle.getParams()!=null) {
+                saveOrUpdateBizAAttributeValue(bizArticle);
+            }
+        }
+        return flag;
+    }
+    private void saveOrUpdateBizAAttributeValue(BizArticle bizArticle){
+        Map<String,Object> map =  bizArticle.getParams();
+        Map<String,Object> mapValue = new HashMap<>();
+        ArrayList list = (ArrayList) map.get("params");
+        BizAttributeValue bizAttributeValue = null;
+        for(int i=0;i<list.size();i++){
+            mapValue =  (Map<String,Object>)list.get(i);
+            bizAttributeValue = new BizAttributeValue();
+            bizAttributeValue.setColumnId(bizArticle.getColumnId());
+            bizAttributeValue.setArticleId(bizArticle.getId());
+            bizAttributeValue.setRuleId(Long.valueOf(String.valueOf(mapValue.get("rule_id"))));
+            bizAttributeValue.setAttrId(Long.valueOf(String.valueOf(mapValue.get("attrId"))));
+            bizAttributeValue.setAttrIndex( mapValue.get("attr_index")==null?"":String.valueOf(mapValue.get("attr_index")));
+            bizAttributeValue.setAttrOrder( mapValue.get("attr_order")==null?"":String.valueOf(mapValue.get("attr_order")));
+            bizAttributeValue.setAttrId(Long.valueOf(String.valueOf(mapValue.get("attrId"))));
+            bizAttributeValue.setAttrValue( mapValue.get("attrValue")==null?"":String.valueOf(mapValue.get("attrValue")));
+            bizAttributeValue.setId(mapValue.get("id")==null?null: Long.valueOf(String.valueOf( mapValue.get("id"))));
+            if(bizAttributeValue.getId()!=null){
+                bizAttributeValueService.updateBizAttributeValue(bizAttributeValue);
+            }else{
+                bizAttributeValueService.insertBizAttributeValue(bizAttributeValue);
+            }
+        }
     }
     /**
      * 修改文章内容
@@ -120,29 +142,9 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
         if(bizArticleMapper.updateBizArticle(bizArticle)>0){
             flag = 1;
             if(bizArticle.getParams()!=null){
-                Map<String,Object> map =  bizArticle.getParams();
-                Map<String,Object> mapValue = new HashMap<>();
-                ArrayList list = (ArrayList) map.get("params");
-                BizAttributeValue bizAttributeValue = null;
-                    for(int i=0;i<list.size();i++){
-                        mapValue =  (Map<String,Object>)list.get(i);
-                        bizAttributeValue = new BizAttributeValue();
-                        bizAttributeValue.setArticleId(Long.valueOf(String.valueOf(mapValue.get("article_id"))));
-                        bizAttributeValue.setRuleId(Long.valueOf(String.valueOf(mapValue.get("rule_id"))));
-                        bizAttributeValue.setAttrId(Long.valueOf(String.valueOf(mapValue.get("attrId"))));
-                        bizAttributeValue.setAttrIndex( mapValue.get("attr_index")==null?"":String.valueOf(mapValue.get("attr_index")));
-                        bizAttributeValue.setAttrOrder( mapValue.get("attr_order")==null?"":String.valueOf(mapValue.get("attr_order")));
-                        bizAttributeValue.setAttrId(Long.valueOf(String.valueOf(mapValue.get("attrId"))));
-                        bizAttributeValue.setAttrValue( mapValue.get("attrValue")==null?"":String.valueOf(mapValue.get("attrValue")));
-                        bizAttributeValue.setId(mapValue.get("id")==null?null: Long.valueOf(String.valueOf( mapValue.get("id"))));
-                         if(bizAttributeValue.getId()!=null){
-                            bizAttributeValueService.updateBizAttributeValue(bizAttributeValue);
-                        }else{
-                            bizAttributeValueService.insertBizAttributeValue(bizAttributeValue);
-                        }
-                    }
-                }
+                saveOrUpdateBizAAttributeValue(bizArticle);
             }
+        }
         return flag;
     }
 
@@ -241,33 +243,10 @@ public class BizArticleServiceImpl extends ServiceImpl<BizArticleMapper, BizArti
     }
 
     @Override
-    public Map<String, Object> getRuleAttr() {
-       Map<String, Object> map = new HashMap<>();
-        List<Map<String, Object>> list =  new ArrayList<>();
-       List<BizRule> ruleList = bizRuleMapper.selectBizRuleList(null);
-        if(ruleList!= null && ruleList.size()>0){
-            map.put("ruleList",ruleList);
-            BizAttribute bizAttribute = new BizAttribute();
-            bizAttribute.setRuleId(ruleList.get(0).getId());
-            List<BizAttribute> attrList = bizAttributeMapper.selectBizAttributeList(bizAttribute);
-            map.put("attributeList",attrList);
-        }
+    public Map<String, Object> getArticleAttrByColumnId(Long columnId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("attrList",bizArticleMapper.getArticleAttrByColumnId(columnId));
          return map;
     }
 
-    @Override
-    public int bindRule(Map<String,Object> map) {
-        String ruleId =  String.valueOf(map.get("ruleId"));
-        List<String> idsStr = (ArrayList) map.get("ids");
-        bizArticleRuleMapper.deleteBizArticleRuleByArticleIds(idsStr);
-        bizAttributeValueMapper.deleteBizArticleRuleValueByArticleIds(idsStr);
-        BizArticleRule bizArticleRule =  new BizArticleRule();
-        for(int i = 0 ;i<idsStr.size();i++){
-            bizArticleRule =  new BizArticleRule();
-            bizArticleRule.setRuleId(Long.valueOf(ruleId));
-            bizArticleRule.setArticleId(Long.valueOf(String.valueOf(idsStr.get(i))));
-            bizArticleRuleService.insertBizArticleRule(bizArticleRule);
-        }
-        return 0;
-    }
 }

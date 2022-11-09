@@ -152,21 +152,16 @@ public class BizArticleController extends BaseController
     {
         return toAjax(bizArticleService.deletePictureInfo(bizPicture));
     }
-    @ApiOperation("获取规则属性")
-    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
-    @Log(title = "获取规则属性", businessType = BusinessType.DELETE)
-    @PostMapping("/getRuleAttr")
-    public AjaxResult getRuleAttr()
+    /**
+     * 获取文章内容详细信息
+     */
+    @ApiOperation("获取文章内容详细信息")
+    @ApiImplicitParam(name = "id", value = "主键ID", required = true, dataType = "int", paramType = "path", dataTypeClass = Integer.class)
+    @PreAuthorize("@ss.hasPermi('cms:article:query')")
+    @GetMapping(value = "/getArticleAttr/{id}")
+    public AjaxResult getArticleAttr(@PathVariable("id") Long columnId)
     {
-        return AjaxResult.success(bizArticleService.getRuleAttr());
-    }
-    @ApiOperation("绑定规则")
-    @PreAuthorize("@ss.hasPermi('cms:article:edit')")
-    @Log(title = "绑定规则", businessType = BusinessType.DELETE)
-    @PostMapping("/bindRule")
-    public AjaxResult bindRule(@RequestBody Map<String,Object> map)
-    {
-        return AjaxResult.success(bizArticleService.bindRule(map));
+        return AjaxResult.success(bizArticleService.getArticleAttrByColumnId(columnId));
     }
 
 }

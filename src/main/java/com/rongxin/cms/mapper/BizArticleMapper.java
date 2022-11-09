@@ -22,7 +22,7 @@ public interface BizArticleMapper  extends BaseMapper<BizArticle>
      */
     public BizArticle selectBizArticleById(Long id);
 
-    public List<LinkedHashMap<String,Object>> selectBizArticleAttr(Long id);
+    public List<LinkedHashMap<String,Object>> selectBizArticleAttr(Long articleId,Long columnId);
 
     /**
      * 查询文章内容列表
@@ -63,4 +63,7 @@ public interface BizArticleMapper  extends BaseMapper<BizArticle>
      * @return 结果
      */
     public int deleteBizArticleByIds(Long[] ids);
+
+    public List<LinkedHashMap<String,Object>> getArticleAttrByColumnId(Long columnId);
+
 }

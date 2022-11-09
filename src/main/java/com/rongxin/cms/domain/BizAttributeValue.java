@@ -22,10 +22,12 @@ public class BizAttributeValue extends BaseEntity
     @Excel(name = "所属规则")
     private Long ruleId;
 
+    /** 所属栏目 */
+    @Excel(name = "所属栏目")
+    private Long columnId;
     /** 所属内容 */
     @Excel(name = "所属内容")
     private Long articleId;
-
     /** 值 */
     @Excel(name = "值")
     private String attrValue;
@@ -63,16 +65,25 @@ public class BizAttributeValue extends BaseEntity
     {
         return ruleId;
     }
-    public void setArticleId(Long articleId) 
+    public void setColumnId(Long columnId)
     {
+        this.columnId = columnId;
+    }
+
+    public Long getColumnId()
+    {
+        return columnId;
+    }
+
+    public Long getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(Long articleId) {
         this.articleId = articleId;
     }
 
-    public Long getArticleId() 
-    {
-        return articleId;
-    }
-    public void setAttrValue(String attrValue) 
+    public void setAttrValue(String attrValue)
     {
         this.attrValue = attrValue;
     }
@@ -122,6 +133,7 @@ public class BizAttributeValue extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("ruleId", getRuleId())
+            .append("columnId", getColumnId())
             .append("articleId", getArticleId())
             .append("attrValue", getAttrValue())
             .append("attrStatus", getAttrStatus())

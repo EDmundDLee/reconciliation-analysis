@@ -82,13 +82,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
     <select id="selectBizArticleAttr" parameterType="Long" resultType="java.util.LinkedHashMap">
-         select e.id,d.rule_id,d.article_id,d.attribute_name as attrName, IFNULL(e.attr_value,'') as attrValue ,d.id as attrId,e.attr_index,e.attr_order from (
-            select b.id,b.attribute_name,a.article_id,a.rule_id  from biz_article_rule a
-             left join biz_attribute b on a.rule_id =  b.rule_id where attribute_status=0 and article_id = #{id}
-            ) d left join biz_attribute_value e on d.article_id = e.article_id and d.rule_id = e.rule_id and d.id= e.attr_id
+        select e.id,d.rule_id,d.article_id,d.attribute_name as attrName, IFNULL(e.attr_value,'') as attrValue ,d.id as attrId,e.attr_index,e.attr_order from (
+			select  f.*,g.id article_id from (select b.id,b.attribute_name,a.column_id,a.rule_id  from biz_column_rule a
+			left join biz_attribute b on a.rule_id =  b.rule_id where attribute_status=0 and column_id = #{columnId} ) f left join
+			(select * from biz_article where   column_id = #{columnId} and  id =#{articleId}  )g
+			on f.column_id = g.column_id)d
+				 left join biz_attribute_value e
+				 on d.article_id = e.article_id
+				 and d.rule_id = e.rule_id
+				 and d.id= e.attr_id
         order by e.attr_order desc ,e.attr_index
-
     </select>
+    <select id="getArticleAttrByColumnId" parameterType="Long" resultType="java.util.LinkedHashMap">
+       select b.id as  attrId,b.attribute_name as attrName,'' as attrValue ,a.column_id,a.rule_id
+        from biz_column_rule a  left join biz_attribute b on a.rule_id =  b.rule_id where attribute_status=0 and column_id =  #{columnId}
+    </select>
+
     <delete id="deleteBizArticleById" parameterType="Long">
         delete from biz_article where id = #{id}
     </delete>

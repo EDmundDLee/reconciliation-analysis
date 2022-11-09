@@ -1,6 +1,8 @@
 package com.rongxin.cms.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.rongxin.cms.domain.BizColumn;
 import com.rongxin.cms.domain.BizColumnTree;
@@ -69,4 +71,12 @@ public interface IBizColumnService extends IService<BizColumn>
     List<BizColumnTree> selectColList();
 
     List<CommonTree>  buildColTreeSelect(List<BizColumnTree> cols);
+
+    public Map<String,Object> getRuleAttr();
+    /**
+     * 绑定规则
+     *
+     * @return 结果
+     */
+    public int bindRule(Map<String,Object> map);
 }

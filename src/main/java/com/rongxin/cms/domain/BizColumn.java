@@ -32,6 +32,9 @@ public class BizColumn extends TreeEntity
     /** 创建人名称 */
     @Excel(name = "创建人名称")
     private String createName;
+    private String ruleName;
+    private String ruleStatus;
+
 
     /** 创建人id */
     @Excel(name = "创建人id")
@@ -96,6 +99,22 @@ public class BizColumn extends TreeEntity
         return colDelete;
     }
 
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
+    }
+
+    public String getRuleStatus() {
+        return ruleStatus;
+    }
+
+    public void setRuleStatus(String ruleStatus) {
+        this.ruleStatus = ruleStatus;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -106,6 +125,8 @@ public class BizColumn extends TreeEntity
             .append("createName", getCreateName())
             .append("createId", getCreateId())
             .append("colDelete", getColDelete())
+            .append("ruleName", getRuleName())
+            .append("ruleStatus", getRuleStatus())
             .toString();
     }
 }

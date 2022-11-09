@@ -19,7 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectBizColumnList" parameterType="BizColumn" resultMap="BizColumnResult">
-        <include refid="selectBizColumnVo"/>
+        select a.id, parent_id, name, create_date, create_name, create_id, col_delete,rule_name,rule_status from biz_column
+        a left join (select r.column_id,c.rule_name,c.rule_status from biz_rule c left join  biz_column_rule r on c.id = r.rule_id) d on a.id = d.column_id
         <where>
             1 = 1
             and col_delete = '0'

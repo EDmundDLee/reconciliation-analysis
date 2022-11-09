@@ -6,24 +6,24 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.rongxin.common.annotation.Excel;
 
 /**
- * 规则内容关系对象 biz_article_rule
+ * 栏目规则属性对象 biz_column_rule
  * 
  * @author rx
- * @date 2022-11-01
+ * @date 2022-11-08
  */
-public class BizArticleRule extends BaseEntity
+public class BizColumnRule extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
     private Long id;
 
-    /** 所属内容 */
-    @Excel(name = "所属内容")
-    private Long articleId;
+    /** 所属栏目 */
+    @Excel(name = "所属栏目")
+    private Long columnId;
 
-    /** 所属规则 */
-    @Excel(name = "所属规则")
+    /** 所属规则id */
+    @Excel(name = "所属规则id")
     private Long ruleId;
 
     public void setId(Long id) 
@@ -35,14 +35,14 @@ public class BizArticleRule extends BaseEntity
     {
         return id;
     }
-    public void setArticleId(Long articleId) 
+    public void setColumnId(Long columnId) 
     {
-        this.articleId = articleId;
+        this.columnId = columnId;
     }
 
-    public Long getArticleId() 
+    public Long getColumnId() 
     {
-        return articleId;
+        return columnId;
     }
     public void setRuleId(Long ruleId) 
     {
@@ -58,7 +58,7 @@ public class BizArticleRule extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
-            .append("articleId", getArticleId())
+            .append("columnId", getColumnId())
             .append("ruleId", getRuleId())
             .toString();
     }

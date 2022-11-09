@@ -1,22 +1,18 @@
 package com.rongxin.cms.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rongxin.cms.domain.BizColumnTree;
-import com.rongxin.cms.mapper.BizColumnTreeMapper;
+import com.rongxin.cms.domain.*;
+import com.rongxin.cms.mapper.*;
+import com.rongxin.cms.service.IBizColumnRuleService;
 import com.rongxin.common.core.domain.entity.SysUser;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.StringUtils;
 import com.rongxin.web.domain.CommonTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.rongxin.cms.mapper.BizColumnMapper;
-import com.rongxin.cms.domain.BizColumn;
 import com.rongxin.cms.service.IBizColumnService;
 
 /**
@@ -32,6 +28,17 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
     private BizColumnMapper bizColumnMapper;
     @Autowired
     private BizColumnTreeMapper bizColumnTreeMapper;
+    @Autowired
+    private BizRuleMapper bizRuleMapper;
+    @Autowired
+    private BizAttributeMapper bizAttributeMapper;
+    @Autowired
+    private IBizColumnRuleService bizColumnRuleService;
+    @Autowired
+    private BizColumnRuleMapper bizColumnRuleMapper;
+
+    @Autowired
+    private BizAttributeValueMapper bizAttributeValueMapper;
     /**
      * 查询栏目类别
      * 
@@ -202,5 +209,37 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
     private boolean hasChild(List<BizColumnTree> list, BizColumnTree t)
     {
         return getChildList(list, t).size() > 0;
+    }
+
+
+    @Override
+    public Map<String, Object> getRuleAttr() {
+        Map<String, Object> map = new HashMap<>();
+        List<Map<String, Object>> list =  new ArrayList<>();
+        List<BizRule> ruleList = bizRuleMapper.selectBizRuleList(null);
+        if(ruleList!= null && ruleList.size()>0){
+            map.put("ruleList",ruleList);
+            BizAttribute bizAttribute = new BizAttribute();
+            bizAttribute.setRuleId(ruleList.get(0).getId());
+            List<BizAttribute> attrList = bizAttributeMapper.selectBizAttributeList(bizAttribute);
+            map.put("attributeList",attrList);
+        }
+        return map;
+    }
+
+    @Override
+    public int bindRule(Map<String,Object> map) {
+        String ruleId =  String.valueOf(map.get("ruleId"));
+        List<String> idsStr = (ArrayList) map.get("ids");
+        bizColumnRuleMapper.deleteBizArticleRuleByArticleIds(idsStr);
+        bizAttributeValueMapper.deleteBizArticleRuleValueByArticleIds(idsStr);
+        BizColumnRule bizColumnRule =  new BizColumnRule();
+        for(int i = 0 ;i<idsStr.size();i++){
+            bizColumnRule =  new BizColumnRule();
+            bizColumnRule.setRuleId(Long.valueOf(ruleId));
+            bizColumnRule.setColumnId(Long.valueOf(String.valueOf(idsStr.get(i))));
+            bizColumnRuleService.insertBizColumnRule(bizColumnRule);
+        }
+        return 0;
     }
 }
