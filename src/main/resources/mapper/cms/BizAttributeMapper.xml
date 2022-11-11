@@ -28,7 +28,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectBizAttributeVo"/>
         where id = #{id}
     </select>
-        
+    <select id="getRuleAttrByColumnId" parameterType="Long" resultMap="BizAttributeResult">
+        select b.* from biz_column_rule a left join biz_attribute b on a.rule_id =  b.rule_id where column_id =#{columnId}
+    </select>
+
     <insert id="insertBizAttribute" parameterType="BizAttribute" useGeneratedKeys="true" keyProperty="id">
         insert into biz_attribute
         <trim prefix="(" suffix=")" suffixOverrides=",">

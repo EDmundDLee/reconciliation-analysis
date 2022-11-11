@@ -216,7 +216,9 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
     public Map<String, Object> getRuleAttr() {
         Map<String, Object> map = new HashMap<>();
         List<Map<String, Object>> list =  new ArrayList<>();
-        List<BizRule> ruleList = bizRuleMapper.selectBizRuleList(null);
+        BizRule bizRule = new BizRule();
+        bizRule.setRuleStatus("0");//启用状态的
+        List<BizRule> ruleList = bizRuleMapper.selectBizRuleList(bizRule);
         if(ruleList!= null && ruleList.size()>0){
             map.put("ruleList",ruleList);
             BizAttribute bizAttribute = new BizAttribute();
@@ -228,18 +230,33 @@ public class BizColumnServiceImpl extends ServiceImpl<BizColumnMapper, BizColumn
     }
 
     @Override
-    public int bindRule(Map<String,Object> map) {
+    public List<Map<String,Object>> bindRule(Map<String,Object> map) {
         String ruleId =  String.valueOf(map.get("ruleId"));
         List<String> idsStr = (ArrayList) map.get("ids");
-        bizColumnRuleMapper.deleteBizArticleRuleByArticleIds(idsStr);
-        bizAttributeValueMapper.deleteBizArticleRuleValueByArticleIds(idsStr);
-        BizColumnRule bizColumnRule =  new BizColumnRule();
-        for(int i = 0 ;i<idsStr.size();i++){
-            bizColumnRule =  new BizColumnRule();
-            bizColumnRule.setRuleId(Long.valueOf(ruleId));
-            bizColumnRule.setColumnId(Long.valueOf(String.valueOf(idsStr.get(i))));
-            bizColumnRuleService.insertBizColumnRule(bizColumnRule);
+        //进行判断如果没有属性绑定数据则可以删除如果已经存在数据 则不可以删除
+         List<Map<String,Object>> list = bizAttributeValueMapper.selectBizAttributeValueListByColumnIds(idsStr);
+
+
+        if(list == null ||list.size() ==0){
+            bizColumnRuleMapper.deleteBizArticleRuleByArticleIds(idsStr);
+            BizColumnRule bizColumnRule =  new BizColumnRule();
+            for(int i = 0 ;i<idsStr.size();i++){
+                bizColumnRule =  new BizColumnRule();
+                bizColumnRule.setRuleId(Long.valueOf(ruleId));
+                bizColumnRule.setColumnId(Long.valueOf(String.valueOf(idsStr.get(i))));
+                bizColumnRuleService.insertBizColumnRule(bizColumnRule);
+            }
+            return list;
+        }else{
+            return list;
         }
-        return 0;
+
+
+
     }
+
+    @Override
+    public List<BizAttribute> getRuleAttrByColumnId(Long columnId) {
+        return bizAttributeMapper.getRuleAttrByColumnId(columnId);
+     }
 }

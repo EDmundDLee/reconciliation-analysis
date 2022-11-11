@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.rongxin.cms.domain.BizAttribute;
 import com.rongxin.cms.domain.BizColumn;
 import com.rongxin.cms.domain.BizColumnTree;
 import com.rongxin.web.domain.CommonTree;
@@ -78,5 +79,13 @@ public interface IBizColumnService extends IService<BizColumn>
      *
      * @return 结果
      */
-    public int bindRule(Map<String,Object> map);
+    public List<Map<String,Object>> bindRule(Map<String,Object> map);
+
+    /**
+     * 查询栏目所属规则及属性信息
+     *
+     * @param id 栏目类别主键
+     * @return 栏目类别
+     */
+    public List<BizAttribute> getRuleAttrByColumnId(Long id);
 }

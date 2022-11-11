@@ -23,6 +23,9 @@ public class BizColumn extends TreeEntity
     /** 栏目名称 */
     @Excel(name = "栏目名称")
     private String name;
+    /** 栏目级别 */
+    @Excel(name = "栏目级别")
+    private String level;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -62,7 +65,16 @@ public class BizColumn extends TreeEntity
     {
         return name;
     }
-    public void setCreateDate(Date createDate) 
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public void setCreateDate(Date createDate)
     {
         this.createDate = createDate;
     }
@@ -121,6 +133,7 @@ public class BizColumn extends TreeEntity
             .append("id", getId())
             .append("parentId", getParentId())
             .append("name", getName())
+            .append("level", getLevel())
             .append("createDate", getCreateDate())
             .append("createName", getCreateName())
             .append("createId", getCreateId())

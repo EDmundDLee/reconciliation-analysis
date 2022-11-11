@@ -58,4 +58,6 @@ public interface BizAttributeMapper  extends BaseMapper<BizAttribute>
      * @return 结果
      */
     public int deleteBizAttributeByIds(Long[] ids);
+
+    public List<BizAttribute> getRuleAttrByColumnId(Long columnId);
 }

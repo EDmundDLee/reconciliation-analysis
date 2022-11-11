@@ -136,4 +136,16 @@ public class BizColumnController extends BaseController
     {
         return AjaxResult.success(bizColumnService.bindRule(map));
     }
+    /**
+     * 获取栏目类别详细信息
+     */
+    @ApiOperation("获取栏目对应规则属性信息")
+    @ApiImplicitParam(name = "id", value = "主键ID", required = true, dataType = "int", paramType = "path", dataTypeClass = Integer.class)
+    @PreAuthorize("@ss.hasPermi('cms:cmscol:query')")
+    @GetMapping(value = "/getRuleAttrByColumnId/{id}")
+    public AjaxResult getRuleAttrByColumnId(@PathVariable("id") Long id)
+    {
+        return AjaxResult.success(bizColumnService.getRuleAttrByColumnId(id));
+    }
+
 }

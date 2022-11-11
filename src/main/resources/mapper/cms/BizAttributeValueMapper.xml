@@ -97,4 +97,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    <select id="selectBizAttributeValueListByColumnIds" parameterType="Long" resultType="java.util.Map">
+        select  DISTINCT c.`name` as columnName,rule_name as ruleName from biz_attribute_value a  left join biz_rule b on a.rule_id = b.id
+        left join biz_column c on a.column_id = c.id
+        where column_id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>
