@@ -5,7 +5,7 @@ import com.aliyun.oss.model.OSSObject;
 import com.rongxin.common.utils.oss.OSSFactory;
 
 import com.rongxin.web.framework.web.service.ISysOssService;
-import com.rongxin.web.util.WordToPDFHelper;
+//import com.rongxin.web.util.WordToPDFHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,13 +94,13 @@ public class SysOssServiceImpl implements ISysOssService
        //     parentDirectory = parentDirectory + "\\";
       //  }
       //  w.docxConvert(parentDirectory,inputStream,"success");
-        WordToPDFHelper  wp = new WordToPDFHelper();
-        if("docx".equals(fileName.substring(fileName.lastIndexOf(".")+1))){
-            wp.wordOfDocxToPdf(inputStream,  "D:/test/tes2.pdf");
-        }
-        if("doc".equals(fileName.substring(fileName.lastIndexOf(".")+1))){
-           // wp.wordOfDocToPdf(inputStream,  "D:/test/tes2.pdf");
-        }
+//        WordToPDFHelper  wp = new WordToPDFHelper();
+//        if("docx".equals(fileName.substring(fileName.lastIndexOf(".")+1))){
+//            wp.wordOfDocxToPdf(inputStream,  "D:/test/tes2.pdf");
+//        }
+//        if("doc".equals(fileName.substring(fileName.lastIndexOf(".")+1))){
+//           // wp.wordOfDocToPdf(inputStream,  "D:/test/tes2.pdf");
+//        }
 
     }
     /**

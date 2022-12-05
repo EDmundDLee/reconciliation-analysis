@@ -2,14 +2,13 @@ package com.rongxin.cms.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import com.rongxin.cms.domain.BizColumnTree;
 import com.rongxin.cms.domain.BizPicture;
 import com.rongxin.cms.service.impl.BizColumnServiceImpl;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2022-10-09
  */
 @RestController
+@Api(tags = "[CMS接口]")
 @RequestMapping("/cms/article")
 public class BizArticleController extends BaseController
 {
