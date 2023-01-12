@@ -1,15 +1,23 @@
 package com.rongxin;
 
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
+
+import java.net.InetAddress;
+
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 /**
  * 启动程序
  * 
  * @author rx
  */
+@Slf4j
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})  无工作流版本 下面是有工作流版本
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class,
         DataSourceAutoConfiguration.class})
@@ -17,17 +25,33 @@ public class RXApplication
 {
     public static void main(String[] args)
     {
-        // System.setProperty("spring.devtools.restart.enabled", "false");
-        SpringApplication.run(RXApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
-                " .-------.       ____      ____       \n" +
-                " |  _ _   \\      \\   \\   /   /    \n" +
-                " | ( ' )  |       \\  _. /   /      \n" +
-                " |(_ o _) /         _( ' ) _ .'    \n" +
-                " | (_,_).'         _(_ o _)' '     \n" +
-                " |  |\\ \\             _(_,_)' '    \n" +
-                " |  | \\ \\        /  /'    \\  \\  \n" +
-                " |  |  \\ \\      /  /'      \\  \\ \n" +
-                " ''-'   `'-'      ''-'         `'-'      ");
+        try {
+            ConfigurableApplicationContext application =
+                    SpringApplication.run(RXApplication.class, args);
+            Environment env = application.getEnvironment();
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            String port = env.getProperty("server.port");
+            String path = getString(env.getProperty("server.servlet.context-path"));
+            log.info("\n--------------------------------------------------------------------------\n\t"
+                    + "管理系统 is running! Access URLs:\n\t"
+                    + "Local: \t\t\thttp://localhost:" + port + path + "/doc.html\n\t"
+                    + "External: \t\thttp://" + ip + ":" + port + path + "/doc.html\n\t"
+                    + "Swagger文档: \thttp://" + ip + ":" + port + path + "/doc.html\n"
+                    + "--------------------------------------------------------------------------");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getString(String s) {
+        return (getString(s, ""));
+    }
+
+    public static String getString(String s, String defval) {
+        if (isEmpty(s)) {
+            return (defval);
+        }
+        return (s.trim());
     }
 }

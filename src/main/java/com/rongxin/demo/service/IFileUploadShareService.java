@@ -3,6 +3,7 @@ package com.rongxin.demo.service;
 import com.rongxin.demo.domain.FileUploadShare;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -45,7 +46,13 @@ public interface IFileUploadShareService
      * @return 结果
      */
     public int updateFileUploadShare(FileUploadShare fileUploadShare);
-
+    /**
+     * 文件转换
+     *
+     * @param id) 文件转换
+     * @return 结果
+     */
+    public int handleTurn(String  id) throws FileNotFoundException;
     /**
      * 批量删除文件上传明细
      * 

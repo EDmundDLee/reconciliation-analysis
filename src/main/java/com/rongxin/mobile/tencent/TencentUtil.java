@@ -12,7 +12,7 @@ import com.tencentcloudapi.ocr.v20181119.models.IDCardOCRResponse;
 
 public class TencentUtil
 {
-    private final static String SecretId = "AKIDeBVbT7YkiaRAhz7CC783qPkrkOozvd7N";
+    private final static String SecretId = "";
     private final static String SecretKey = "4wazA6oIbgX9WfZEepmVzEE0XpshIgqm";
 
     /**

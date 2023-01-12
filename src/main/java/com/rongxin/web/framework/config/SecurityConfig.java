@@ -109,9 +109,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 过滤请求
                 .authorizeRequests()
                 .antMatchers("/mobile/login/**").permitAll()
-
+                 //csm内容管理网站接口
+                .antMatchers("/webrtc/**").permitAll()
+                 //csm内容管理网站接口
+                .antMatchers("/cms/web/**").permitAll()
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问 /mobile/login/** 手机登录界面也可以访问
-                .antMatchers("/login","/mobile/login/loginByPassword", "/register", "/captchaImage","/wsserver/**").anonymous()
+                .antMatchers("/login","/mobile/login/loginByPassword","/register", "/captchaImage","/wsserver/**").anonymous()
                  //微信回调
                 .antMatchers("/apply/test/weChatCallBack").permitAll()
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()

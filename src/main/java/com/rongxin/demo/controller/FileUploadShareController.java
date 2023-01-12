@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -86,7 +87,15 @@ public class FileUploadShareController extends BaseController
     {
         return toAjax(fileUploadShareService.updateFileUploadShare(fileUploadShare));
     }
-
+    /**
+     * 文件转换
+     */
+    @PreAuthorize("@ss.hasPermi('system:share:edit')")
+    @Log(title = "文件转换", businessType = BusinessType.UPDATE)
+    @PutMapping("/handleTurn")
+    public AjaxResult handleTurn(@RequestBody String id) throws FileNotFoundException {
+        return toAjax(fileUploadShareService.handleTurn(id));
+    }
     /**
      * 删除文件上传明细
      */

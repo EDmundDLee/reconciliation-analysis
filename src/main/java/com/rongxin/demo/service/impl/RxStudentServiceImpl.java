@@ -5,9 +5,11 @@ import java.util.List;
 import com.alibaba.fastjson.JSON;
 import com.rongxin.common.utils.uuid.IdUtils;
 import com.rongxin.web.framework.web.service.ElasticSearchService;
+import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.rongxin.demo.domain.RxStudent;
@@ -66,6 +68,27 @@ public class RxStudentServiceImpl  implements IRxStudentService
             queryBuilder = QueryBuilders.fuzzyQuery("address",rxStudent.getAddress());//模糊查询
         }
         searchSourceBuilder.query(queryBuilder);
+//        // 创建查询构造
+//        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+//        /* es多条件搜索  详情请：https://blog.csdn.net/Leige_Smart/article/details/80901059 */
+//        MatchQueryBuilder m1 = QueryBuilders.matchQuery("title",map.get("name"));
+//        MatchQueryBuilder m2 = QueryBuilders.matchQuery("content",map.get("name"));
+//        QueryBuilder qb2 = QueryBuilders.boolQuery()
+//                .should(m1)
+//                .should(m2);
+//        searchSourceBuilder.query(qb2);
+//
+//        //设置高亮
+//        String preTags = "<font color=\"red\">";
+//        String postTags = "</font>";
+//        HighlightBuilder highlightBuilder = new HighlightBuilder();
+//        highlightBuilder.preTags(preTags);
+//        highlightBuilder.postTags(postTags);
+//        //设置高亮字段
+//        highlightBuilder.field("content");
+//        highlightBuilder.field("title");
+//        //设置高亮信息
+//        searchSourceBuilder.highlighter(highlightBuilder);
         return (List<RxStudent>) easticSearchService.selectList("students",RxStudent.class,searchSourceBuilder);
     }
 

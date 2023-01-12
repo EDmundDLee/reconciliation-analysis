@@ -102,6 +102,28 @@ public class SysMenuServiceImpl implements ISysMenuService
     }
 
     /**
+     * 根据用户及角色获取菜单数据权限
+     *
+     * @param userId 用户ID
+     * @param roleId 角色ID
+     * @return 权限列表
+     */
+    @Override
+    public Set<String> selectMenuPermsByUserIdAndRoleId(Long userId,Long roleId)
+    {
+        List<String> perms = menuMapper.selectMenuPermsByUserIdAndRoleId(userId,roleId);
+        Set<String> permsSet = new HashSet<>();
+        for (String perm : perms)
+        {
+            if (StringUtils.isNotEmpty(perm))
+            {
+                permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+            }
+        }
+        return permsSet;
+    }
+
+    /**
      * 根据用户ID查询菜单
      * 
      * @param userId 用户名称
@@ -118,6 +140,26 @@ public class SysMenuServiceImpl implements ISysMenuService
         else
         {
             menus = menuMapper.selectMenuTreeByUserId(userId);
+        }
+        return getChildPerms(menus, 0);
+    }
+    /**
+     * 根据用户ID查询菜单
+     *
+     * @param userId 用户名称
+     * @return 菜单列表
+     */
+    @Override
+    public List<SysMenu> selectMenuTreeByUserIdAndRoleId(Long userId,Long roleId)
+    {
+        List<SysMenu> menus = null;
+        if (SecurityUtils.isAdmin(userId))
+        {
+            menus = menuMapper.selectMenuTreeAll();
+        }
+        else
+        {
+            menus = menuMapper.selectMenuTreeByUserIdAndRoleId(userId,roleId);
         }
         return getChildPerms(menus, 0);
     }

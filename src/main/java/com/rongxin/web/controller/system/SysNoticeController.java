@@ -101,7 +101,16 @@ public class SysNoticeController extends BaseController
         List<SysNotice> messageList = noticeService.selectMessageList(userId);
         return getDataTable(messageList);
     }
-
+    /**
+     * 通过userid查询未读消息列表
+     */
+     @GetMapping("/messageListOfAll")
+    public TableDataInfo messageListOfAll(String userId)
+    {
+        startPage();
+        List<SysNotice> messageList = noticeService.selectMessageList(userId);
+        return getDataTable(messageList);
+    }
     /**
      * 根据通知公告编号获取详细信息及修改消息状态
      */
@@ -109,9 +118,14 @@ public class SysNoticeController extends BaseController
     @GetMapping(value = "/queryMessage")
     public AjaxResult getMessageInfo(SysNotice notice)
     {
-        System.out.println(notice.getNoticeId());
-        System.out.println(notice.getSnuId());
         return AjaxResult.success(noticeService.selectMessageById(notice));
     }
-
+    /**
+     * 根据通知公告编号获取详细信息及修改消息状态
+     */
+    @GetMapping(value = "/queryMessageOfAll")
+    public AjaxResult queryMessageOfAll(SysNotice notice)
+    {
+        return AjaxResult.success(noticeService.selectMessageById(notice));
+    }
 }

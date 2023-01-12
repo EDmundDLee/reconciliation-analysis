@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.cms.mapper.BizArticleMapper">
+    
+    <resultMap type="BizArticle" id="BizArticleResult">
+        <result property="id"    column="id"    />
+        <result property="columnId"    column="column_id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="createName"    column="create_name"    />
+        <result property="createId"    column="create_id"    />
+        <result property="titleImgId"    column="title_img_id"    />
+        <result property="artType"    column="art_type"    />
+        <result property="artDelete"    column="art_delete"    />
+        <result property="titleImgUrl"    column="title_img_url"    />
+    </resultMap>
+
+    <sql id="selectBizArticleVo">
+        select id, column_id, title, content, create_date, create_name, create_id, title_img_id, art_type, art_delete, title_img_url from biz_article
+    </sql>
+
+    <select id="selectBizArticleList" parameterType="BizArticle" resultMap="BizArticleResult">
+        <include refid="selectBizArticleVo"/>
+        <where>
+            1 = 1
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="title != null  and title != ''"> and title  like concat('%', #{title}, '%')</if>
+        </where>
+
+    </select>
+    
+    <select id="selectBizArticleById" parameterType="Long" resultMap="BizArticleResult">
+        <include refid="selectBizArticleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizArticle" parameterType="BizArticle" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="columnId != null">column_id,</if>
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="createName != null">create_name,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="titleImgId != null">title_img_id,</if>
+            <if test="artType != null">art_type,</if>
+            <if test="artDelete != null">art_delete,</if>
+            <if test="titleImgUrl != null">title_img_url,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="columnId != null">#{columnId},</if>
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="createName != null">#{createName},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="titleImgId != null">#{titleImgId},</if>
+            <if test="artType != null">#{artType},</if>
+            <if test="artDelete != null">#{artDelete},</if>
+            <if test="titleImgUrl != null">#{titleImgUrl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizArticle" parameterType="BizArticle">
+        update biz_article
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="createName != null">create_name = #{createName},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="titleImgId != null">title_img_id = #{titleImgId},</if>
+            <if test="artType != null">art_type = #{artType},</if>
+            <if test="artDelete != null">art_delete = #{artDelete},</if>
+            <if test="titleImgUrl != null">title_img_url = #{titleImgUrl},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <select id="selectBizArticleAttr" parameterType="Long" resultType="java.util.LinkedHashMap">
+        select e.id,d.rule_id,d.article_id,d.attribute_name as attrName, IFNULL(e.attr_value,'') as attrValue ,d.id as attrId,e.attr_index,e.attr_order from (
+			select  f.*,g.id article_id from (select b.id,b.attribute_name,a.column_id,a.rule_id  from biz_column_rule a
+			left join biz_attribute b on a.rule_id =  b.rule_id left join biz_rule r on a.rule_id = r.id  where attribute_status=0 and rule_status=0 and column_id = #{columnId} ) f left join
+			(select * from biz_article where   column_id = #{columnId} and  id =#{articleId}  )g
+			on f.column_id = g.column_id)d
+				 left join biz_attribute_value e
+				 on d.article_id = e.article_id
+				 and d.rule_id = e.rule_id
+				 and d.id= e.attr_id
+        order by e.attr_order desc ,e.attr_index
+    </select>
+    <select id="getArticleAttrByColumnId" parameterType="Long" resultType="java.util.LinkedHashMap">
+       select b.id as  attrId,b.attribute_name as attrName,'' as attrValue ,a.column_id,a.rule_id
+        from biz_column_rule a  left join biz_attribute b on a.rule_id =  b.rule_id
+        left join biz_rule r on a.rule_id = r.id
+        where attribute_status=0  and rule_status=0 and column_id =  #{columnId}
+    </select>
+
+    <delete id="deleteBizArticleById" parameterType="Long">
+        delete from biz_article where id = #{id}
+    </delete>
+
+    <delete id="deleteBizArticleByIds" parameterType="String">
+        delete from biz_article where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

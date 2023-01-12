@@ -18,6 +18,8 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -223,6 +225,21 @@ public class ElasticSearchServiceImpl implements ElasticSearchService
         // 操作ES
         DeleteResponse deleteResponse = client.delete(deleteRequest, RequestOptions.DEFAULT);
         return deleteResponse.getId();
+    }
+
+    @Override
+    public SearchResponse search(SearchRequest searchRequest, RequestOptions options) throws IOException {
+        return client.search(searchRequest,options);
+    }
+
+    @Override
+    public IndexResponse index(IndexRequest request, RequestOptions aDefault) throws IOException {
+        return client.index(request,aDefault);
+    }
+
+    @Override
+    public BulkByScrollResponse deleteByQuery(DeleteByQueryRequest request, RequestOptions aDefault) throws IOException {
+        return client.deleteByQuery(request,aDefault);
     }
 
 
