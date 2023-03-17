@@ -12,6 +12,7 @@ import com.rongxin.web.domain.SysConfig;
 import com.rongxin.web.service.ISysConfigService;
 import com.rongxin.web.mapper.SysConfigMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.List;
  * @author rx
  */
 @Service
+@DependsOn("createInitDataImpl")
 public class SysConfigServiceImpl implements ISysConfigService
 {
     @Autowired

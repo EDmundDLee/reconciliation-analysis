@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.rongxin.common.constant.UserConstants;
@@ -24,6 +25,7 @@ import com.rongxin.web.service.ISysDictTypeService;
  * @author rx
  */
 @Service
+@DependsOn("createInitDataImpl")
 public class SysDictTypeServiceImpl implements ISysDictTypeService
 {
     @Autowired

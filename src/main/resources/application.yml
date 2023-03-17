@@ -3,7 +3,7 @@ rongxin:
   # 名称
   name: rx
   # 版本
-  version: 3.8.8
+  version: 3.8.9
   # 版权年份
   copyrightYear: 2022
   # 实例演示开关
@@ -48,8 +48,8 @@ spring:
     # 国际化资源文件路径
     basename: i18n/messages
   profiles:
-    active: ${NODE_ENV}
-#    active: local
+    #    active: ${NODE_ENV}
+    active: local
   # 文件上传
   servlet:
     multipart:
@@ -64,7 +64,8 @@ spring:
       enabled: true
   main:
     allow-bean-definition-overriding: true
-
+  # 初始化创建原始数据库(仅支持local配置)  请确定是否备份，会进行清库操作  此文件包含工作流的初始结构及数据，所以可以关闭工作流生成表配置
+  initdatabase: false
 
 # token配置
 token:
