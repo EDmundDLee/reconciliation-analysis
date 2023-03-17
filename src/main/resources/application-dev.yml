@@ -193,3 +193,9 @@ wechat:
       id: wx47bd0da118464bb7
 
 
+tencent:
+  im:
+    sdkappid: 1400751532
+    key: 87de0e1681fe3fa5ed744adf5e1393bc31dd36fcbd0e74081f4e4a7d68406d50
+
+
