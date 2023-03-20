@@ -59,7 +59,7 @@ function run_svc_bin()
     fi
 
     if [[ $NODE_ENV == "test" ]]; then
-        NODE_HOST=${ip_address} NODE_PORT=${svc_port} CONSUL_HOST=localhost DATASOURCE_URL="jdbc:mysql://10.30.94.174:3306/${db_name}?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai" DATASOURCE_USER="sample_dbowner" DATASOURCE_PWD="TDkNWKSFatELG5pN" REDIS_HOST=localhost REDIS_PORT=6279 ${JAVA_CMD} -Xms1024M -Xmx1024M -Xmn512M  -jar ${svc_bin} >> ${svc_log} 2>&1 &
+        NODE_HOST=${ip_address} NODE_PORT=${svc_port} CONSUL_HOST=localhost DATASOURCE_URL="jdbc:mysql://rongxin-redis-m-svc.test:3306/${db_name}?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai" DATASOURCE_USER="sample_dbowner" DATASOURCE_PWD="TDkNWKSFatELG5pN" REDIS_HOST="rongxin-redis-m-svc.test" REDIS_PORT=6279 ${JAVA_CMD} -Xms1024M -Xmx1024M -Xmn512M  -jar ${svc_bin} >> ${svc_log} 2>&1 &
     fi
 
     if [[ $NODE_ENV == "stage" ]]; then
