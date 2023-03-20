@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rongxin.common.annotation.Excel;
 import com.rongxin.common.annotation.Excel.ColumnType;
 import com.rongxin.common.core.domain.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
@@ -18,39 +19,48 @@ public class SysLogininfor extends BaseEntity
 
     /** ID */
     @Excel(name = "访问编号", cellType = ColumnType.NUMERIC)
+    @ApiModelProperty("访问ID")
     private Long infoId;
 
     /** 用户名称 */
     @Excel(name = "用户名称")
+    @ApiModelProperty("用户名称")
     private String userName;
 
     /** 登录状态 0成功 1失败 */
     @Excel(name = "登录状态", readConverterExp = "0=成功,1=失败")
+    @ApiModelProperty("登录状态")
     private String status;
 
     /** 登录IP地址 */
     @Excel(name = "登录地址")
+    @ApiModelProperty("登录状态")
     private String ipaddr;
 
     /** 登录地点 */
     @Excel(name = "登录地点")
+    @ApiModelProperty("登录地点")
     private String loginLocation;
 
     /** 浏览器类型 */
     @Excel(name = "浏览器")
+    @ApiModelProperty("浏览器")
     private String browser;
 
     /** 操作系统 */
     @Excel(name = "操作系统")
+    @ApiModelProperty("操作系统")
     private String os;
 
     /** 操作信息 */
     @Excel(name = "操作信息")
+    @ApiModelProperty("操作信息")
     private String msg;
 
     /** 登录日期 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "登录日期", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("登录日期")
     private Date loginTime;
 
     public Long getInfoId()

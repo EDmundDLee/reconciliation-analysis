@@ -1,5 +1,6 @@
 package com.rongxin.web.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -11,9 +12,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class SysRoleDept
 {
     /** 角色ID */
+    @ApiModelProperty("角色ID")
     private Long roleId;
     
     /** 部门ID */
+    @ApiModelProperty("部门ID")
     private Long deptId;
 
     public Long getRoleId()

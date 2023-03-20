@@ -1,6 +1,7 @@
 package com.rongxin.web.domain;
 
 import com.rongxin.common.core.domain.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.rongxin.common.annotation.Excel;
@@ -17,17 +18,21 @@ public class SysNoticeUser extends BaseEntity
 
     /** 标识ID */
     @Excel(name = "标识ID")
+    @ApiModelProperty("公告ID")
     private String noticeId;
 
     /** 已读状态（0未读 1已读） */
     @Excel(name = "已读状态", readConverterExp = "0=未读,1=已读")
+    @ApiModelProperty("已读状态")
     private String status;
 
     /** 主键 */
+    @ApiModelProperty("主键")
     private String id;
 
     /** 用户主键 */
     @Excel(name = "用户主键")
+    @ApiModelProperty("用户主键")
     private String userId;
 
     public void setNoticeId(String noticeId)
