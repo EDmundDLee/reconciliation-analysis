@@ -11,6 +11,8 @@ import com.rongxin.web.framework.web.service.SysLoginService;
 import com.rongxin.web.framework.web.service.SysPermissionService;
 import com.rongxin.web.service.ISysMenuService;
 import com.rongxin.web.service.ISysRoleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,7 @@ import java.util.Set;
  * 
  * @author rx
  */
+@Api(tags = "[登录验证]")
 @RestController
 public class SysLoginController
 {
@@ -59,6 +62,7 @@ public class SysLoginController
      * 
      * @return 用户信息
      */
+    @ApiOperation("获取用户信息")
     @GetMapping("getInfo")
     public AjaxResult getInfo()
     {
@@ -78,6 +82,7 @@ public class SysLoginController
      *
      * @return 用户信息
      */
+    @ApiOperation("获取用户角色信息")
     @GetMapping("getRoles")
     public AjaxResult getRoles()
     {
@@ -93,6 +98,7 @@ public class SysLoginController
      *
      * @return 用户信息
      */
+    @ApiOperation("通过角色获取用户角色信息")
     @GetMapping("GetInfoByRole")
     public AjaxResult GetInfoByRole()
     {
@@ -119,6 +125,7 @@ public class SysLoginController
      *
      * @return 用户信息
      */
+    @ApiOperation("通过角色ID获取用户角色信息")
     @GetMapping("GetInfoByRoleId/{roleId}")
     public AjaxResult GetInfoByRoleId(@PathVariable Long roleId)
     {
@@ -146,6 +153,7 @@ public class SysLoginController
      *
      * @return 用户信息
      */
+    @ApiOperation("根据用户角色ID获取权限信息")
     @GetMapping("getPermissionsByRoleId/{roleId}")
     public AjaxResult getPermissionsByRoleId(@PathVariable Long roleId)
     {

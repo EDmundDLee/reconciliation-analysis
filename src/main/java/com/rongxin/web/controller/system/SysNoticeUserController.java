@@ -3,6 +3,7 @@ package com.rongxin.web.controller.system;
 import com.rongxin.common.utils.poi.ExcelUtil;
 import com.rongxin.web.domain.SysNoticeUser;
 import com.rongxin.web.service.ISysNoticeUserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,7 @@ import java.util.List;
  * @author rx
  * @date 2022-08-29
  */
+@Api(tags = "[用户通知公告]")
 @RestController
 @RequestMapping("/system/noticeuser")
 public class SysNoticeUserController extends BaseController

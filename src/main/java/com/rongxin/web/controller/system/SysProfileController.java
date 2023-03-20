@@ -1,7 +1,8 @@
 package com.rongxin.web.controller.system;
 
-import com.rongxin.common.utils.uuid.IdUtils;
 import com.rongxin.web.framework.web.service.ISysOssService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.rongxin.common.annotation.Log;
-import com.rongxin.common.config.RXPROConfig;
 import com.rongxin.common.constant.UserConstants;
 import com.rongxin.common.core.controller.BaseController;
 import com.rongxin.common.core.domain.AjaxResult;
@@ -22,7 +22,6 @@ import com.rongxin.common.enums.BusinessType;
 import com.rongxin.common.utils.SecurityUtils;
 import com.rongxin.common.utils.StringUtils;
 import com.rongxin.common.utils.file.FileUploadUtils;
-import com.rongxin.common.utils.file.MimeTypeUtils;
 import com.rongxin.web.framework.web.service.TokenService;
 import com.rongxin.web.service.ISysUserService;
 
@@ -31,6 +30,7 @@ import com.rongxin.web.service.ISysUserService;
  * 
  * @author rx
  */
+@Api(tags = "[个人信息]")
 @RestController
 @RequestMapping("/system/user/profile")
 public class SysProfileController extends BaseController
@@ -45,6 +45,7 @@ public class SysProfileController extends BaseController
     /**
      * 个人信息
      */
+    @ApiOperation("个人信息")
     @GetMapping
     public AjaxResult profile()
     {
@@ -59,6 +60,7 @@ public class SysProfileController extends BaseController
     /**
      * 修改用户
      */
+    @ApiOperation("修改用户")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult updateProfile(@RequestBody SysUser user)
@@ -94,6 +96,7 @@ public class SysProfileController extends BaseController
     /**
      * 重置密码
      */
+    @ApiOperation("重置密码")
     @Log(title = "个人信息", businessType = BusinessType.UPDATE)
     @PutMapping("/updatePwd")
     public AjaxResult updatePwd(String oldPassword, String newPassword)
@@ -122,6 +125,7 @@ public class SysProfileController extends BaseController
     /**
      * 头像上传
      */
+    @ApiOperation("头像上传")
     @Log(title = "用户头像", businessType = BusinessType.UPDATE)
     @PostMapping("/avatar")
     public AjaxResult avatar(@RequestParam("avatarfile") MultipartFile file) throws Exception

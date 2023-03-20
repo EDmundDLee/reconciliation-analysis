@@ -1,5 +1,7 @@
 package com.rongxin.web.controller.system;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import com.rongxin.web.service.ISysConfigService;
  * 
  * @author rx
  */
+@Api(tags = "[注册验证]")
 @RestController
 public class SysRegisterController extends BaseController
 {
@@ -25,6 +28,7 @@ public class SysRegisterController extends BaseController
     @Autowired
     private ISysConfigService configService;
 
+    @ApiOperation("注册用户")
     @PostMapping("/register")
     public AjaxResult register(@RequestBody RegisterBody user)
     {

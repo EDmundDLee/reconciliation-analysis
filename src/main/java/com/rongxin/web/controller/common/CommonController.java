@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.rongxin.web.framework.web.service.ISysOssService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import com.rongxin.framework.config.ServerConfig;
  * 
  * @author rx
  */
+@Api(tags = "[通用附件请求]")
 @RestController
 @RequestMapping("/common")
 public class CommonController

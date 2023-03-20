@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import com.rongxin.common.config.RXPROConfig;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import com.rongxin.web.service.ISysConfigService;
  * 
  * @author rx
  */
+@Api(tags = "[验证码]")
 @RestController
 public class CaptchaController
 {

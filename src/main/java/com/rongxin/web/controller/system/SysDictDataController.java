@@ -3,6 +3,9 @@ package com.rongxin.web.controller.system;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +33,7 @@ import com.rongxin.web.service.ISysDictTypeService;
  * 
  * @author rx
  */
+@Api(tags = "[系统字典信息]")
 @RestController
 @RequestMapping("/system/dict/data")
 public class SysDictDataController extends BaseController
@@ -40,6 +44,7 @@ public class SysDictDataController extends BaseController
     @Autowired
     private ISysDictTypeService dictTypeService;
 
+    @ApiOperation("系统字典数据列表")
     @PreAuthorize("@ss.hasPermi('system:dict:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysDictData dictData)
@@ -48,7 +53,7 @@ public class SysDictDataController extends BaseController
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         return getDataTable(list);
     }
-
+    @ApiOperation("系统字典数据导出")
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:dict:export')")
     @PostMapping("/export")
@@ -62,6 +67,7 @@ public class SysDictDataController extends BaseController
     /**
      * 查询字典数据详细
      */
+    @ApiOperation("查询字典数据详细")
     @PreAuthorize("@ss.hasPermi('system:dict:query')")
     @GetMapping(value = "/{dictCode}")
     public AjaxResult getInfo(@PathVariable Long dictCode)
@@ -72,6 +78,7 @@ public class SysDictDataController extends BaseController
     /**
      * 根据字典类型查询字典数据信息
      */
+    @ApiOperation("查询字典数据详细")
     @GetMapping(value = "/type/{dictType}")
     public AjaxResult dictType(@PathVariable String dictType)
     {
@@ -86,6 +93,7 @@ public class SysDictDataController extends BaseController
     /**
      * 新增字典类型
      */
+    @ApiOperation("新增字典数据")
     @PreAuthorize("@ss.hasPermi('system:dict:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
@@ -98,6 +106,7 @@ public class SysDictDataController extends BaseController
     /**
      * 修改保存字典类型
      */
+    @ApiOperation("修改保存字典数据")
     @PreAuthorize("@ss.hasPermi('system:dict:edit')")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -110,6 +119,7 @@ public class SysDictDataController extends BaseController
     /**
      * 删除字典类型
      */
+    @ApiOperation("删除字典数据")
     @PreAuthorize("@ss.hasPermi('system:dict:remove')")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")

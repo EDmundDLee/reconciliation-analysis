@@ -8,6 +8,8 @@ import com.rongxin.common.core.domain.entity.SysDept;
 import com.rongxin.common.enums.BusinessType;
 import com.rongxin.common.utils.StringUtils;
 import com.rongxin.web.service.ISysDeptService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ import java.util.List;
  * 
  * @author rx
  */
+@Api(tags = "[系统部门]")
 @RestController
 @RequestMapping("/system/dept")
 public class SysDeptController extends BaseController
@@ -32,6 +35,7 @@ public class SysDeptController extends BaseController
     /**
      * 获取部门列表
      */
+    @ApiOperation("获取部门列表")
     @PreAuthorize("@ss.hasPermi('system:dept:list')")
     @GetMapping("/list")
     public AjaxResult list(SysDept dept)
@@ -43,6 +47,7 @@ public class SysDeptController extends BaseController
     /**
      * 查询部门列表（排除节点）
      */
+    @ApiOperation("查询部门列表")
     @PreAuthorize("@ss.hasPermi('system:dept:list')")
     @GetMapping("/list/exclude/{deptId}")
     public AjaxResult excludeChild(@PathVariable(value = "deptId", required = false) Long deptId)
@@ -64,6 +69,7 @@ public class SysDeptController extends BaseController
     /**
      * 根据部门编号获取详细信息
      */
+    @ApiOperation("根据部门编号获取详细信息")
     @PreAuthorize("@ss.hasPermi('system:dept:query')")
     @GetMapping(value = "/{deptId}")
     public AjaxResult getInfo(@PathVariable Long deptId)
@@ -75,6 +81,7 @@ public class SysDeptController extends BaseController
     /**
      * 获取部门下拉树列表
      */
+    @ApiOperation("获取部门下拉树列表")
     @GetMapping("/treeselect")
     public AjaxResult treeselect(SysDept dept)
     {
@@ -85,6 +92,7 @@ public class SysDeptController extends BaseController
     /**
      * 加载对应角色部门列表树
      */
+    @ApiOperation("加载对应角色部门列表树")
     @GetMapping(value = "/roleDeptTreeselect/{roleId}")
     public AjaxResult roleDeptTreeselect(@PathVariable("roleId") Long roleId)
     {
@@ -98,6 +106,7 @@ public class SysDeptController extends BaseController
     /**
      * 新增部门
      */
+    @ApiOperation("新增部门")
     @PreAuthorize("@ss.hasPermi('system:dept:add')")
     @Log(title = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -114,6 +123,7 @@ public class SysDeptController extends BaseController
     /**
      * 修改部门
      */
+    @ApiOperation("修改部门")
     @PreAuthorize("@ss.hasPermi('system:dept:edit')")
     @Log(title = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -140,6 +150,7 @@ public class SysDeptController extends BaseController
     /**
      * 删除部门
      */
+    @ApiOperation("删除部门")
     @PreAuthorize("@ss.hasPermi('system:dept:remove')")
     @Log(title = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")

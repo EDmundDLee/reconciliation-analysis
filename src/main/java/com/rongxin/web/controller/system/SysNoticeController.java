@@ -2,6 +2,9 @@ package com.rongxin.web.controller.system;
 
 import java.io.IOException;
 import java.util.List;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +29,7 @@ import com.rongxin.web.service.ISysNoticeService;
  * 
  * @author rx
  */
+@Api(tags = "[公告信息]")
 @RestController
 @RequestMapping("/system/notice")
 public class SysNoticeController extends BaseController
@@ -36,6 +40,7 @@ public class SysNoticeController extends BaseController
     /**
      * 获取通知公告列表
      */
+    @ApiOperation("获取通知公告列表")
     @PreAuthorize("@ss.hasPermi('system:notice:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysNotice notice)
@@ -48,6 +53,7 @@ public class SysNoticeController extends BaseController
     /**
      * 根据通知公告编号获取详细信息
      */
+    @ApiOperation("根据通知公告编号获取详细信息")
     @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
     public AjaxResult getInfo(@PathVariable Long noticeId)
@@ -58,6 +64,7 @@ public class SysNoticeController extends BaseController
     /**
      * 新增通知公告
      */
+    @ApiOperation("新增通知公告")
     @PreAuthorize("@ss.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
@@ -70,6 +77,7 @@ public class SysNoticeController extends BaseController
     /**
      * 修改通知公告
      */
+    @ApiOperation("修改通知公告")
     @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -82,6 +90,7 @@ public class SysNoticeController extends BaseController
     /**
      * 删除通知公告
      */
+    @ApiOperation("删除通知公告")
     @PreAuthorize("@ss.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
@@ -93,6 +102,7 @@ public class SysNoticeController extends BaseController
     /**
      * 通过userid查询未读消息列表
      */
+    @ApiOperation("通过userid查询未读消息列表")
     @PreAuthorize("@ss.hasPermi('system:notice:messageList')")
     @GetMapping("/messageList")
     public TableDataInfo messageList(String userId)
@@ -102,9 +112,10 @@ public class SysNoticeController extends BaseController
         return getDataTable(messageList);
     }
     /**
-     * 通过userid查询未读消息列表
+     * 通过userid查询消息列表
      */
-     @GetMapping("/messageListOfAll")
+    @ApiOperation("通过userid查询消息列表")
+    @GetMapping("/messageListOfAll")
     public TableDataInfo messageListOfAll(String userId)
     {
         startPage();
@@ -114,6 +125,7 @@ public class SysNoticeController extends BaseController
     /**
      * 根据通知公告编号获取详细信息及修改消息状态
      */
+    @ApiOperation("根据通知公告编号获取详细信息及修改消息状态")
     @PreAuthorize("@ss.hasPermi('system:notice:queryMessage')")
     @GetMapping(value = "/queryMessage")
     public AjaxResult getMessageInfo(SysNotice notice)
