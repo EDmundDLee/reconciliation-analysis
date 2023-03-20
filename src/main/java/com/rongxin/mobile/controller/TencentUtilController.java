@@ -5,18 +5,29 @@ import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.core.redis.RedisCache;
 import com.rongxin.common.enums.BusinessType;
+import com.rongxin.mobile.tencent.TLSSigAPIv2;
 import com.rongxin.mobile.tencent.TencentUtil;
+import com.rongxin.mobile.tencent.VideoSignature;
 import com.rongxin.web.util.Base64Util;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/tencent/util")
 public class TencentUtilController {
+
+
+    @Value("${tencent.im.sdkappid}")
+    private Long imsdkappid;
+    @Value("${tencent.im.key}")
+    private String imkey;
 
     @Autowired
     private RedisCache redisCache;
@@ -67,5 +78,14 @@ public class TencentUtilController {
             return AjaxResult.error("文件上传异常");
         }
     }
-    //   接下来这段是腾讯云普通版 H5    -------------------------------------结束
+
+    /**
+     * 获取视频云点播签名
+     */
+    @ApiOperation("获取视频云点播签名")
+    @GetMapping("/getVideoSignature")
+    public AjaxResult getVideoSignature() throws Exception {
+        return AjaxResult.success(VideoSignature.getUploadSignature());
+    }
+
 }

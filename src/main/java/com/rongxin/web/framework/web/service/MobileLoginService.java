@@ -114,6 +114,12 @@ public class MobileLoginService  {
         {
             authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(loginParams.getUsername(), loginParams.getPassword()));
+
+            //微信登录
+//            if("3".equals(loginParams.getLoginType()))
+//            {
+//                authentication = authenticationManager.authenticate(new WxCodeAuthenticationToken(loginParams.getUsername()));
+//            }
         }
         catch (Exception e)
         {

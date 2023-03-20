@@ -12,7 +12,7 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://101.201.180.37:3306/rongxin_farm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
+        url: jdbc:mysql://rongxin-mysql-p-svc.dev:3306/rongxin_druid?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true
         username: sample_dbowner
         password: TDkNWKSFatELG5pN
       # 从库数据源
@@ -191,5 +191,11 @@ wechat:
   public:
     app:
       id: wx47bd0da118464bb7
+
+
+tencent:
+  im:
+    sdkappid: 1400751532
+    key: 87de0e1681fe3fa5ed744adf5e1393bc31dd36fcbd0e74081f4e4a7d68406d50
 
 

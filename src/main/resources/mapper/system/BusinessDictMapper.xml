@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rongxin.web.mapper.BusinessDictMapper">
+    
+    <resultMap type="BusinessDict" id="BusinessDictResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="level"    column="level"    />
+        <result property="code"    column="code"    />
+        <result property="value"    column="value"    />
+        <result property="description"    column="description"    />
+        <result property="sort"    column="sort"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="isEnabled"    column="is_enabled"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBusinessDictVo">
+        select id, type, level, code, value, description, sort, parent_id, is_enabled, create_by, create_time, update_by, update_time from business_dict
+    </sql>
+
+    <select id="selectBusinessDictList" parameterType="BusinessDict" resultMap="BusinessDictResult">
+        <include refid="selectBusinessDictVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+            <if test="isEnabled != null "> and is_enabled = #{isEnabled}</if>
+        </where>
+        order by sort,id
+    </select>
+    
+    <select id="selectBusinessDictById" parameterType="Long" resultMap="BusinessDictResult">
+        <include refid="selectBusinessDictVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBusinessDict" parameterType="BusinessDict" useGeneratedKeys="true" keyProperty="id">
+        insert into business_dict
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="level != null">level,</if>
+            <if test="code != null">code,</if>
+            <if test="value != null">value,</if>
+            <if test="description != null">description,</if>
+            <if test="sort != null">sort,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="isEnabled != null">is_enabled,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="level != null">#{level},</if>
+            <if test="code != null">#{code},</if>
+            <if test="value != null">#{value},</if>
+            <if test="description != null">#{description},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="isEnabled != null">#{isEnabled},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusinessDict" parameterType="BusinessDict">
+        update business_dict
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="value != null">value = #{value},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="isEnabled != null">is_enabled = #{isEnabled},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBusinessDictById" parameterType="Long">
+        delete from business_dict where id = #{id}
+    </delete>
+
+    <delete id="deleteBusinessDictByIds" parameterType="String">
+        delete from business_dict where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectBusinessDictListOfAllSon" parameterType="Long" resultMap="BusinessDictResult">
+            select t3.* from (
+            select t1.*,
+            if(find_in_set(parent_id, @pids) > 0, @pids := concat(@pids, ',', id), if (t1.id =   #{id},  #{id},0)) as ischild
+            from (
+            select  t.* from business_dict t
+            ) t1,
+            (select @pids :=   #{id}) t2
+            ) t3 where ischild &lt;&gt;  '0'
+    </select>
+    <select id="selectBusinessDictListOfAllParent" parameterType="Long" resultMap="BusinessDictResult">
+        select  s.* from  (
+        SELECT
+        @r AS _id,
+        (SELECT @r := parent_id FROM business_dict WHERE id = _id) AS parent_id,
+        @l := @l + 1 AS lvl FROM (SELECT @r := #{id}, @l := 0) vars,
+        business_dict h WHERE @r &lt;&gt;  0 ) q left join business_dict s on q._id =s.id
+    </select>
+
+</mapper>

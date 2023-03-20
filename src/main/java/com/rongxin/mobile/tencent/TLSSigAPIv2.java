@@ -2,19 +2,23 @@ package com.rongxin.mobile.tencent;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.rongxin.web.util.HttpUtils;
+import com.rongxin.web.util.Sm4Util;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Base64;
+import java.util.*;
 import java.util.zip.Deflater;
 
 public class TLSSigAPIv2 {
     final private long sdkappid;
     final private String key;
+    private static int random =new Random().nextInt(Integer.MAX_VALUE);//随机数
 
     public TLSSigAPIv2(long sdkappid, String key) {
         this.sdkappid = sdkappid;
@@ -310,5 +314,9 @@ public class TLSSigAPIv2 {
             }
         }
         return userbuf;
+    }
+
+    public static void main(String[] args) throws Exception {
+
     }
 }

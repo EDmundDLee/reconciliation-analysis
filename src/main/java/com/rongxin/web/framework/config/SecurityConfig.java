@@ -4,6 +4,7 @@ import com.rongxin.web.framework.config.properties.PermitAllUrlProperties;
 import com.rongxin.web.framework.security.filter.JwtAuthenticationTokenFilter;
 import com.rongxin.web.framework.security.handle.AuthenticationEntryPointImpl;
 import com.rongxin.web.framework.security.handle.LogoutSuccessHandlerImpl;
+import com.rongxin.web.framework.wxloginconfig.WxCodeAuthenticationSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.annotation.Resource;
+
 /**
  * spring security配置
  *
@@ -34,6 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * 微信认证
+     */
+    @Resource
+    private WxCodeAuthenticationSecurityConfig wxCodeAuthenticationSecurityConfig;
     /**
      * 认证失败处理类
      */
@@ -99,6 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity.authorizeRequests();
         permitAllUrl.getUrls().forEach(url -> registry.antMatchers(url).permitAll());
 
+        httpSecurity.apply(wxCodeAuthenticationSecurityConfig);
         httpSecurity
                 // CSRF禁用，因为不使用session
                 .csrf().disable()
