@@ -1,13 +1,11 @@
 package com.rongxin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
-
 import java.net.InetAddress;
 
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
@@ -18,8 +16,7 @@ import static org.apache.commons.lang3.ObjectUtils.isEmpty;
  * @author rx
  */
 @Slf4j
-//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})  无工作流版本 下面是有工作流版本
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class,
+@SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class})
 public class RXApplication
 {
