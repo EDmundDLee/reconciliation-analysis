@@ -131,3 +131,5 @@ oss:
     endpoint: https://oss-cn-beijing.aliyuncs.com
 
 
+wx:
+    host: https://api.weixin.qq.com

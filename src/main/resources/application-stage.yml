@@ -104,3 +104,6 @@ oss:
   FOLDER: jlncwqw/pkgs/dev/
   # oss对外服务的访问域名
   endpoint: https://oss-cn-beijing.aliyuncs.com
+
+wx:
+  host: https://api.weixin.qq.com
