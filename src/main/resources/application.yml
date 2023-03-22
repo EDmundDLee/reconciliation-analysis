@@ -63,7 +63,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   # 初始化创建原始数据库(仅支持local配置)  请确定是否备份，会进行清库操作  此文件包含工作流的初始结构及数据，所以可以关闭工作流生成表配置
-  initdatabase: true
+  initdatabase: false
 
 # token配置
 token:

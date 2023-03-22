@@ -29,11 +29,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 /**
  * 移动端登录服务接口
  */
+@Service
 public class MobileLoginService  {
 
     private static final Logger log = LoggerFactory.getLogger(MobileLoginService.class);
