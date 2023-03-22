@@ -63,7 +63,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   # 初始化创建原始数据库(仅支持local配置)  请确定是否备份，会进行清库操作  此文件包含工作流的初始结构及数据，所以可以关闭工作流生成表配置
-  initdatabase: false
+  initdatabase: true
 
 # token配置
 token:
@@ -117,4 +117,12 @@ xss:
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 
+#阿里云短信配置，无需修改
+ali:
+  sms:
+    access-key-id: UjyKDL1Jo24Z6TCm #阿里云 access-key-id
+    access-secret: wfVuLx7LsqIEwMqZ4WGd6ZPjUCyEEF   #阿里云 access-secret
+    enable: true   #是否启用短信功能
+    time-out: 2   # 默认 2分钟 过期
+    open-redis: true  # 开启redis 缓存
 

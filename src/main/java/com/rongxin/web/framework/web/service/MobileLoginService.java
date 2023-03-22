@@ -20,7 +20,6 @@ import com.rongxin.module.sms.aliyun.service.AliYunSmsService;
 import com.rongxin.web.framework.manager.AsyncManager;
 import com.rongxin.web.framework.manager.factory.AsyncFactory;
 import com.rongxin.web.framework.wxloginconfig.WxCodeAuthenticationToken;
-import com.rongxin.web.service.ISysRoleService;
 import com.rongxin.web.service.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,18 +29,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * 移动端登录服务接口
  */
-@Component
 public class MobileLoginService  {
 
     private static final Logger log = LoggerFactory.getLogger(MobileLoginService.class);
@@ -55,9 +47,6 @@ public class MobileLoginService  {
 
     @Autowired(required = false)
     private SysLoginService sysLoginService;
-
-    @Autowired(required = false)
-    private ISysRoleService sysRoleService;
 
     @Autowired(required = false)
     private AuthenticationManager authenticationManager;

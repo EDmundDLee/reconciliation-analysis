@@ -1,24 +1,15 @@
 package com.rongxin.mobile.controller;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.rongxin.common.annotation.Log;
 import com.rongxin.common.core.controller.BaseController;
 import com.rongxin.common.core.domain.AjaxResult;
 import com.rongxin.common.core.domain.entity.SysUser;
-import com.rongxin.common.core.domain.model.LoginBody;
-import com.rongxin.common.core.domain.model.LoginUser;
 import com.rongxin.common.core.domain.model.RegisterBody;
-import com.rongxin.common.enums.BusinessType;
-import com.rongxin.common.utils.SecurityUtils;
-import com.rongxin.common.utils.StringUtils;
 import com.rongxin.mobile.tencent.GetOpenIdUtil;
 import com.rongxin.mobile.tencent.GetWxInfo;
 import com.rongxin.mobile.tencent.WxVo;
-import com.rongxin.module.sms.aliyun.service.AliYunSmsService;
 import com.rongxin.web.framework.web.service.MobileLoginService;
-import com.rongxin.web.framework.web.service.TokenService;
 import com.rongxin.web.service.ISysUserService;
-import com.rongxin.web.service.impl.SysUserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -26,8 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**

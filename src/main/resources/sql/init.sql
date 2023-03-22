@@ -1109,7 +1109,6 @@ CREATE TABLE `sys_user`  (
   `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `auth_id` varchar(100) DEFAULT NULL COMMENT '认证登录id(微信等)',
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = COMPACT;
 
@@ -1166,5 +1165,8 @@ INSERT INTO `sys_user_role` VALUES (2, 2);
 INSERT INTO `sys_user_role` VALUES (7, 2);
 INSERT INTO `sys_user_role` VALUES (8, 2);
 INSERT INTO `sys_user_role` VALUES (8, 3);
+
+
+ALTER TABLE sys_user ADD auth_id VARCHAR(100) comment '认证ID';
 
 SET FOREIGN_KEY_CHECKS = 1;
