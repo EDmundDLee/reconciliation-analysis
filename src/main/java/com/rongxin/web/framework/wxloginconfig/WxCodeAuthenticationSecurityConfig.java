@@ -1,5 +1,6 @@
 package com.rongxin.web.framework.wxloginconfig;
 
+import com.rongxin.web.framework.web.service.impl.UserDetailsByAuthIdServiceImpl;
 import com.rongxin.web.framework.web.service.impl.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
@@ -11,7 +12,7 @@ import javax.annotation.Resource;
 @Configuration
 public class WxCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     @Resource
-    private UserDetailsServiceImpl userDetailsService;
+     private UserDetailsByAuthIdServiceImpl userDetailsByAuthIdService;
 
     @Resource
     private WxCodeAuthenticationProvider wxCodeAuthenticationProvider;
@@ -19,7 +20,7 @@ public class WxCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapte
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        wxCodeAuthenticationProvider.setUserDetailsService(userDetailsService);
+        wxCodeAuthenticationProvider.setUserDetailsService(userDetailsByAuthIdService);
         http.authenticationProvider(wxCodeAuthenticationProvider);
     }
 }
