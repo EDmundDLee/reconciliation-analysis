@@ -53,7 +53,13 @@ public interface SysUserMapper
      * @return 用户对象信息
      */
     public SysUser selectUserById(Long userId);
-
+    /**
+     * 通过用户认证ID查询用户
+     *
+     * @param authId 用户认证ID
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByAuthId(String authId);
     /**
      * 新增用户信息
      * 

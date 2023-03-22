@@ -49,7 +49,13 @@ public interface ISysUserService
      * @return 用户对象信息
      */
     public SysUser selectUserById(Long userId);
-
+    /**
+     * 通过用户认证ID查询用户
+     *
+     * @param authId 用户认证ID
+     * @return 用户对象信息
+     */
+    public SysUser selectUserByAuthId(String authId);
     /**
      * 根据用户ID查询用户所属角色组
      * 
